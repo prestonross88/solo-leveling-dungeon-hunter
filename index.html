@@ -8,28 +8,28 @@
 <title>Solo Leveling Dungeon Hunter</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     color-scheme: dark;
-    --bg:#06070f;
-    --panel:#0d1022;
-    --panel2:#12162e;
-    --line:#26335f;
-    --line-bright:#38bdf8;
-    --cyan:#22d3ee;
-    --cyan-dim:#0e7490;
-    --violet:#8b5cf6;
-    --violet-dark:#4c1d95;
+    --bg:#07060f;
+    --panel:#12142a;
+    --panel2:#1a1d3a;
+    --panel3:#232751;
+    --line:#333a75;
+    --line-soft:#262b57;
+    --cyan:#38e1ff;
+    --violet:#9d6bff;
     --gold:#f5c451;
-    --gold-dim:#92600a;
-    --red:#ef4444;
-    --red-dark:#7f1d1d;
-    --green:#22c55e;
-    --mp:#3b82f6;
-    --text:#eef2ff;
-    --muted:#9aa3c7;
-    --muted2:#6b7396;
+    --gold-deep:#b97e10;
+    --red:#ff5d5d;
+    --green:#4ade80;
+    --mp:#4f9dff;
+    --text:#f2f4ff;
+    --muted:#a7add6;
+    --muted2:#767ea8;
+    --elc:#9d6bff;
+    --radius:14px;
   }
   *{box-sizing:border-box}
   html,body{background:var(--bg)}
@@ -37,230 +37,131 @@
     margin:0;
     font-family:"Rajdhani", system-ui, sans-serif;
     color:var(--text);
-    background:
-      radial-gradient(900px 500px at 50% -10%, rgba(76,29,149,.55), transparent 60%),
-      radial-gradient(700px 400px at 90% 30%, rgba(14,116,144,.25), transparent 60%),
-      var(--bg);
     min-height:100vh;
-    padding:16px 14px 40px;
+    padding:16px 14px 44px;
+    background:
+      radial-gradient(900px 480px at 50% -8%, rgba(109,64,255,.38), transparent 62%),
+      radial-gradient(760px 420px at 96% 22%, rgba(14,116,144,.22), transparent 60%),
+      radial-gradient(700px 500px at 4% 68%, rgba(185,126,16,.14), transparent 60%),
+      var(--bg);
+    overflow-x:hidden;
   }
+  /* drifting mana motes */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:
+      radial-gradient(2px 2px at 12% 22%, rgba(157,107,255,.9), transparent 60%),
+      radial-gradient(1.5px 1.5px at 82% 14%, rgba(56,225,255,.9), transparent 60%),
+      radial-gradient(2px 2px at 66% 44%, rgba(245,196,81,.8), transparent 60%),
+      radial-gradient(1.5px 1.5px at 28% 62%, rgba(56,225,255,.7), transparent 60%),
+      radial-gradient(2px 2px at 90% 78%, rgba(157,107,255,.8), transparent 60%),
+      radial-gradient(1.5px 1.5px at 44% 88%, rgba(245,196,81,.7), transparent 60%),
+      radial-gradient(1.5px 1.5px at 6% 84%, rgba(157,107,255,.7), transparent 60%);
+    animation:motes 9s ease-in-out infinite alternate;
+  }
+  @keyframes motes{from{transform:translateY(0)}to{transform:translateY(-16px)}}
   button{font-family:inherit; cursor:pointer}
-  button:focus-visible, [tabindex]:focus-visible{outline:2px solid var(--cyan); outline-offset:2px}
+  button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--cyan); outline-offset:2px}
+  .app{max-width:740px; margin:0 auto; position:relative; z-index:1}
 
-  .app{max-width:720px; margin:0 auto}
+  .panel{
+    border:1px solid var(--line);
+    background:linear-gradient(180deg, var(--panel2), var(--panel));
+    border-radius:var(--radius);
+    box-shadow:0 10px 26px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .panel h3{
+    margin:0 0 10px; font-family:"Orbitron",sans-serif; font-size:12px; letter-spacing:.22em;
+    color:var(--cyan); font-weight:800; display:flex; align-items:center; gap:8px;
+  }
+  .panel h3::after{content:""; flex:1; height:1px; background:linear-gradient(90deg, var(--line), transparent)}
 
-  /* ---------- SYSTEM WINDOW ---------- */
+  /* ---------- SYSTEM HEADER ---------- */
   .system{
-    position:relative;
-    border:1.5px solid var(--line-bright);
-    background:linear-gradient(180deg, rgba(14,30,58,.92), rgba(10,13,32,.96));
-    box-shadow:0 0 0 4px rgba(56,189,248,.08), 0 0 32px rgba(34,211,238,.18), inset 0 0 40px rgba(34,211,238,.06);
-    padding:18px 18px 16px;
-    clip-path:polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+    position:relative; text-align:center; padding:20px 18px 16px;
+    border:1.5px solid rgba(56,225,255,.75); border-radius:18px;
+    background:linear-gradient(180deg, rgba(18,32,66,.95), rgba(10,11,30,.97));
+    box-shadow:0 0 0 5px rgba(56,225,255,.07), 0 0 38px rgba(56,225,255,.20), inset 0 0 46px rgba(56,225,255,.07);
   }
   .sys-tag{
     display:flex; align-items:center; gap:10px;
-    font-family:"Orbitron",sans-serif; font-size:10px; letter-spacing:.28em; color:var(--cyan); font-weight:700;
-    text-transform:uppercase;
+    font-family:"Orbitron",sans-serif; font-size:10px; letter-spacing:.3em; color:var(--cyan); font-weight:700; text-transform:uppercase;
   }
-  .sys-tag::before,.sys-tag::after{content:""; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--cyan));}
+  .sys-tag::before,.sys-tag::after{content:""; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--cyan))}
   .sys-tag::after{background:linear-gradient(90deg,var(--cyan),transparent)}
   .system h1{
-    font-family:"Orbitron",sans-serif;
-    margin:10px 0 2px; font-size:clamp(28px,7vw,44px); line-height:.95; font-weight:900; letter-spacing:.04em; text-align:center;
+    font-family:"Cinzel",serif; margin:10px 0 2px;
+    font-size:clamp(30px,7.4vw,48px); line-height:.98; font-weight:900; letter-spacing:.05em;
+    text-shadow:0 3px 0 rgba(0,0,0,.5), 0 0 26px rgba(157,107,255,.45);
   }
-  .system h1 span{color:var(--cyan); text-shadow:0 0 18px rgba(34,211,238,.7)}
-  .system .sub{text-align:center; color:var(--muted); font-size:15px; font-weight:600; letter-spacing:.06em; margin:4px 0 0}
+  .system h1 span{
+    background:linear-gradient(180deg,#a5f3fc,#38bdf8 55%,#0369a1);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 14px rgba(56,189,248,.55));
+  }
+  .system .sub{text-align:center; color:var(--muted); font-size:15px; font-weight:600; letter-spacing:.04em; margin:5px 0 0}
   .system .sub b{color:#fff}
 
   /* ---------- STATUS ---------- */
-  .status{
-    margin-top:12px; border:1px solid var(--line); background:var(--panel);
-    padding:14px;
-  }
+  .status{margin-top:12px; padding:14px}
   .status-top{display:flex; gap:12px; align-items:stretch; flex-wrap:wrap}
   .rank-badge{
-    width:82px; min-height:78px; padding:8px 6px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    border:1.5px solid var(--gold); background:radial-gradient(circle at 50% 30%, #3a2a05, #171106);
-    flex-shrink:0;
+    width:86px; min-height:80px; padding:8px 6px; text-align:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;
+    border:1.5px solid var(--gold); border-radius:12px;
+    background:radial-gradient(circle at 50% 28%, #4a3405, #1c1304 75%);
+    box-shadow:0 0 18px rgba(245,196,81,.28), inset 0 0 18px rgba(245,196,81,.15);
   }
-  .rank-badge small{font-size:9px; letter-spacing:.22em; color:var(--gold); font-weight:700; font-family:"Orbitron",sans-serif}
-  .rank-badge strong{font-family:"Orbitron",sans-serif; font-size:38px; line-height:1; color:var(--gold); text-shadow:0 0 16px rgba(245,196,81,.6)}
-  .rank-badge em{font-style:normal; font-size:11px; color:#d9c07a; font-weight:700; letter-spacing:.08em}
+  .rank-badge small{font-size:9px; letter-spacing:.24em; color:var(--gold); font-weight:700; font-family:"Orbitron",sans-serif}
+  .rank-badge strong{font-family:"Cinzel",serif; font-size:40px; line-height:1; color:var(--gold); text-shadow:0 0 18px rgba(245,196,81,.65)}
+  .rank-badge em{font-style:normal; font-size:11px; color:#e6cd85; font-weight:700; letter-spacing:.06em}
   .who{flex:1; min-width:200px}
-  .who-row{display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap}
-  .who h2{margin:0; font-size:22px; letter-spacing:.02em; line-height:1}
-  .who h2 span{color:var(--muted); font-size:14px; font-weight:600}
-  .lvl{font-family:"Orbitron",sans-serif; font-weight:800; font-size:15px; color:#fff; background:var(--panel2); border:1px solid var(--line); padding:4px 9px}
+  .who-row{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap}
+  .who h2{margin:0; font-size:21px; letter-spacing:.02em; line-height:1}
+  .who h2 span{color:var(--muted); font-size:13.5px; font-weight:600}
+  .lvl{font-family:"Orbitron",sans-serif; font-weight:800; font-size:14px; color:#fff; background:var(--panel3); border:1px solid var(--line); border-radius:8px; padding:4px 10px}
   .lvl b{color:var(--cyan)}
-  .bar-row{display:grid; grid-template-columns:34px 1fr 74px; align-items:center; gap:8px; margin-top:7px; font-size:12px; font-weight:700; letter-spacing:.08em}
+  .bar-row{display:grid; grid-template-columns:34px 1fr 76px; align-items:center; gap:8px; margin-top:7px; font-size:12px; font-weight:700; letter-spacing:.08em}
   .bar-row label{color:var(--muted)}
   .bar-row output{text-align:right; font-variant-numeric:tabular-nums; color:#fff}
-  .bar{height:12px; background:#05060d; border:1px solid #232946; overflow:hidden}
-  .bar i{display:block; height:100%; transition:width .35s ease}
-  .bar.hp i{background:linear-gradient(90deg,#dc2626,#f87171)}
-  .bar.mp i{background:linear-gradient(90deg,#1d4ed8,#38bdf8)}
-  .bar.xp{height:8px}
+  .bar{height:13px; background:#05060d; border:1px solid #2b3160; border-radius:7px; overflow:hidden; position:relative}
+  .bar i{display:block; height:100%; transition:width .3s ease; border-radius:6px; position:relative}
+  .bar i::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 55%)}
+  .bar.hp i{background:linear-gradient(90deg,#b91c1c,#ff6b5e)}
+  .bar.mp i{background:linear-gradient(90deg,#1d4ed8,#54b9ff)}
+  .bar.xp{height:9px}
   .bar.xp i{background:linear-gradient(90deg,#7c3aed,#c4b5fd)}
+  .bar.atb{height:7px}
+  .bar.atb i{background:linear-gradient(90deg,#b97e10,#ffd970); transition:none}
   .meta-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
-  .chip{flex:1; min-width:96px; background:var(--panel2); border:1px solid var(--line); padding:8px 10px; text-align:center}
-  .chip small{display:block; font-size:10px; letter-spacing:.18em; color:var(--muted2); font-weight:700; font-family:"Orbitron",sans-serif}
+  .chip{flex:1; min-width:92px; background:var(--panel2); border:1px solid var(--line-soft); border-radius:10px; padding:8px 10px; text-align:center}
+  .chip small{display:block; font-size:9.5px; letter-spacing:.18em; color:var(--muted2); font-weight:700; font-family:"Orbitron",sans-serif}
   .chip strong{font-size:18px; font-variant-numeric:tabular-nums}
   .chip.gold strong{color:var(--gold)}
+  .chip.crystal strong{color:#7dd3fc}
   .chip.shadow strong{color:#c4b5fd}
+  .chip.scroll strong{color:#fda4af}
   .points-banner{
-    display:none; margin-top:12px; border:1px solid var(--gold); background:#221a05; color:#fde68a;
+    display:none; margin-top:12px; border:1px solid var(--gold); border-radius:10px; background:#241a04; color:#fde68a;
     padding:10px 12px; font-weight:700; font-size:15px; text-align:center;
   }
   .points-banner.show{display:block; animation:pulseGold 1.2s ease infinite alternate}
-  @keyframes pulseGold{from{box-shadow:0 0 0 rgba(245,196,81,0)}to{box-shadow:0 0 18px rgba(245,196,81,.35)}}
+  @keyframes pulseGold{from{box-shadow:0 0 0 rgba(245,196,81,0)}to{box-shadow:0 0 20px rgba(245,196,81,.4)}}
 
   /* ---------- GATE BAR ---------- */
-  .gatebar{
-    margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    border:1px solid var(--line); background:var(--panel); padding:10px 12px;
-  }
-  .gatebar .gate-name{font-family:"Orbitron",sans-serif; font-size:13px; font-weight:800; letter-spacing:.06em}
-  .gatebar .gate-name span{color:var(--violet); }
+  .gatebar{margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:11px 14px}
+  .gatebar .gate-name{font-family:"Orbitron",sans-serif; font-size:13px; font-weight:800; letter-spacing:.05em}
+  .gatebar .gate-name span{color:var(--violet)}
   .gatebar .gate-sub{color:var(--muted); font-weight:600; font-size:13px}
   .pips{display:flex; gap:4px; margin-left:auto}
-  .pip{width:18px; height:8px; background:#1a1f3d; border:1px solid #2a335e}
-  .pip.done{background:var(--cyan); border-color:var(--cyan); box-shadow:0 0 8px rgba(34,211,238,.6)}
-  .pip.boss{background:#2a1408; border-color:var(--gold-dim)}
+  .pip{width:18px; height:9px; border-radius:3px; background:#1a1f45; border:1px solid #2d3468}
+  .pip.done{background:var(--cyan); border-color:var(--cyan); box-shadow:0 0 8px rgba(56,225,255,.6)}
+  .pip.boss{background:#2a1408; border-color:var(--gold-deep)}
   .pip.boss.done{background:var(--gold); border-color:var(--gold); box-shadow:0 0 8px rgba(245,196,81,.7)}
 
-  /* ---------- ARENA ---------- */
-  .arena{
-    margin-top:12px; position:relative; overflow:hidden;
-    border:1px solid var(--line); background:
-      radial-gradient(600px 260px at 50% 110%, rgba(124,58,237,.35), transparent 65%),
-      radial-gradient(400px 200px at 50% 0%, rgba(34,211,238,.10), transparent 60%),
-      linear-gradient(180deg,#0a0c1e,#070812);
-    padding:18px 16px 16px; text-align:center;
-  }
-  .arena::before{
-    content:""; position:absolute; inset:0; opacity:.35; pointer-events:none;
-    background-image:linear-gradient(rgba(56,189,248,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,.06) 1px, transparent 1px);
-    background-size:34px 34px;
-  }
-  .monster-wrap{position:relative; z-index:1}
-  .monster-name{font-family:"Orbitron",sans-serif; font-weight:800; font-size:19px; letter-spacing:.03em; margin:0}
-  .monster-name .boss-tag{color:var(--gold); font-size:11px; letter-spacing:.2em; vertical-align:middle; border:1px solid var(--gold-dim); padding:2px 6px; margin-right:8px}
-  .monster-sub{color:var(--muted); font-weight:600; font-size:14px; margin:2px 0 0}
-  .monster-hp{max-width:440px; margin:12px auto 0; text-align:left}
-  .monster-hp .bar-row{grid-template-columns:30px 1fr 86px; margin-top:0}
-  .monster-stage{
-    position:relative; height:196px; display:flex; align-items:center; justify-content:center; margin:6px auto 2px; max-width:440px;
-  }
-  .monster-emoji{
-    font-size:118px; line-height:1; user-select:none; cursor:pointer; background:none; border:none; padding:10px;
-    filter:drop-shadow(0 14px 22px rgba(0,0,0,.65)) drop-shadow(0 0 26px rgba(139,92,246,.35));
-    transition:transform .08s ease; animation:bob 2.6s ease-in-out infinite;
-  }
-  .monster-emoji:active{transform:scale(.94)}
-  .monster-emoji.hit{animation:hitShake .28s ease}
-  .monster-emoji.boss{font-size:142px}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-  @keyframes hitShake{0%{transform:translateX(0)}25%{transform:translateX(-9px) rotate(-3deg)}55%{transform:translateX(8px) rotate(2deg)}100%{transform:translateX(0)}}
-  .shadow-ring{
-    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
-    width:170px; height:26px; border-radius:50%; background:radial-gradient(ellipse, rgba(139,92,246,.5), transparent 70%);
-  }
-  .floaters{position:absolute; inset:0; pointer-events:none; overflow:visible; z-index:3}
-  .floater{
-    position:absolute; font-family:"Orbitron",sans-serif; font-weight:900; font-size:22px; color:#fff;
-    text-shadow:0 2px 10px rgba(0,0,0,.8); animation:floatUp 0.85s ease-out forwards; white-space:nowrap;
-  }
-  .floater.crit{color:var(--gold); font-size:31px}
-  .floater.player-dmg{color:#fca5a5; font-size:17px}
-  .floater.heal{color:#86efac}
-  @keyframes floatUp{0%{opacity:0; transform:translateY(8px) scale(.85)}15%{opacity:1; transform:translateY(0) scale(1.05)}100%{opacity:0; transform:translateY(-64px) scale(1)}}
-  .combo{
-    position:absolute; top:12px; right:14px; z-index:2; text-align:right; display:none;
-  }
-  .combo.show{display:block}
-  .combo strong{font-family:"Orbitron",sans-serif; font-size:26px; color:var(--gold); display:block; line-height:1; text-shadow:0 0 14px rgba(245,196,81,.5)}
-  .combo small{font-size:11px; letter-spacing:.2em; color:var(--muted); font-weight:700}
-  .stun-tag{display:none; margin-top:6px; color:#fde68a; font-weight:700; letter-spacing:.1em; font-size:13px}
-  .stun-tag.show{display:block}
-
-  /* ---------- ACTIONS ---------- */
-  .actions{margin-top:12px; display:grid; grid-template-columns:1fr; gap:10px}
-  .attack-btn{
-    border:1.5px solid var(--line-bright); background:linear-gradient(180deg,#164e63,#0b2438);
-    color:#fff; padding:16px; font-family:"Orbitron",sans-serif; font-weight:900; letter-spacing:.12em; font-size:19px;
-    box-shadow:0 0 22px rgba(34,211,238,.25), inset 0 0 24px rgba(34,211,238,.12);
-    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
-  }
-  .attack-btn:active{transform:scale(.985)}
-  .attack-btn small{display:block; font-family:"Rajdhani",sans-serif; font-weight:600; letter-spacing:.04em; font-size:13px; color:#a5f3fc; margin-top:2px; text-transform:none}
-  .skills{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
-  .skill{
-    border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:10px 8px; text-align:center;
-  }
-  .skill:disabled{opacity:.42; cursor:not-allowed}
-  .skill .ic{font-size:21px; display:block; line-height:1.1}
-  .skill strong{display:block; font-size:14px; margin-top:2px}
-  .skill small{color:var(--cyan); font-weight:700; font-size:12px}
-  .skill small.cd{color:var(--gold)}
-  .util-row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
-  .util{
-    border:1px solid var(--line); background:var(--panel); color:var(--text); padding:11px 10px; font-weight:700; font-size:15px;
-  }
-  .util:disabled{opacity:.45; cursor:not-allowed}
-  .util span{color:var(--muted); font-weight:600; font-size:13px; display:block}
-  .util.potion{border-color:#3f2d5c}
-  .util.potion strong{color:#e9d5ff}
-
-  /* ---------- PANELS ---------- */
-  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px}
-  @media (max-width:560px){ .grid2{grid-template-columns:1fr} .skills{grid-template-columns:repeat(3,1fr)} }
-  .panel{border:1px solid var(--line); background:var(--panel); padding:13px 14px}
-  .panel h3{margin:0 0 10px; font-family:"Orbitron",sans-serif; font-size:12px; letter-spacing:.22em; color:var(--cyan); font-weight:800}
-  .stat-row{display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed #1e2447}
-  .stat-row:last-child{border-bottom:none}
-  .stat-row .nm{flex:1}
-  .stat-row .nm strong{font-size:16px}
-  .stat-row .nm small{display:block; color:var(--muted); font-size:12px; font-weight:600; line-height:1.2}
-  .stat-row .val{font-family:"Orbitron",sans-serif; font-weight:800; font-size:17px; min-width:30px; text-align:right}
-  .plus-btn{
-    width:32px; height:32px; border:1px solid var(--gold-dim); background:#221a05; color:var(--gold);
-    font-size:19px; font-weight:900; line-height:1; display:none;
-  }
-  .plus-btn.show{display:block}
-  .shop-row{display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px dashed #1e2447}
-  .shop-row:last-child{border-bottom:none}
-  .shop-row .nm{flex:1}
-  .shop-row .nm strong{font-size:15px; display:block; line-height:1.15}
-  .shop-row .nm small{color:var(--muted); font-size:12px; font-weight:600}
-  .buy-btn{border:1px solid var(--cyan-dim); background:#082f3f; color:#a5f3fc; font-weight:800; padding:7px 10px; font-size:13px; white-space:nowrap}
-  .buy-btn:disabled{opacity:.4; cursor:not-allowed}
-  .derived{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-  .derived div{flex:1; min-width:80px; background:var(--panel2); border:1px solid #1e2447; padding:7px 8px; text-align:center}
-  .derived small{display:block; font-size:10px; letter-spacing:.14em; color:var(--muted2); font-weight:700}
-  .derived strong{font-size:16px}
-
-  /* ---------- LOG ---------- */
-  .log-panel{margin-top:12px}
-  .log{list-style:none; margin:0; padding:0; max-height:172px; overflow:auto; font-size:14.5px; font-weight:600}
-  .log li{padding:5px 2px; border-bottom:1px solid #161b36; color:#c7cdea; line-height:1.35}
-  .log li:first-child{color:#fff}
-  .log li .t{color:var(--muted2); font-size:12px; margin-right:6px; font-variant-numeric:tabular-nums}
-  .log li.good{color:#86efac}
-  .log li.gold{color:#fde68a}
-  .log li.bad{color:#fca5a5}
-  .log li.sys{color:#67e8f9}
-
-  .footer-row{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
-  .ghost-btn{flex:1; min-width:130px; border:1px solid var(--line); background:transparent; color:var(--muted); padding:10px; font-weight:700; font-size:14px}
-  .ghost-btn.danger-armed{border-color:var(--red); color:#fca5a5; background:#2a0a0a}
-  .hint{text-align:center; color:var(--muted2); font-size:13px; font-weight:600; margin-top:12px}
-
-  /* ---------- DUNGEON MAP (exploration) ---------- */
+  /* ---------- DUNGEON MAP ---------- */
   [hidden]{display:none !important}
-  .dungeon-panel{
-    margin-top:12px; border:1px solid var(--line); background:var(--panel); padding:12px;
-  }
+  .dungeon-panel{margin-top:12px; padding:13px 14px}
   .dungeon-head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px}
   .dungeon-head h3{margin:0; font-family:"Orbitron",sans-serif; font-size:12px; letter-spacing:.22em; color:var(--cyan); font-weight:800}
   .dungeon-head .d-status{color:var(--muted); font-weight:700; font-size:13.5px}
@@ -268,79 +169,289 @@
   .dungeon-head .d-status .boss-left{color:var(--gold)}
   .dungeon-grid{
     display:grid; grid-template-columns:repeat(13,1fr); gap:3px;
-    background:#04050c; border:1px solid #232946; padding:6px;
+    background:#04050c; border:1px solid #2b3160; border-radius:10px; padding:6px;
     max-width:560px; margin:0 auto;
   }
   .tile{
-    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
-    background:#12162e; font-size:clamp(14px,4.2vw,25px); line-height:1; position:relative; user-select:none;
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; border-radius:4px;
+    background:linear-gradient(180deg,#181c3c,#12152e); font-size:clamp(14px,4.2vw,25px); line-height:1; position:relative; user-select:none;
   }
-  .tile.alt{background:#171d3a}
+  .tile.alt{background:linear-gradient(180deg,#1b2044,#141736)}
   .tile.wall{
-    background:linear-gradient(180deg,#2e3c6e,#1a2145);
-    box-shadow:inset 0 0 0 1.5px #41548f, inset 0 -5px 0 rgba(0,0,0,.35), inset 0 4px 0 rgba(255,255,255,.06);
+    background:linear-gradient(180deg,#3b4a85,#212a56);
+    box-shadow:inset 0 0 0 1.5px #55679f, inset 0 -5px 0 rgba(0,0,0,.35), inset 0 4px 0 rgba(255,255,255,.08);
   }
   .tile.wall::after{content:""; position:absolute; left:18%; right:18%; top:50%; height:1.5px; background:rgba(0,0,0,.35)}
   .tile .ent{filter:drop-shadow(0 3px 5px rgba(0,0,0,.7)); z-index:1}
-  .tile.monster-tile{background:#1d1430}
-  .tile.boss-tile{background:#2a1408; box-shadow:inset 0 0 0 1.5px var(--gold-dim), inset 0 0 14px rgba(245,196,81,.35)}
-  .tile.chest-tile{background:#1d1a08}
+  .el-dot{position:absolute; top:2px; left:2px; width:8px; height:8px; border-radius:50%; z-index:2; box-shadow:0 0 6px currentColor}
+  .tile.monster-tile{background:linear-gradient(180deg,#241647,#180f31)}
+  .tile.boss-tile{background:linear-gradient(180deg,#3a1c07,#241103); box-shadow:inset 0 0 0 1.5px var(--gold-deep), inset 0 0 14px rgba(245,196,81,.4)}
+  .tile.chest-tile{background:linear-gradient(180deg,#2b2408,#1d1a08)}
   .tile.portal-tile{
-    background:radial-gradient(circle at 50% 50%, rgba(196,181,253,.85), rgba(124,58,237,.45) 55%, #1d1430 78%);
-    box-shadow:inset 0 0 0 1.5px #a78bfa, inset 0 0 16px rgba(167,139,250,.8);
+    background:radial-gradient(circle at 50% 50%, rgba(216,199,255,.9), rgba(124,58,237,.5) 55%, #1d1430 80%);
+    box-shadow:inset 0 0 0 1.5px #a78bfa, inset 0 0 16px rgba(167,139,250,.85);
     animation:portalPulse 1.1s ease-in-out infinite alternate;
   }
   @keyframes portalPulse{from{filter:brightness(.9)}to{filter:brightness(1.3)}}
   .tile.player-tile{
-    background:radial-gradient(circle at 50% 55%, rgba(34,211,238,.5), rgba(14,116,144,.22) 60%, #12303e 85%);
-    box-shadow:inset 0 0 0 2px var(--cyan), inset 0 0 14px rgba(34,211,238,.55);
+    background:radial-gradient(circle at 50% 55%, rgba(56,225,255,.5), rgba(14,116,144,.22) 60%, #12303e 88%);
+    box-shadow:inset 0 0 0 2px var(--cyan), inset 0 0 14px rgba(56,225,255,.55);
   }
-  .player-sprite{display:block; animation:playerBob 1s ease-in-out infinite; filter:drop-shadow(0 0 7px rgba(34,211,238,.9)) drop-shadow(0 3px 4px rgba(0,0,0,.7))}
+  .player-sprite{display:block; animation:playerBob 1s ease-in-out infinite; filter:drop-shadow(0 0 7px rgba(56,225,255,.9)) drop-shadow(0 3px 4px rgba(0,0,0,.7))}
   @keyframes playerBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
   .dir-arrow{position:absolute; right:1px; bottom:0; font-size:9px; color:var(--cyan); z-index:2; line-height:1; font-weight:900}
-  .explore-msg{
-    max-width:560px; margin:10px auto 0; text-align:center; color:var(--muted); font-weight:600; font-size:14.5px; line-height:1.4; min-height:22px;
-  }
+  .explore-msg{max-width:560px; margin:10px auto 0; text-align:center; color:var(--muted); font-weight:600; font-size:14.5px; line-height:1.4; min-height:22px}
   .explore-msg b{color:#fff}
   .explore-msg .gold-t{color:var(--gold)}
-  .dpad{
-    display:grid; grid-template-columns:repeat(3,62px); grid-template-rows:repeat(3,50px);
-    gap:6px; justify-content:center; margin:12px auto 2px; max-width:220px;
-  }
+  .dpad{display:grid; grid-template-columns:repeat(3,62px); grid-template-rows:repeat(3,50px); gap:6px; justify-content:center; margin:12px auto 2px; max-width:220px}
   .dpad button{
-    border:1.5px solid var(--line-bright); background:linear-gradient(180deg,#164e63,#0b2438); color:#fff;
-    font-size:19px; line-height:1; box-shadow:0 0 12px rgba(34,211,238,.15);
+    border:1.5px solid rgba(56,225,255,.7); border-radius:10px; color:#fff; font-size:19px; line-height:1;
+    background:linear-gradient(180deg,#1b6a8a,#0c2c44); box-shadow:0 4px 0 #062033, 0 0 12px rgba(56,225,255,.18);
   }
-  .dpad button:active{transform:scale(.93); background:#0e7490}
+  .dpad button:active{transform:translateY(3px); box-shadow:0 1px 0 #062033}
   .dpad .dpad-center{
-    border:1px solid var(--line); background:#0a0d1f; color:var(--muted2);
+    border:1px solid var(--line-soft); border-radius:10px; background:#0a0d1f; color:var(--muted2);
     font-family:"Orbitron",sans-serif; font-size:8.5px; letter-spacing:.14em; font-weight:700;
-    display:flex; align-items:center; justify-content:center; text-align:center; box-shadow:none; cursor:default;
+    display:flex; align-items:center; justify-content:center; text-align:center; cursor:default;
   }
-  .dpad button:disabled{opacity:.35; cursor:not-allowed}
   .dungeon-panel.in-battle .dungeon-grid{opacity:.45}
   .dungeon-panel.in-battle .dpad button{opacity:.35}
   .keys-hint{text-align:center; color:var(--muted2); font-size:12.5px; font-weight:600; margin-top:8px}
 
-  /* ---------- DEATH / CLEAR OVERLAYS ---------- */
-  .overlay{
-    position:fixed; inset:0; background:rgba(3,4,10,.86); display:none; align-items:center; justify-content:center; padding:18px; z-index:20;
+  /* ---------- BATTLE ARENA (Summoners-War style stage) ---------- */
+  .arena{
+    margin-top:12px; position:relative; overflow:hidden; padding:0; text-align:center;
+    --elc:#9d6bff;
+    background:
+      radial-gradient(640px 300px at 50% 118%, color-mix(in srgb, var(--elc) 42%, transparent), transparent 68%),
+      radial-gradient(460px 220px at 50% -6%, rgba(56,225,255,.13), transparent 62%),
+      linear-gradient(180deg,#131736 0%, #0a0c22 58%, #07081a 100%);
   }
+  .arena::before{
+    content:""; position:absolute; inset:0; opacity:.4; pointer-events:none;
+    background-image:linear-gradient(rgba(120,140,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(120,140,255,.055) 1px, transparent 1px);
+    background-size:34px 34px;
+  }
+  .battle-top{
+    position:relative; z-index:2; display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+    padding:13px 14px 0; text-align:left; flex-wrap:wrap;
+  }
+  .enemy-id{flex:1; min-width:210px}
+  .enemy-line{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .el-badge{
+    display:inline-flex; align-items:center; gap:4px; font-family:"Orbitron",sans-serif; font-size:10px; font-weight:800;
+    letter-spacing:.1em; padding:3px 8px; border-radius:20px; color:#0b0b18; background:var(--elc);
+    box-shadow:0 0 12px color-mix(in srgb, var(--elc) 65%, transparent);
+  }
+  .stars{color:var(--gold); font-size:14px; letter-spacing:1px; text-shadow:0 0 8px rgba(245,196,81,.55)}
+  .stars .off{color:#4a4f78; text-shadow:none}
+  .monster-name{font-family:"Cinzel",serif; font-weight:900; font-size:21px; letter-spacing:.02em; margin:0; line-height:1.1}
+  .monster-name .boss-tag{color:#0b0b18; background:linear-gradient(180deg,#ffd970,var(--gold-deep)); font-family:"Orbitron",sans-serif; font-size:10px; letter-spacing:.16em; padding:3px 7px; border-radius:5px; vertical-align:middle; margin-right:8px}
+  .monster-sub{color:var(--muted); font-weight:600; font-size:13.5px; margin:3px 0 0}
+  .monster-sub .adv{color:var(--gold); font-weight:800}
+  .monster-sub .dis{color:#f87171; font-weight:800}
+  .battle-toggles{display:flex; gap:6px}
+  .toggle-btn{
+    border:1px solid var(--line); background:var(--panel2); color:var(--muted); border-radius:9px;
+    font-family:"Orbitron",sans-serif; font-size:11px; font-weight:800; letter-spacing:.08em; padding:8px 10px;
+  }
+  .toggle-btn.on{border-color:var(--gold); color:var(--gold); background:#241a04; box-shadow:0 0 12px rgba(245,196,81,.25)}
+  .monster-hp{position:relative; z-index:2; max-width:460px; margin:10px auto 0; padding:0 16px; text-align:left}
+  .monster-hp .bar-row{grid-template-columns:30px 1fr 88px; margin-top:5px}
+  .monster-hp .bar-row:first-child{margin-top:0}
+  .monster-stage{position:relative; z-index:1; height:218px; display:flex; align-items:flex-end; justify-content:center; margin:2px auto 0; max-width:480px}
+  .platform{
+    position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+    width:230px; height:52px; border-radius:50%;
+    background:radial-gradient(ellipse, color-mix(in srgb, var(--elc) 55%, transparent), rgba(10,10,26,.2) 68%, transparent 75%);
+  }
+  .rune-ring{
+    position:absolute; bottom:6px; left:50%; width:250px; height:66px; transform:translateX(-50%);
+    border-radius:50%; border:2px dashed color-mix(in srgb, var(--elc) 75%, transparent);
+    animation:ringSpin 16s linear infinite; opacity:.85;
+  }
+  @keyframes ringSpin{from{transform:translateX(-50%) rotate(0deg)}to{transform:translateX(-50%) rotate(360deg)}}
+  .monster-emoji{
+    font-size:124px; line-height:1; user-select:none; cursor:pointer; background:none; border:none; padding:10px 10px 26px; position:relative; z-index:2;
+    filter:drop-shadow(0 16px 22px rgba(0,0,0,.65)) drop-shadow(0 0 30px color-mix(in srgb, var(--elc) 55%, transparent));
+    transition:transform .08s ease; animation:bob 2.6s ease-in-out infinite;
+  }
+  .monster-emoji:active{transform:scale(.94)}
+  .monster-emoji.hit{animation:hitShake .28s ease}
+  .monster-emoji.boss{font-size:150px}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @keyframes hitShake{0%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-3deg)}55%{transform:translateX(9px) rotate(2deg)}100%{transform:translateX(0)}}
+  .floaters{position:absolute; inset:0; pointer-events:none; overflow:visible; z-index:4}
+  .floater{
+    position:absolute; font-family:"Orbitron",sans-serif; font-weight:900; font-size:22px; color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,.85); animation:floatUp .85s ease-out forwards; white-space:nowrap;
+  }
+  .floater.crit{color:var(--gold); font-size:32px}
+  .floater.player-dmg{color:#fca5a5; font-size:17px}
+  .floater.heal{color:#86efac}
+  .floater.shadow-hit{font-size:16px}
+  @keyframes floatUp{0%{opacity:0; transform:translateY(8px) scale(.85)}15%{opacity:1; transform:translateY(0) scale(1.06)}100%{opacity:0; transform:translateY(-66px) scale(1)}}
+  .combo{position:absolute; top:64px; right:14px; z-index:3; text-align:right; display:none}
+  .combo.show{display:block}
+  .combo strong{font-family:"Orbitron",sans-serif; font-size:27px; color:var(--gold); display:block; line-height:1; text-shadow:0 0 14px rgba(245,196,81,.55)}
+  .combo small{font-size:10px; letter-spacing:.22em; color:var(--muted); font-weight:700}
+  .stun-tag{display:none; position:relative; z-index:2; padding-bottom:8px; color:#fde68a; font-weight:700; letter-spacing:.1em; font-size:13px}
+  .stun-tag.show{display:block}
+  /* party row */
+  .party-row{
+    position:relative; z-index:2; display:flex; gap:8px; justify-content:center; align-items:flex-end; flex-wrap:wrap;
+    padding:4px 12px 14px;
+  }
+  .party-card{
+    width:74px; border:1px solid var(--line); border-radius:10px; padding:6px 4px 5px; text-align:center;
+    background:linear-gradient(180deg, rgba(35,39,81,.92), rgba(16,18,40,.95));
+  }
+  .party-card.leader{border-color:var(--cyan); box-shadow:0 0 12px rgba(56,225,255,.3)}
+  .party-card .face{font-size:30px; line-height:1.15; display:block; filter:drop-shadow(0 3px 4px rgba(0,0,0,.7))}
+  .party-card .pname{display:block; font-size:10px; font-weight:700; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .party-card .bar{height:5px; margin-top:4px}
+  .party-card .bar i{transition:none}
+  .party-card .bar i.shadow-atb{background:linear-gradient(90deg,#6d28d9,#c4b5fd)}
+  .party-empty{color:var(--muted2); font-weight:600; font-size:13.5px; padding:6px 0 12px}
+
+  /* ---------- ACTIONS ---------- */
+  .actions{margin-top:12px; display:grid; grid-template-columns:1fr; gap:10px}
+  .attack-btn{
+    border:1.5px solid rgba(56,225,255,.8); border-radius:14px; color:#fff; padding:15px 16px;
+    font-family:"Orbitron",sans-serif; font-weight:900; letter-spacing:.12em; font-size:19px;
+    background:linear-gradient(180deg,#1d7ea6,#0d3d5c);
+    box-shadow:0 5px 0 #062a42, 0 0 24px rgba(56,225,255,.28), inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .attack-btn:active{transform:translateY(3px); box-shadow:0 2px 0 #062a42}
+  .attack-btn small{display:block; font-family:"Rajdhani",sans-serif; font-weight:600; letter-spacing:.04em; font-size:13px; color:#bdefff; margin-top:2px; text-transform:none}
+  .skills{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+  .skill{
+    position:relative; overflow:hidden; border:1px solid var(--line); border-radius:12px; color:var(--text);
+    padding:11px 8px 10px; text-align:center; background:linear-gradient(180deg, var(--panel3), var(--panel2));
+    box-shadow:0 3px 0 #0a0c22;
+  }
+  .skill:active{transform:translateY(2px); box-shadow:0 1px 0 #0a0c22}
+  .skill:disabled{opacity:.42; cursor:not-allowed; transform:none}
+  .skill .ic{font-size:22px; display:block; line-height:1.1}
+  .skill strong{display:block; font-size:14px; margin-top:2px}
+  .skill small{color:var(--cyan); font-weight:700; font-size:12px}
+  .skill small.cd{color:var(--gold)}
+  .battle-util{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .util-row{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px}
+  .util{
+    border:1px solid var(--line); border-radius:12px; color:var(--text); padding:11px 10px; font-weight:700; font-size:15px;
+    background:linear-gradient(180deg, var(--panel2), var(--panel)); box-shadow:0 3px 0 #0a0c22;
+  }
+  .util:active{transform:translateY(2px); box-shadow:0 1px 0 #0a0c22}
+  .util:disabled{opacity:.45; cursor:not-allowed; transform:none}
+  .util span{color:var(--muted); font-weight:600; font-size:13px; display:block}
+  .util.potion{border-color:#4c3577}
+  .util.potion strong{color:#e9d5ff}
+  .util.flee{border-color:#5c3535}
+  .util.flee strong{color:#fca5a5}
+
+  /* ---------- COLLECTION / RUNES / STATS / SHOP ---------- */
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px}
+  @media (max-width:600px){ .grid2{grid-template-columns:1fr} }
+  .pad{padding:13px 14px}
+  .army-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(96px,1fr)); gap:8px}
+  .mon-card{
+    border:1.5px solid var(--cardc, var(--line)); border-radius:12px; padding:9px 6px 7px; text-align:center; position:relative;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--cardc, #333a75) 22%, #171a36), #101227);
+    box-shadow:inset 0 0 18px color-mix(in srgb, var(--cardc, #333a75) 18%, transparent);
+  }
+  .mon-card .face{font-size:36px; line-height:1.15; display:block; filter:drop-shadow(0 4px 6px rgba(0,0,0,.7))}
+  .mon-card .mname{display:block; font-size:11.5px; font-weight:700; line-height:1.15; margin-top:2px}
+  .mon-card .stars{font-size:10.5px}
+  .mon-card .eltag{font-size:10px; font-weight:800; letter-spacing:.08em; font-family:"Orbitron",sans-serif}
+  .army-empty{color:var(--muted); font-weight:600; font-size:14px; grid-column:1/-1; text-align:center; padding:8px 4px}
+  .summon-row{display:flex; gap:8px; margin-top:11px; flex-wrap:wrap}
+  .summon-btn{
+    flex:1; min-width:170px; border:1px solid #7c4a03; border-radius:11px; padding:11px; font-weight:800; font-size:15px; color:#ffe9b0;
+    background:linear-gradient(180deg,#8a5a10,#5e3c06); box-shadow:0 3px 0 #332000;
+  }
+  .summon-btn:active{transform:translateY(2px)}
+  .summon-btn:disabled{opacity:.45; cursor:not-allowed}
+  .summon-btn span{display:block; font-weight:600; font-size:12.5px; color:#f3d489}
+  .rune-slots{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:11px}
+  .rune-slot{
+    aspect-ratio:1/1; border:1.5px dashed #3a4176; border-radius:10px; background:#0d1026; color:var(--muted2);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:2px;
+    font-size:19px; line-height:1;
+  }
+  .rune-slot.filled{border-style:solid; border-color:var(--gold-deep); background:linear-gradient(180deg,#2b2108,#171106); color:#fff; cursor:pointer; box-shadow:inset 0 0 12px rgba(245,196,81,.16)}
+  .rune-slot small{font-size:8.5px; font-family:"Orbitron",sans-serif; letter-spacing:.04em; color:var(--muted); font-weight:700; text-align:center; line-height:1.1}
+  .rune-slot .rstars{font-size:8px; color:var(--gold); letter-spacing:0}
+  .rune-list{display:flex; flex-direction:column; gap:6px; max-height:190px; overflow:auto}
+  .rune-item{
+    display:flex; align-items:center; gap:9px; border:1px solid var(--line-soft); border-radius:10px; padding:7px 9px;
+    background:var(--panel2); text-align:left; color:var(--text); width:100%;
+  }
+  .rune-item .ric{font-size:21px}
+  .rune-item .rnm{flex:1}
+  .rune-item .rnm strong{font-size:14px; display:block; line-height:1.15}
+  .rune-item .rnm small{color:var(--muted); font-size:12px; font-weight:600}
+  .rune-item .rstars{color:var(--gold); font-size:11px}
+  .rune-item .req{font-family:"Orbitron",sans-serif; font-size:10px; font-weight:800; color:var(--cyan); letter-spacing:.06em}
+  .rune-empty{color:var(--muted); font-weight:600; font-size:13.5px; text-align:center; padding:6px}
+  .stat-row{display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed #23264e}
+  .stat-row:last-child{border-bottom:none}
+  .stat-row .nm{flex:1}
+  .stat-row .nm strong{font-size:16px}
+  .stat-row .nm small{display:block; color:var(--muted); font-size:12px; font-weight:600; line-height:1.2}
+  .stat-row .val{font-family:"Orbitron",sans-serif; font-weight:800; font-size:17px; min-width:30px; text-align:right}
+  .stat-row .bonus{color:var(--gold); font-size:12px; font-weight:800; min-width:44px; text-align:right}
+  .plus-btn{
+    width:32px; height:32px; border:1px solid var(--gold-deep); border-radius:9px; background:#241a04; color:var(--gold);
+    font-size:19px; font-weight:900; line-height:1; display:none;
+  }
+  .plus-btn.show{display:block}
+  .shop-row{display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px dashed #23264e}
+  .shop-row:last-child{border-bottom:none}
+  .shop-row .nm{flex:1}
+  .shop-row .nm strong{font-size:15px; display:block; line-height:1.15}
+  .shop-row .nm small{color:var(--muted); font-size:12px; font-weight:600}
+  .buy-btn{border:1px solid #0e7490; border-radius:9px; background:#0a3446; color:#a5f3fc; font-weight:800; padding:8px 10px; font-size:13px; white-space:nowrap; box-shadow:0 2px 0 #052433}
+  .buy-btn:active{transform:translateY(1px); box-shadow:none}
+  .buy-btn:disabled{opacity:.4; cursor:not-allowed}
+  .derived{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .derived div{flex:1; min-width:76px; background:var(--panel2); border:1px solid #23264e; border-radius:9px; padding:7px 8px; text-align:center}
+  .derived small{display:block; font-size:9.5px; letter-spacing:.13em; color:var(--muted2); font-weight:700}
+  .derived strong{font-size:16px}
+
+  /* ---------- LOG ---------- */
+  .log-panel{margin-top:12px; padding:13px 14px}
+  .log{list-style:none; margin:0; padding:0; max-height:176px; overflow:auto; font-size:14.5px; font-weight:600}
+  .log li{padding:5px 2px; border-bottom:1px solid #1b1e3f; color:#ccd2f2; line-height:1.35}
+  .log li:first-child{color:#fff}
+  .log li .t{color:var(--muted2); font-size:12px; margin-right:6px; font-variant-numeric:tabular-nums}
+  .log li.good{color:#86efac}
+  .log li.gold{color:#fde68a}
+  .log li.bad{color:#fca5a5}
+  .log li.sys{color:#7deffc}
+  .log li.rune{color:#f0abfc}
+
+  .footer-row{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .ghost-btn{flex:1; min-width:130px; border:1px solid var(--line); border-radius:10px; background:transparent; color:var(--muted); padding:10px; font-weight:700; font-size:14px}
+  .ghost-btn.danger-armed{border-color:var(--red); color:#fca5a5; background:#2a0a0a}
+  .hint{text-align:center; color:var(--muted2); font-size:13px; font-weight:600; margin-top:12px; line-height:1.5}
+  .save-status{text-align:center; color:#86efac; font-size:13px; font-weight:700; margin:10px 0 0; letter-spacing:.02em}
+  .save-status span{color:var(--muted2); font-weight:600}
+
+  /* ---------- OVERLAYS ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(3,4,10,.87); display:none; align-items:center; justify-content:center; padding:18px; z-index:20}
   .overlay.show{display:flex}
   .overlay-card{
-    max-width:420px; width:100%; border:1.5px solid var(--red); background:#140a12; padding:24px 20px; text-align:center;
-    box-shadow:0 0 40px rgba(239,68,68,.25);
-    clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
+    max-width:420px; width:100%; border:1.5px solid var(--red); border-radius:16px; background:#170a13; padding:24px 20px; text-align:center;
+    box-shadow:0 0 44px rgba(239,68,68,.28);
   }
-  .overlay-card.clear{border-color:var(--gold); background:#161106; box-shadow:0 0 40px rgba(245,196,81,.25)}
-  .overlay-card h2{font-family:"Orbitron",sans-serif; margin:0 0 6px; font-size:28px; letter-spacing:.06em}
+  .overlay-card h2{font-family:"Cinzel",serif; margin:0 0 6px; font-size:29px; letter-spacing:.05em}
   .overlay-card p{color:var(--muted); font-weight:600; margin:0 0 16px; line-height:1.45}
   .overlay-card p b{color:#fff}
-  .big-btn{width:100%; border:1px solid var(--line-bright); background:#0b2a3f; color:#fff; padding:13px; font-family:"Orbitron",sans-serif; font-weight:800; letter-spacing:.1em; font-size:15px}
-  .overlay-card.clear .big-btn{border-color:var(--gold); background:#2a1f05; color:#fde68a}
+  .big-btn{width:100%; border:1px solid rgba(56,225,255,.7); border-radius:11px; background:#0d324e; color:#fff; padding:13px; font-family:"Orbitron",sans-serif; font-weight:800; letter-spacing:.1em; font-size:15px}
 
   @media (prefers-reduced-motion: reduce){
-    .monster-emoji{animation:none}
+    .monster-emoji,.rune-ring,body::before{animation:none}
     .floater{animation-duration:.01s}
     *{transition:none !important}
   }
@@ -353,11 +464,11 @@
   <header class="system">
     <div class="sys-tag">System Notification</div>
     <h1>DUNGEON <span>HUNTER</span></h1>
-    <p class="sub">A gate has appeared. Clear each gate, extract shadows, and <b>level up</b> — weakest hunter to Monarch.</p>
+    <p class="sub">A gate has appeared. Build your <b>shadow army</b>, inscribe <b>runes</b>, exploit <b>elemental advantage</b> — weakest hunter to Monarch.</p>
   </header>
 
   <!-- HUNTER STATUS -->
-  <section class="status" aria-label="Hunter status">
+  <section class="status panel" aria-label="Hunter status">
     <div class="status-top">
       <div class="rank-badge" aria-label="Hunter rank">
         <small>RANK</small>
@@ -375,16 +486,17 @@
       </div>
     </div>
     <div class="meta-row">
-      <div class="chip gold"><small>GOLD</small><strong id="goldVal">0</strong></div>
-      <div class="chip"><small>KILLS</small><strong id="killsVal">0</strong></div>
-      <div class="chip shadow"><small>SHADOWS</small><strong id="shadowsVal">0</strong></div>
-      <div class="chip"><small>BEST COMBO</small><strong id="comboBestVal">0</strong></div>
+      <div class="chip gold"><small>◆ GOLD</small><strong id="goldVal">0</strong></div>
+      <div class="chip crystal"><small>◆ CRYSTALS</small><strong id="crystalVal">0</strong></div>
+      <div class="chip scroll"><small>📜 SCROLLS</small><strong id="scrollVal">1</strong></div>
+      <div class="chip shadow"><small>👤 SHADOWS</small><strong id="shadowsVal">0</strong></div>
+      <div class="chip"><small>⚔ KILLS</small><strong id="killsVal">0</strong></div>
     </div>
     <div class="points-banner" id="pointsBanner">LEVEL UP — you have <span id="pointsVal">0</span> stat points. Tap <b>+</b> next to a stat below to spend them.</div>
   </section>
 
   <!-- GATE BAR -->
-  <div class="gatebar">
+  <div class="gatebar panel">
     <div>
       <div class="gate-name">GATE <span id="gateNum">1</span> — <span id="gateName">Gate of Embers</span></div>
       <div class="gate-sub" id="gateSub">Clear 10 monsters · Boss on the last one</div>
@@ -392,13 +504,13 @@
     <div class="pips" id="pips" aria-label="Gate progress"></div>
   </div>
 
-  <!-- DUNGEON MAP — walk it like a classic handheld RPG -->
-  <section class="dungeon-panel" id="dungeonPanel" aria-label="Dungeon map">
+  <!-- DUNGEON MAP -->
+  <section class="dungeon-panel panel" id="dungeonPanel" aria-label="Dungeon map">
     <div class="dungeon-head">
       <h3>🗺️ DUNGEON MAP</h3>
       <div class="d-status" id="dungeonStatus">Monsters left: <b>10</b></div>
     </div>
-    <div class="dungeon-grid" id="dungeonGrid" role="img" aria-label="Top-down dungeon floor. You are the glowing hunter. Walk into a monster to fight it."></div>
+    <div class="dungeon-grid" id="dungeonGrid" role="img" aria-label="Top-down dungeon floor. You are the glowing hunter. Walk into a monster to fight it. Colored dots mark each monster's element."></div>
     <p class="explore-msg" id="exploreMsg">You step through the gate. Something moves in the dark…</p>
     <div class="dpad" aria-label="Movement pad">
       <span></span>
@@ -411,25 +523,38 @@
       <button type="button" data-dir="down" aria-label="Move down">▼</button>
       <span></span>
     </div>
-    <p class="keys-hint">Walk with the pad, arrow keys, or WASD. Bump into a monster to fight it · open chests for loot · the <b style="color:#c4b5fd">portal</b> opens when the boss falls.</p>
+    <p class="keys-hint">Walk with the pad, arrow keys, or WASD. The dot on each monster is its <b>element</b> — 🔥 beats 🌪️, 🌪️ beats 💧, 💧 beats 🔥, ✨ ⇄ 🌑. Your shadows strike harder with the advantage.</p>
   </section>
 
-  <!-- BATTLE ARENA (appears when you bump into a monster) -->
-  <section class="arena" id="battlePanel" aria-label="Battle arena" hidden>
-    <div class="combo" id="comboBox"><small>COMBO</small><strong id="comboVal">x0</strong></div>
-    <div class="monster-wrap">
-      <h2 class="monster-name" id="monsterName">—</h2>
-      <p class="monster-sub" id="monsterSub">—</p>
-      <div class="monster-hp">
-        <div class="bar-row"><label>HP</label><div class="bar hp"><i id="monsterHpBar" style="width:100%"></i></div><output id="monsterHpText">—</output></div>
+  <!-- BATTLE ARENA -->
+  <section class="arena panel" id="battlePanel" aria-label="Battle arena" hidden>
+    <div class="battle-top">
+      <div class="enemy-id">
+        <div class="enemy-line">
+          <span class="el-badge" id="monsterElBadge">🔥 FIRE</span>
+          <span class="stars" id="monsterStars" aria-label="Monster grade"></span>
+        </div>
+        <h2 class="monster-name" id="monsterName">—</h2>
+        <p class="monster-sub" id="monsterSub">—</p>
       </div>
-      <div class="monster-stage">
-        <div class="shadow-ring"></div>
-        <button class="monster-emoji" id="monsterBtn" aria-label="Attack the monster">👺</button>
-        <div class="floaters" id="floaters"></div>
+      <div class="battle-toggles">
+        <button class="toggle-btn" id="autoBtn" aria-pressed="false">▶ AUTO</button>
+        <button class="toggle-btn" id="speedBtn">SPEED ×1</button>
       </div>
-      <div class="stun-tag" id="stunTag">✦ STUNNED — it can't fight back ✦</div>
     </div>
+    <div class="combo" id="comboBox"><small>COMBO</small><strong id="comboVal">x0</strong></div>
+    <div class="monster-hp">
+      <div class="bar-row"><label>HP</label><div class="bar hp"><i id="monsterHpBar" style="width:100%"></i></div><output id="monsterHpText">—</output></div>
+      <div class="bar-row"><label>ATB</label><div class="bar atb"><i id="monsterAtbBar" style="width:0%"></i></div><output id="monsterAtbText">ENEMY TURN</output></div>
+    </div>
+    <div class="monster-stage">
+      <div class="platform"></div>
+      <div class="rune-ring"></div>
+      <button class="monster-emoji" id="monsterBtn" aria-label="Attack the monster">👺</button>
+      <div class="floaters" id="floaters"></div>
+    </div>
+    <div class="stun-tag" id="stunTag">✦ STUNNED — it can't fight back ✦</div>
+    <div class="party-row" id="partyRow" aria-label="Your party"></div>
   </section>
 
   <!-- BATTLE ACTIONS -->
@@ -440,40 +565,57 @@
       <button class="skill" id="skill2"><span class="ic">👤</span><strong>Shadow Rush</strong><small id="skill2Cost">20 MP · 5 hits</small></button>
       <button class="skill" id="skill3"><span class="ic">💀</span><strong>Monarch's Wrath</strong><small id="skill3Cost">35 MP · 500% + stun</small></button>
     </div>
+    <div class="battle-util">
+      <button class="util potion" id="potionBtn2"><strong>🧪 Drink Potion</strong><span id="potionSub2">3 left · heals 50% HP</span></button>
+      <button class="util flee" id="fleeBtn"><strong>🏃 Flee Battle</strong><span>Escape — the monster stays on the map</span></button>
+    </div>
   </div>
-  <div class="util-row" style="margin-top:12px">
+  <div class="util-row">
     <button class="util potion" id="potionBtn"><strong>🧪 Drink Potion</strong><span id="potionSub">3 left · heals 50% HP</span></button>
     <button class="util" id="buyPotionBtn"><strong>Buy Potion — 60 G</strong><span>Stock up before the boss</span></button>
   </div>
 
+  <!-- SHADOW ARMY -->
+  <section class="panel pad" style="margin-top:12px" aria-label="Shadow army">
+    <h3>👤 SHADOW ARMY — YOUR TEAM</h3>
+    <div class="army-grid" id="armyGrid"></div>
+    <div class="summon-row">
+      <button class="summon-btn" id="summonBtn">📜 MYSTIC SUMMON<span id="summonSub">Use 1 scroll · random 3★–6★ shadow joins your team</span></button>
+    </div>
+  </section>
+
   <div class="grid2">
     <!-- STATS -->
-    <section class="panel" aria-label="Stats">
+    <section class="panel pad" aria-label="Stats">
       <h3>HUNTER STATS</h3>
       <div class="stat-row">
         <div class="nm"><strong>Strength</strong><small>More damage on every hit</small></div>
+        <div class="bonus" id="strBonus"></div>
         <div class="val" id="strVal">10</div>
         <button class="plus-btn" data-stat="str" aria-label="Add Strength">+</button>
       </div>
       <div class="stat-row">
         <div class="nm"><strong>Agility</strong><small>Higher crit chance &amp; combo speed</small></div>
+        <div class="bonus" id="agiBonus"></div>
         <div class="val" id="agiVal">10</div>
         <button class="plus-btn" data-stat="agi" aria-label="Add Agility">+</button>
       </div>
       <div class="stat-row">
         <div class="nm"><strong>Vitality</strong><small>+12 max HP per point</small></div>
+        <div class="bonus" id="vitBonus"></div>
         <div class="val" id="vitVal">10</div>
         <button class="plus-btn" data-stat="vit" aria-label="Add Vitality">+</button>
       </div>
       <div class="derived">
         <div><small>TAP DMG</small><strong id="dmgVal">14</strong></div>
         <div><small>CRIT</small><strong id="critVal">13%</strong></div>
-        <div><small>SHADOW BONUS</small><strong id="shadowBonusVal">+0%</strong></div>
+        <div><small>DMG CUT</small><strong id="reduceVal">0%</strong></div>
+        <div><small>SHADOW DMG</small><strong id="shadowBonusVal">+0%</strong></div>
       </div>
     </section>
 
     <!-- SHOP -->
-    <section class="panel" aria-label="Hunter shop">
+    <section class="panel pad" aria-label="Hunter shop">
       <h3>HUNTER ASSOCIATION SHOP</h3>
       <div class="shop-row">
         <div class="nm"><strong id="weaponName">Rusty Dagger</strong><small id="weaponSub">Weapon Lv 1 · +0 bonus damage</small></div>
@@ -484,11 +626,23 @@
         <button class="buy-btn" id="armorBtn">Upgrade · 100 G</button>
       </div>
       <div class="shop-row">
+        <div class="nm"><strong>Mystic Scroll</strong><small>Summon a random shadow for your army</small></div>
+        <button class="buy-btn" id="scrollBtn">Buy · 150 G</button>
+      </div>
+      <div class="shop-row">
         <div class="nm"><strong>Full Heal</strong><small>Restore HP &amp; MP to full, right now</small></div>
         <button class="buy-btn" id="healBtn">Heal · 40 G</button>
       </div>
     </section>
   </div>
+
+  <!-- RUNES -->
+  <section class="panel pad" style="margin-top:12px" aria-label="Runes">
+    <h3>◆ RUNES — 6 SLOTS</h3>
+    <div class="rune-slots" id="runeSlots"></div>
+    <div class="rune-list" id="runeList"></div>
+    <p class="keys-hint" style="margin-top:9px">Monsters drop runes — bosses always drop one. Tap a rune to inscribe it, tap an inscribed slot to remove it. <b style="color:#f0abfc">Fatal</b> +damage · <b style="color:#f0abfc">Energy</b> +HP · <b style="color:#f0abfc">Guard</b> damage cut · <b style="color:#f0abfc">Rage</b> +crit · <b style="color:#f0abfc">Swift</b> +shadow damage.</p>
+  </section>
 
   <!-- LOG -->
   <section class="panel log-panel" aria-label="Battle log">
@@ -500,24 +654,16 @@
     <button class="ghost-btn" id="soundBtn">🔊 Sound: On</button>
     <button class="ghost-btn" id="resetBtn">Restart Hunt</button>
   </div>
-  <p class="hint">Explore each gate on foot, hunter. In battle, monsters fight back every couple of seconds — kill fast, watch your HP, and save MP for the boss. Beat the boss and a portal opens: walk into it to descend to the next gate. Bosses can be extracted as shadows: <b style="color:#c4b5fd">ARISE.</b></p>
+  <p class="save-status" id="saveStatus" role="status">💾 Auto-save on <span>— your level, gold, army, runes and gate progress are kept on this device between visits.</span></p>
+  <p class="hint">Explore each gate on foot, hunter. In battle your <b style="color:#c4b5fd">shadow army fights beside you</b> on its own turn bars — match their elements against the enemy for bonus damage. Turn on <b style="color:var(--gold)">AUTO</b> and crank the <b style="color:var(--gold)">SPEED</b> to farm gates like a true Monarch. Beat the boss and a portal opens: walk into it to descend. Bosses can be extracted as shadows: <b style="color:#c4b5fd">ARISE.</b></p>
 </div>
 
 <!-- DEATH OVERLAY -->
 <div class="overlay" id="deathOverlay" role="dialog" aria-modal="true" aria-labelledby="deathTitle">
   <div class="overlay-card">
     <h2 id="deathTitle" style="color:#fca5a5">YOU DIED</h2>
-    <p id="deathText">The gate overwhelmed you. The System drags you back — you keep your level, gold and gear, but this gate restarts.</p>
+    <p id="deathText">The gate overwhelmed you. The System drags you back — you keep your level, gold, gear, runes and army, but this gate restarts.</p>
     <button class="big-btn" id="reviveBtn">RE-ENTER THE GATE</button>
-  </div>
-</div>
-
-<!-- GATE CLEAR OVERLAY -->
-<div class="overlay" id="clearOverlay" role="dialog" aria-modal="true" aria-labelledby="clearTitle">
-  <div class="overlay-card clear">
-    <h2 id="clearTitle" style="color:#fde68a">GATE CLEARED</h2>
-    <p id="clearText">The boss has fallen.</p>
-    <button class="big-btn" id="nextGateBtn">ENTER NEXT GATE →</button>
   </div>
 </div>
 
@@ -527,27 +673,52 @@
 
   /* ---------------- DATA ---------------- */
   var GATE_NAMES = ["Gate of Embers","Gate of Frost","Gate of Thorns","Gate of Echoes","Gate of Ash","Gate of the Deep","Gate of Storms","Demon Castle Gate","Gate of the Monarch","Gate of Chaos"];
+  var ELEMENTS = {
+    fire:  {label:"FIRE",  icon:"🔥", color:"#ff7847"},
+    water: {label:"WATER", icon:"💧", color:"#38a8ff"},
+    wind:  {label:"WIND",  icon:"🌪️", color:"#ffd84d"},
+    light: {label:"LIGHT", icon:"✨", color:"#fff3a6"},
+    dark:  {label:"DARK",  icon:"🌑", color:"#b388ff"}
+  };
+  var BEATS = { fire:"wind", wind:"water", water:"fire", light:"dark", dark:"light" };
+  function elementMult(attEl, defEl){
+    if(!attEl || !defEl) return 1;
+    if(BEATS[attEl]===defEl) return 1.3;
+    if(BEATS[defEl]===attEl) return 0.8;
+    return 1;
+  }
   var MONSTERS = [
-    {name:"Goblin Scout", emoji:"👺", type:"Beast"},
-    {name:"Dungeon Wolf", emoji:"🐺", type:"Beast"},
-    {name:"Venom Slime", emoji:"🟢", type:"Magic Beast"},
-    {name:"Skeleton Soldier", emoji:"💀", type:"Undead"},
-    {name:"Cave Spider", emoji:"🕷️", type:"Insectoid"},
-    {name:"Stone Golem", emoji:"🗿", type:"Construct"},
-    {name:"Orc Brute", emoji:"👹", type:"Demi-human"},
-    {name:"Dark Mage", emoji:"🧙", type:"Caster"},
-    {name:"Poison Serpent", emoji:"🐍", type:"Beast"},
-    {name:"Shadow Assassin", emoji:"🥷", type:"Shadow"}
+    {name:"Goblin Scout", emoji:"👺", type:"Beast", el:"fire"},
+    {name:"Dungeon Wolf", emoji:"🐺", type:"Beast", el:"wind"},
+    {name:"Venom Slime", emoji:"🟢", type:"Magic Beast", el:"water"},
+    {name:"Skeleton Soldier", emoji:"💀", type:"Undead", el:"dark"},
+    {name:"Cave Spider", emoji:"🕷️", type:"Insectoid", el:"wind"},
+    {name:"Stone Golem", emoji:"🗿", type:"Construct", el:"fire"},
+    {name:"Orc Brute", emoji:"👹", type:"Demi-human", el:"fire"},
+    {name:"Dark Mage", emoji:"🧙", type:"Caster", el:"dark"},
+    {name:"Poison Serpent", emoji:"🐍", type:"Beast", el:"water"},
+    {name:"Shadow Assassin", emoji:"🥷", type:"Shadow", el:"dark"},
+    {name:"Frost Wraith", emoji:"👻", type:"Undead", el:"water"},
+    {name:"Storm Roc", emoji:"🦅", type:"Beast", el:"wind"}
   ];
   var BOSSES = [
-    {name:"Steel-Fanged Lycan", emoji:"🐺", type:"Gate Boss"},
-    {name:"Blood-Red Commander", emoji:"👺", type:"Gate Boss"},
-    {name:"Cerberus, Gatekeeper", emoji:"🐕", type:"Gate Boss"},
-    {name:"Demon King Baran", emoji:"😈", type:"Gate Boss"},
-    {name:"Architect of Chaos", emoji:"👁️", type:"Gate Boss"}
+    {name:"Steel-Fanged Lycan", emoji:"🐺", type:"Gate Boss", el:"wind"},
+    {name:"Blood-Red Commander", emoji:"👺", type:"Gate Boss", el:"fire"},
+    {name:"Cerberus, Gatekeeper", emoji:"🐕", type:"Gate Boss", el:"fire"},
+    {name:"Seraph of the Broken Gate", emoji:"👼", type:"Gate Boss", el:"light"},
+    {name:"Demon King Baran", emoji:"😈", type:"Gate Boss", el:"dark"},
+    {name:"Architect of Chaos", emoji:"👁️", type:"Gate Boss", el:"light"}
   ];
   var WEAPONS = ["Rusty Dagger","Hunter's Dagger","Knight Killer","Kasaka's Venom Fang","Demon King's Dagger","Monarch's Shadow Blade"];
   var ARMORS = ["Worn Hunter Jacket","Reinforced Leather Armor","Red Knight's Armor","Demon King's Cloak","Monarch's Shadow Armor"];
+  var RUNE_SETS = {
+    fatal:  {label:"Fatal",  icon:"⚔️", per:3,   unit:"% damage",        fmt:function(v){ return "+" + v + "% tap damage"; }},
+    energy: {label:"Energy", icon:"❤️", per:3,   unit:"% max HP",        fmt:function(v){ return "+" + v + "% max HP"; }},
+    guard:  {label:"Guard",  icon:"🛡️", per:1.2, unit:"% damage cut",    fmt:function(v){ return "+" + v + "% damage cut"; }},
+    rage:   {label:"Rage",   icon:"💢", per:1.5, unit:"% crit chance",   fmt:function(v){ return "+" + v + "% crit chance"; }},
+    swift:  {label:"Swift",  icon:"🌀", per:4,   unit:"% shadow damage", fmt:function(v){ return "+" + v + "% shadow damage"; }}
+  };
+  var RUNE_KEYS = Object.keys(RUNE_SETS);
   var LOOT_LINES = [
     "Dropped a Magic Crystal.",
     "Found a glowing Mana Stone in the remains.",
@@ -555,37 +726,131 @@
     "The monster was guarding a small gold pouch.",
     "Recovered a rune fragment. It hums with mana."
   ];
+  var SUMMON_POOL = MONSTERS.concat([
+    {name:"Shadow Knight", emoji:"♞", type:"Shadow", el:"dark"},
+    {name:"Flame Imp", emoji:"👿", type:"Demon", el:"fire"},
+    {name:"Tide Sprite", emoji:"🧚", type:"Fae", el:"water"},
+    {name:"Gale Falcon", emoji:"🦅", type:"Beast", el:"wind"}
+  ]);
 
   /* ---------------- STATE ---------------- */
-  var S;
+  var S, runeSeq = 0;
   function freshState(){
     return {
       level:1, xp:0, xpNext:100,
       hp:100, mp:50,
       str:10, agi:10, vit:10, statPoints:0,
-      gold:0, potions:3,
+      gold:0, crystals:0, scrolls:1, potions:3,
       weaponLv:1, armorLv:1,
-      gate:1, killsInGate:0, totalKills:0, shadows:0, bestCombo:0,
+      gate:1, killsInGate:0, totalKills:0, bestCombo:0,
+      shadowsArr:[], runes:[], runeSlots:[null,null,null,null,null,null],
       combo:0, comboTimer:null,
-      monster:null, stunned:0,
-      wrathCd:0,
+      monster:null, stunned:0, wrathCd:0,
       dead:false, gateCleared:false,
       sound:true, resetArmed:false,
+      auto:false, speed:1,
       mode:"explore",
       player:{x:1, y:1, dir:"down"},
       walls:{}, mapMonsters:[], chests:[], portal:null, portalActive:false,
-      currentEntity:-1
+      currentEntity:-1,
+      enemyAtb:0, shadowAtb:0, shadowTurn:0, autoTimer:0, rushIv:null
     };
   }
   S = freshState();
 
+  /* ---------------- SAVE / LOAD (persists between visits on this device) ---------------- */
+  var SAVE_KEY = "solo-leveling-dungeon-hunter-save-v1";
+  var _saveQueued = false;
+  function buildSaveData(){
+    return {
+      v:1, savedAt:Date.now(),
+      level:S.level, xp:S.xp, xpNext:S.xpNext,
+      hp:S.hp, mp:S.mp,
+      str:S.str, agi:S.agi, vit:S.vit, statPoints:S.statPoints,
+      gold:S.gold, crystals:S.crystals, scrolls:S.scrolls, potions:S.potions,
+      weaponLv:S.weaponLv, armorLv:S.armorLv,
+      gate:S.gate, killsInGate:S.killsInGate, totalKills:S.totalKills, bestCombo:S.bestCombo,
+      shadowsArr:S.shadowsArr, runes:S.runes, runeSlots:S.runeSlots, runeSeq:runeSeq,
+      sound:S.sound, auto:S.auto, speed:S.speed,
+      mode:S.mode, monster:S.monster, currentEntity:S.currentEntity,
+      stunned:S.stunned, wrathCd:S.wrathCd, gateCleared:S.gateCleared,
+      player:S.player, walls:S.walls, mapMonsters:S.mapMonsters, chests:S.chests,
+      portal:S.portal, portalActive:S.portalActive
+    };
+  }
+  function updateSaveStatus(){
+    var n = document.getElementById("saveStatus");
+    if(!n) return;
+    var d = new Date();
+    var t = d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+    n.innerHTML = "💾 Progress saved <span>· " + t + " — close and come back anytime, your hunt will be right here.</span>";
+  }
+  function saveGame(){
+    try{
+      localStorage.setItem(SAVE_KEY, JSON.stringify(buildSaveData()));
+      updateSaveStatus();
+    }catch(e){ /* storage full/blocked — game continues without saving */ }
+  }
+  function scheduleSave(){
+    if(_saveQueued) return;
+    _saveQueued = true;
+    setTimeout(function(){ _saveQueued = false; saveGame(); }, 250);
+  }
+  function clearSave(){
+    try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  }
+  function loadGame(){
+    var raw = null;
+    try{ raw = localStorage.getItem(SAVE_KEY); }catch(e){ return false; }
+    if(!raw) return false;
+    var data;
+    try{ data = JSON.parse(raw); }catch(e){ return false; }
+    if(!data || data.v!==1) return false;
+    if(typeof data.level!=="number" || data.level<1) return false;
+    if(!Array.isArray(data.shadowsArr) || !Array.isArray(data.runes) || !Array.isArray(data.runeSlots)) return false;
+    if(!Array.isArray(data.mapMonsters) || !data.walls || typeof data.walls!=="object") return false;
+    var base = freshState();
+    var keys = ["level","xp","xpNext","hp","mp","str","agi","vit","statPoints","gold","crystals","scrolls","potions","weaponLv","armorLv","gate","killsInGate","totalKills","bestCombo","shadowsArr","runes","runeSlots","sound","auto","speed","mode","monster","currentEntity","stunned","wrathCd","gateCleared","player","walls","mapMonsters","chests","portal","portalActive"];
+    for(var i=0;i<keys.length;i++){
+      if(data[keys[i]]!==undefined) base[keys[i]] = data[keys[i]];
+    }
+    S = base;
+    runeSeq = (typeof data.runeSeq==="number") ? data.runeSeq : 0;
+    if(!runeSeq && S.runes.length){
+      for(var j=0;j<S.runes.length;j++) if(S.runes[j].id>runeSeq) runeSeq = S.runes[j].id;
+    }
+    // sanitise restored state so a stale/edited save can never soft-lock the game
+    S.shadowsArr = S.shadowsArr.slice(0,12);
+    if(S.runeSlots.length!==6) S.runeSlots = [null,null,null,null,null,null];
+    if(!Array.isArray(S.chests)) S.chests = [];
+    if(!S.player || typeof S.player.x!=="number") S.player = {x:1,y:1,dir:"down"};
+    S.dead = false; S.combo = 0; S.comboTimer = null; S.rushIv = null;
+    S.enemyAtb = 0; S.shadowAtb = 0; S.shadowTurn = 0; S.autoTimer = 0; S.resetArmed = false;
+    if(S.hp<=0) S.hp = 1;
+    if(S.mode==="battle" && !S.monster){ S.mode = "explore"; S.currentEntity = -1; }
+    if(S.mode!=="battle"){ S.mode = "explore"; S.monster = null; S.currentEntity = -1; }
+    return true;
+  }
+
   /* ---------------- DERIVED ---------------- */
-  function maxHp(){ return 100 + (S.vit-10)*12 + (S.armorLv-1)*25; }
+  function runeBonus(key){
+    var total = 0;
+    for(var i=0;i<S.runeSlots.length;i++){
+      var id = S.runeSlots[i];
+      if(id==null) continue;
+      for(var j=0;j<S.runes.length;j++){
+        if(S.runes[j].id===id && S.runes[j].set===key) total += Math.round(S.runes[j].grade * RUNE_SETS[key].per);
+      }
+    }
+    return total;
+  }
+  function maxHp(){ return Math.round((100 + (S.vit-10)*12 + (S.armorLv-1)*25) * (1 + runeBonus("energy")/100)); }
   function maxMp(){ return 50 + (S.level-1)*4; }
-  function shadowMult(){ return 1 + S.shadows*0.05; }
-  function tapDamageBase(){ return Math.round((8 + S.str*1.1 + (S.weaponLv-1)*6) * shadowMult()); }
-  function critChance(){ return 0.10 + S.agi*0.003; }
-  function armorReduce(){ return Math.min(0.45, (S.armorLv-1)*0.07); }
+  function shadowCountMult(){ return 1 + S.shadowsArr.length*0.05; }
+  function tapDamageBase(){ return Math.round((8 + S.str*1.1 + (S.weaponLv-1)*6) * shadowCountMult() * (1 + runeBonus("fatal")/100)); }
+  function critChance(){ return Math.min(0.85, 0.10 + S.agi*0.003 + runeBonus("rage")/100); }
+  function armorReduce(){ return Math.min(0.6, (S.armorLv-1)*0.07 + runeBonus("guard")/100); }
+  function shadowDamageBase(){ return tapDamageBase() * 0.55 * (1 + runeBonus("swift")/100); }
   function rankFor(level){
     if(level>=50) return {letter:"S", name:"Monarch"};
     if(level>=40) return {letter:"A", name:"Elite Hunter"};
@@ -596,6 +861,16 @@
   }
   function weaponCost(){ return 100 * S.weaponLv; }
   function armorCost(){ return 100 * S.armorLv; }
+  function starsHtml(n){
+    var s = "";
+    for(var i=1;i<=6;i++) s += '<span class="' + (i<=n ? "" : "off") + '">★</span>';
+    return s;
+  }
+  function starString(n){
+    var s = "";
+    for(var i=1;i<=n;i++) s += "★";
+    return s;
+  }
 
   /* ---------------- AUDIO (tiny synth, no files) ---------------- */
   var audioCtx = null;
@@ -618,6 +893,7 @@
   function sndHurt(){ beep(110, 0.12, "sawtooth", 0.06); }
   function sndLevel(){ [523,659,784,1046].forEach(function(f,i){ setTimeout(function(){beep(f,0.14,"triangle",0.07);}, i*90); }); }
   function sndSkill(){ beep(340,0.09,"sawtooth",0.06); setTimeout(function(){beep(560,0.12,"sawtooth",0.06);},70); }
+  function sndRune(){ beep(1180,0.1,"sine",0.05); setTimeout(function(){beep(1560,0.14,"sine",0.05);},80); }
 
   /* ---------------- DOM ---------------- */
   function $(id){ return document.getElementById(id); }
@@ -625,106 +901,36 @@
     rankLetter:$("rankLetter"), rankName:$("rankName"), level:$("levelVal"),
     hpBar:$("hpBar"), hpText:$("hpText"), mpBar:$("mpBar"), mpText:$("mpText"),
     xpBar:$("xpBar"), xpText:$("xpText"),
-    gold:$("goldVal"), kills:$("killsVal"), shadows:$("shadowsVal"), comboBest:$("comboBestVal"),
+    gold:$("goldVal"), crystals:$("crystalVal"), scrolls:$("scrollVal"), kills:$("killsVal"), shadows:$("shadowsVal"),
     pointsBanner:$("pointsBanner"), pointsVal:$("pointsVal"),
     gateNum:$("gateNum"), gateName:$("gateName"), gateSub:$("gateSub"), pips:$("pips"),
-    mName:$("monsterName"), mSub:$("monsterSub"), mHpBar:$("monsterHpBar"), mHpText:$("monsterHpText"),
+    arena:$("battlePanel"),
+    mName:$("monsterName"), mSub:$("monsterSub"), mElBadge:$("monsterElBadge"), mStars:$("monsterStars"),
+    mHpBar:$("monsterHpBar"), mHpText:$("monsterHpText"), mAtbBar:$("monsterAtbBar"),
     mBtn:$("monsterBtn"), floaters:$("floaters"), comboBox:$("comboBox"), comboVal:$("comboVal"),
-    stunTag:$("stunTag"), attackSub:$("attackSub"),
-    potionSub:$("potionSub"), potionBtn:$("potionBtn"),
+    stunTag:$("stunTag"), attackSub:$("attackSub"), partyRow:$("partyRow"),
+    autoBtn:$("autoBtn"), speedBtn:$("speedBtn"),
+    potionSub:$("potionSub"), potionBtn:$("potionBtn"), potionSub2:$("potionSub2"), potionBtn2:$("potionBtn2"),
+    armyGrid:$("armyGrid"), summonBtn:$("summonBtn"), summonSub:$("summonSub"),
+    runeSlots:$("runeSlots"), runeList:$("runeList"),
     str:$("strVal"), agi:$("agiVal"), vit:$("vitVal"),
-    dmg:$("dmgVal"), crit:$("critVal"), shadowBonus:$("shadowBonusVal"),
+    strBonus:$("strBonus"), agiBonus:$("agiBonus"), vitBonus:$("vitBonus"),
+    dmg:$("dmgVal"), crit:$("critVal"), reduce:$("reduceVal"), shadowBonus:$("shadowBonusVal"),
     weaponName:$("weaponName"), weaponSub:$("weaponSub"), weaponBtn:$("weaponBtn"),
     armorName:$("armorName"), armorSub:$("armorSub"), armorBtn:$("armorBtn"),
-    healBtn:$("healBtn"),
+    healBtn:$("healBtn"), scrollBtn:$("scrollBtn"),
     skill1:$("skill1"), skill2:$("skill2"), skill3:$("skill3"),
     skill1Cost:$("skill1Cost"), skill2Cost:$("skill2Cost"), skill3Cost:$("skill3Cost"),
     log:$("log"),
-    deathOverlay:$("deathOverlay"), clearOverlay:$("clearOverlay"), clearText:$("clearText"),
+    deathOverlay:$("deathOverlay"),
     soundBtn:$("soundBtn"), resetBtn:$("resetBtn"),
     dungeonPanel:$("dungeonPanel"), dungeonGrid:$("dungeonGrid"),
     dungeonStatus:$("dungeonStatus"), exploreMsg:$("exploreMsg"),
     battlePanel:$("battlePanel"), battleActions:$("battleActions")
   };
 
-  function renderPips(){
-    el.pips.innerHTML = "";
-    for(var i=0;i<10;i++){
-      var d = document.createElement("div");
-      d.className = "pip" + (i===9 ? " boss" : "") + (i < S.killsInGate ? " done" : "");
-      el.pips.appendChild(d);
-    }
-  }
-
-  function render(){
-    var r = rankFor(S.level);
-    el.rankLetter.textContent = r.letter;
-    el.rankName.textContent = r.name;
-    el.level.textContent = S.level;
-    var mh = maxHp(), mm = maxMp();
-    el.hpBar.style.width = Math.max(0, S.hp/mh*100) + "%";
-    el.hpText.textContent = Math.max(0,Math.ceil(S.hp)) + " / " + mh;
-    el.mpBar.style.width = Math.max(0, S.mp/mm*100) + "%";
-    el.mpText.textContent = Math.floor(S.mp) + " / " + mm;
-    el.xpBar.style.width = Math.min(100, S.xp/S.xpNext*100) + "%";
-    el.xpText.textContent = S.xp + " / " + S.xpNext;
-    el.gold.textContent = S.gold;
-    el.kills.textContent = S.totalKills;
-    el.shadows.textContent = S.shadows;
-    el.comboBest.textContent = S.bestCombo;
-    el.pointsBanner.className = "points-banner" + (S.statPoints>0 ? " show" : "");
-    el.pointsVal.textContent = S.statPoints;
-    document.querySelectorAll(".plus-btn").forEach(function(b){
-      b.className = "plus-btn" + (S.statPoints>0 ? " show" : "");
-    });
-    el.gateNum.textContent = S.gate;
-    el.gateName.textContent = GATE_NAMES[(S.gate-1) % GATE_NAMES.length];
-    el.gateSub.textContent = S.portalActive ? "Boss down — the portal is open. Walk into it!" : "Cleared " + S.killsInGate + " of 10 · Find them on the map below";
-    renderPips();
-    el.str.textContent = S.str; el.agi.textContent = S.agi; el.vit.textContent = S.vit;
-    el.dmg.textContent = tapDamageBase();
-    el.crit.textContent = Math.round(critChance()*100) + "%";
-    el.shadowBonus.textContent = "+" + Math.round((shadowMult()-1)*100) + "%";
-    el.attackSub.textContent = "Tap damage " + tapDamageBase() + " · or tap the monster · Space works too";
-    el.potionSub.textContent = S.potions + " left · heals 50% HP";
-    el.potionBtn.disabled = S.potions<=0 || S.hp>=maxHp() || S.dead;
-    el.weaponName.textContent = WEAPONS[Math.min(S.weaponLv-1, WEAPONS.length-1)] + (S.weaponLv>WEAPONS.length ? " +" + (S.weaponLv-WEAPONS.length) : "");
-    el.weaponSub.textContent = "Weapon Lv " + S.weaponLv + " · +" + ((S.weaponLv-1)*6) + " bonus damage";
-    el.weaponBtn.textContent = "Upgrade · " + weaponCost() + " G";
-    el.weaponBtn.disabled = S.gold < weaponCost();
-    el.armorName.textContent = ARMORS[Math.min(S.armorLv-1, ARMORS.length-1)] + (S.armorLv>ARMORS.length ? " +" + (S.armorLv-ARMORS.length) : "");
-    el.armorSub.textContent = "Armor Lv " + S.armorLv + " · +" + ((S.armorLv-1)*25) + " max HP · " + Math.round(armorReduce()*100) + "% less damage taken";
-    el.armorBtn.textContent = "Upgrade · " + armorCost() + " G";
-    el.armorBtn.disabled = S.gold < armorCost();
-    el.healBtn.disabled = S.gold < 40 || (S.hp>=maxHp() && S.mp>=maxMp());
-    $("buyPotionBtn").disabled = S.gold < 60;
-    el.skill1.disabled = S.mp < 10 || S.dead || S.mode!=="battle";
-    el.skill2.disabled = S.mp < 20 || S.dead || S.mode!=="battle";
-    var wrathReady = S.mp >= 35 && S.wrathCd<=0;
-    el.skill3.disabled = !wrathReady || S.dead || S.mode!=="battle";
-    el.skill3Cost.textContent = S.wrathCd>0 ? "Cooldown · " + S.wrathCd + " hits" : "35 MP · 500% + stun";
-    el.skill3Cost.className = S.wrathCd>0 ? "cd" : "";
-    el.stunTag.className = "stun-tag" + (S.stunned>0 ? " show" : "");
-    el.comboBox.className = "combo" + (S.combo>=3 ? " show" : "");
-    el.comboVal.textContent = "x" + S.combo;
-    if(S.monster){
-      var m = S.monster;
-      el.mName.innerHTML = (m.boss ? '<span class="boss-tag">BOSS</span>' : "") + escapeHtml(m.name);
-      el.mSub.textContent = "Lv " + m.level + " · " + m.type + " · hits for ~" + m.dmg;
-      el.mHpBar.style.width = Math.max(0, m.hp/m.maxHp*100) + "%";
-      el.mHpText.textContent = Math.max(0, Math.ceil(m.hp)) + " / " + m.maxHp;
-      el.mBtn.textContent = m.emoji;
-      el.mBtn.className = "monster-emoji" + (m.boss ? " boss" : "");
-    }
-    var inBattle = S.mode==="battle";
-    el.battlePanel.hidden = !inBattle;
-    el.battleActions.hidden = !inBattle;
-    el.dungeonPanel.className = "dungeon-panel" + (inBattle ? " in-battle" : "");
-    renderDungeon();
-  }
-
   function escapeHtml(s){
-    return s.replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+    return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
   }
 
   /* ---------------- LOG ---------------- */
@@ -740,88 +946,300 @@
 
   /* ---------------- FLOATERS ---------------- */
   function floater(text, cls, xPct){
+    if(el.floaters.children.length > 14) return;
     var f = document.createElement("div");
     f.className = "floater" + (cls ? " " + cls : "");
     f.textContent = text;
     f.style.left = (xPct!=null ? xPct : 38 + Math.random()*24) + "%";
-    f.style.top = (18 + Math.random()*22) + "%";
+    f.style.top = (16 + Math.random()*22) + "%";
     el.floaters.appendChild(f);
     setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 900);
   }
 
+  /* ---------------- RENDER ---------------- */
+  function renderPips(){
+    el.pips.innerHTML = "";
+    for(var i=0;i<10;i++){
+      var d = document.createElement("div");
+      d.className = "pip" + (i===9 ? " boss" : "") + (i < S.killsInGate ? " done" : "");
+      el.pips.appendChild(d);
+    }
+  }
+
+  function partyAdvantage(){
+    // best elemental matchup any shadow has against the current monster
+    if(!S.monster || !S.shadowsArr.length) return 1;
+    var best = 0.8;
+    for(var i=0;i<S.shadowsArr.length;i++){
+      var m = elementMult(S.shadowsArr[i].el, S.monster.el);
+      if(m > best) best = m;
+    }
+    return best;
+  }
+
+  function renderParty(){
+    var html = '<div class="party-card leader"><span class="face">🧍</span><span class="pname">YOU · LV ' + S.level + '</span><div class="bar hp"><i style="width:' + Math.max(0, S.hp/maxHp()*100) + '%"></i></div></div>';
+    var show = S.shadowsArr.slice(0,5);
+    for(var i=0;i<show.length;i++){
+      var sh = show[i];
+      var ec = ELEMENTS[sh.el];
+      html += '<div class="party-card" style="border-color:' + ec.color + '"><span class="face">' + sh.emoji + '</span><span class="pname">' + escapeHtml(sh.name) + '</span><div class="bar"><i class="shadow-atb" data-shadow-atb="' + i + '" style="width:0%"></i></div></div>';
+    }
+    if(S.shadowsArr.length > 5) html += '<div class="party-card"><span class="face">👥</span><span class="pname">+' + (S.shadowsArr.length-5) + ' more</span><div class="bar"><i class="shadow-atb" style="width:0%"></i></div></div>';
+    if(!S.shadowsArr.length) html += '<div class="party-empty">No shadows yet — extract a boss or use a Mystic Scroll below.</div>';
+    el.partyRow.innerHTML = html;
+  }
+
+  function renderArmy(){
+    if(!S.shadowsArr.length){
+      el.armyGrid.innerHTML = '<div class="army-empty">Your army is empty. Defeat a boss for a chance to extract its shadow — or summon one with a Mystic Scroll.</div>';
+    } else {
+      var html = "";
+      S.shadowsArr.forEach(function(sh){
+        var ec = ELEMENTS[sh.el];
+        html += '<div class="mon-card" style="--cardc:' + ec.color + '"><span class="face">' + sh.emoji + '</span>' +
+          '<span class="stars">' + starString(sh.stars) + '</span>' +
+          '<span class="mname">' + escapeHtml(sh.name) + '</span>' +
+          '<span class="eltag" style="color:' + ec.color + '">' + ec.icon + ' ' + ec.label + '</span></div>';
+      });
+      el.armyGrid.innerHTML = html;
+    }
+    el.summonBtn.disabled = S.scrolls<=0 || S.shadowsArr.length>=12;
+    el.summonSub.textContent = S.shadowsArr.length>=12
+      ? "Army is full (12) — new summons convert to gold instead"
+      : "Use 1 scroll · you have " + S.scrolls + " · random 3★–6★ shadow joins your team";
+  }
+
+  function runeById(id){
+    for(var i=0;i<S.runes.length;i++) if(S.runes[i].id===id) return S.runes[i];
+    return null;
+  }
+  function renderRunes(){
+    var html = "";
+    for(var i=0;i<6;i++){
+      var id = S.runeSlots[i];
+      var r = id!=null ? runeById(id) : null;
+      if(r){
+        var set = RUNE_SETS[r.set];
+        html += '<button type="button" class="rune-slot filled" data-slot="' + i + '" aria-label="Remove ' + set.label + ' rune from slot ' + (i+1) + '">' + set.icon + '<small>' + set.label + '</small><span class="rstars">' + starString(r.grade) + '</span></button>';
+      } else {
+        html += '<div class="rune-slot">' + (i+1) + '<small>EMPTY</small></div>';
+      }
+    }
+    el.runeSlots.innerHTML = html;
+    el.runeSlots.querySelectorAll("[data-slot]").forEach(function(b){
+      b.addEventListener("click", function(){ unequipRune(parseInt(b.getAttribute("data-slot"),10)); });
+    });
+    var equipped = {};
+    S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+    var bag = S.runes.filter(function(r){ return !equipped[r.id]; });
+    if(!bag.length){
+      el.runeList.innerHTML = '<div class="rune-empty">No runes in your bag. Monsters drop them — bosses always do.</div>';
+    } else {
+      el.runeList.innerHTML = "";
+      bag.forEach(function(r){
+        var set = RUNE_SETS[r.set];
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.className = "rune-item";
+        btn.innerHTML = '<span class="ric">' + set.icon + '</span><span class="rnm"><strong>' + set.label + ' Rune</strong><small>' + set.fmt(Math.round(r.grade*set.per)) + '</small></span><span class="rstars">' + starString(r.grade) + '</span><span class="req">INSCRIBE</span>';
+        btn.addEventListener("click", function(){ equipRune(r.id); });
+        el.runeList.appendChild(btn);
+      });
+    }
+  }
+
+  function render(){
+    var r = rankFor(S.level);
+    el.rankLetter.textContent = r.letter;
+    el.rankName.textContent = r.name;
+    el.level.textContent = S.level;
+    var mh = maxHp(), mm = maxMp();
+    if(S.hp > mh) S.hp = mh;
+    el.hpBar.style.width = Math.max(0, S.hp/mh*100) + "%";
+    el.hpText.textContent = Math.max(0,Math.ceil(S.hp)) + " / " + mh;
+    el.mpBar.style.width = Math.max(0, S.mp/mm*100) + "%";
+    el.mpText.textContent = Math.floor(S.mp) + " / " + mm;
+    el.xpBar.style.width = Math.min(100, S.xp/S.xpNext*100) + "%";
+    el.xpText.textContent = S.xp + " / " + S.xpNext;
+    el.gold.textContent = S.gold;
+    el.crystals.textContent = S.crystals;
+    el.scrolls.textContent = S.scrolls;
+    el.kills.textContent = S.totalKills;
+    el.shadows.textContent = S.shadowsArr.length;
+    el.pointsBanner.className = "points-banner" + (S.statPoints>0 ? " show" : "");
+    el.pointsVal.textContent = S.statPoints;
+    document.querySelectorAll(".plus-btn").forEach(function(b){
+      b.className = "plus-btn" + (S.statPoints>0 ? " show" : "");
+    });
+    el.gateNum.textContent = S.gate;
+    el.gateName.textContent = GATE_NAMES[(S.gate-1) % GATE_NAMES.length];
+    el.gateSub.textContent = S.portalActive ? "Boss down — the portal is open. Walk into it!" : "Cleared " + S.killsInGate + " of 10 · Find them on the map below";
+    renderPips();
+    el.str.textContent = S.str; el.agi.textContent = S.agi; el.vit.textContent = S.vit;
+    el.strBonus.textContent = runeBonus("fatal") ? "◆+" + runeBonus("fatal") + "%" : "";
+    el.agiBonus.textContent = runeBonus("rage") ? "◆+" + runeBonus("rage") + "%" : "";
+    el.vitBonus.textContent = runeBonus("energy") ? "◆+" + runeBonus("energy") + "%" : "";
+    el.dmg.textContent = tapDamageBase();
+    el.crit.textContent = Math.round(critChance()*100) + "%";
+    el.reduce.textContent = Math.round(armorReduce()*100) + "%";
+    el.shadowBonus.textContent = "+" + Math.round(((shadowCountMult()-1) + runeBonus("swift")/100) * 100) + "%";
+    el.attackSub.textContent = "Tap damage " + tapDamageBase() + " · or tap the monster · Space works too";
+    var potionTxt = S.potions + " left · heals 50% HP";
+    el.potionSub.textContent = potionTxt;
+    el.potionSub2.textContent = potionTxt;
+    var potionOff = S.potions<=0 || S.hp>=maxHp() || S.dead;
+    el.potionBtn.disabled = potionOff;
+    el.potionBtn2.disabled = potionOff;
+    el.weaponName.textContent = WEAPONS[Math.min(S.weaponLv-1, WEAPONS.length-1)] + (S.weaponLv>WEAPONS.length ? " +" + (S.weaponLv-WEAPONS.length) : "");
+    el.weaponSub.textContent = "Weapon Lv " + S.weaponLv + " · +" + ((S.weaponLv-1)*6) + " bonus damage";
+    el.weaponBtn.textContent = "Upgrade · " + weaponCost() + " G";
+    el.weaponBtn.disabled = S.gold < weaponCost();
+    el.armorName.textContent = ARMORS[Math.min(S.armorLv-1, ARMORS.length-1)] + (S.armorLv>ARMORS.length ? " +" + (S.armorLv-ARMORS.length) : "");
+    el.armorSub.textContent = "Armor Lv " + S.armorLv + " · +" + ((S.armorLv-1)*25) + " max HP · " + Math.round(armorReduce()*100) + "% less damage taken";
+    el.armorBtn.textContent = "Upgrade · " + armorCost() + " G";
+    el.armorBtn.disabled = S.gold < armorCost();
+    el.healBtn.disabled = S.gold < 40 || (S.hp>=maxHp() && S.mp>=maxMp());
+    el.scrollBtn.disabled = S.gold < 150;
+    $("buyPotionBtn").disabled = S.gold < 60;
+    var inBattle = S.mode==="battle";
+    el.skill1.disabled = !inBattle || S.mp < 10 || S.dead;
+    el.skill2.disabled = !inBattle || S.mp < 20 || S.dead;
+    var wrathReady = S.mp >= 35 && S.wrathCd<=0;
+    el.skill3.disabled = !inBattle || !wrathReady || S.dead;
+    el.skill3Cost.textContent = S.wrathCd>0 ? "Cooldown · " + S.wrathCd + " hits" : "35 MP · 500% + stun";
+    el.skill3Cost.className = S.wrathCd>0 ? "cd" : "";
+    el.stunTag.className = "stun-tag" + (S.stunned>0 ? " show" : "");
+    el.comboBox.className = "combo" + (S.combo>=3 ? " show" : "");
+    el.comboVal.textContent = "x" + S.combo;
+    el.autoBtn.textContent = S.auto ? "⏸ AUTO ON" : "▶ AUTO";
+    el.autoBtn.className = "toggle-btn" + (S.auto ? " on" : "");
+    el.autoBtn.setAttribute("aria-pressed", S.auto ? "true" : "false");
+    el.speedBtn.textContent = "SPEED ×" + S.speed;
+    el.speedBtn.className = "toggle-btn" + (S.speed>1 ? " on" : "");
+    if(S.monster){
+      var m = S.monster;
+      var ec = ELEMENTS[m.el];
+      el.arena.style.setProperty("--elc", ec.color);
+      el.mElBadge.textContent = ec.icon + " " + ec.label;
+      el.mElBadge.style.background = ec.color;
+      el.mStars.innerHTML = starsHtml(m.stars);
+      el.mName.innerHTML = (m.boss ? '<span class="boss-tag">BOSS</span>' : "") + escapeHtml(m.name);
+      var adv = partyAdvantage();
+      var advTxt = "";
+      if(S.shadowsArr.length){
+        if(adv > 1) advTxt = ' · <span class="adv">▲ Shadow advantage!</span>';
+        else if(adv < 1) advTxt = ' · <span class="dis">▼ Shadows resisted</span>';
+      }
+      el.mSub.innerHTML = "Lv " + m.level + " · " + escapeHtml(m.type) + " · hits for ~" + m.dmg + advTxt;
+      el.mHpBar.style.width = Math.max(0, m.hp/m.maxHp*100) + "%";
+      el.mHpText.textContent = Math.max(0, Math.ceil(m.hp)) + " / " + m.maxHp;
+      el.mBtn.textContent = m.emoji;
+      el.mBtn.className = "monster-emoji" + (m.boss ? " boss" : "");
+    }
+    el.battlePanel.hidden = !inBattle;
+    el.battleActions.hidden = !inBattle;
+    el.dungeonPanel.className = "dungeon-panel panel" + (inBattle ? " in-battle" : "");
+    renderParty();
+    renderArmy();
+    renderRunes();
+    renderDungeon();
+    scheduleSave();
+  }
+
   /* ---------------- MONSTERS ---------------- */
+  function monsterStars(isBoss){
+    if(isBoss) return (S.gate>=3 && Math.random()<0.5) ? 6 : 5;
+    var base = 3 + Math.min(2, Math.floor((S.gate-1)/3));
+    if(Math.random()<0.18) base = Math.min(5, base+1);
+    return base;
+  }
   function makeMonster(isBoss, base, slot){
     var lvl = S.gate*2 + slot + Math.max(0, S.level-1);
+    var stars = monsterStars(isBoss);
+    var starMult = 1 + (stars-3)*0.22;
     var hpBase = isBoss ? 300 : 52;
-    var mHp = Math.round(hpBase * (1 + (S.gate-1)*0.85) * (1 + slot*0.10) * (isBoss ? (1 + (S.gate-1)*0.15) : 1));
-    var dmg = Math.round((5 + (S.gate-1)*3.2 + slot*0.5) * (isBoss ? 1.6 : 1));
-    return { name: base.name, emoji: base.emoji, type: base.type, boss: isBoss, level: lvl, maxHp: mHp, hp: mHp, dmg: dmg };
+    var mHp = Math.round(hpBase * starMult * (1 + (S.gate-1)*0.85) * (1 + slot*0.10) * (isBoss ? (1 + (S.gate-1)*0.15) : 1));
+    var dmg = Math.round((5 + (S.gate-1)*3.2 + slot*0.5) * (isBoss ? 1.6 : 1) * (1 + (stars-3)*0.1));
+    return { name: base.name, emoji: base.emoji, type: base.type, el: base.el, boss: isBoss, stars: stars, level: lvl, maxHp: mHp, hp: mHp, dmg: dmg };
   }
 
   /* ---------------- DUNGEON GENERATION ---------------- */
   var MAP_W = 13, MAP_H = 9;
   function tileKey(x,y){ return x + "," + y; }
 
+  function buildFloor(walls){
+    // returns open reachable tiles, or null if the floor is too cramped
+    var seen = {}, queue = [[1,1]], x, y, i;
+    seen[tileKey(1,1)] = 1;
+    while(queue.length){
+      var cur = queue.shift();
+      var dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+      for(i=0;i<4;i++){
+        var nx = cur[0]+dirs[i][0], ny = cur[1]+dirs[i][1];
+        if(nx<0||ny<0||nx>=MAP_W||ny>=MAP_H) continue;
+        if(walls[tileKey(nx,ny)] || seen[tileKey(nx,ny)]) continue;
+        seen[tileKey(nx,ny)] = 1; queue.push([nx,ny]);
+      }
+    }
+    var openTiles = [];
+    for(x=1;x<MAP_W-1;x++) for(y=1;y<MAP_H-1;y++){
+      if(!walls[tileKey(x,y)] && seen[tileKey(x,y)]) openTiles.push([x,y]);
+    }
+    return openTiles.length >= 45 ? openTiles : null;
+  }
+
+  function populateFloor(openTiles){
+    var i;
+    S.player = {x:1, y:1, dir:"down"};
+    var far = openTiles.filter(function(t){ return Math.abs(t[0]-1)+Math.abs(t[1]-1) >= 5; });
+    if(far.length < 10) far = openTiles.filter(function(t){ return !(t[0]===1 && t[1]===1); });
+    far.sort(function(a,b){ return (Math.abs(b[0]-1)+Math.abs(b[1]-1)) - (Math.abs(a[0]-1)+Math.abs(a[1]-1)); });
+    var shuffled = far.slice(1);
+    for(i=shuffled.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var tmp = shuffled[i]; shuffled[i]=shuffled[j]; shuffled[j]=tmp; }
+    S.mapMonsters = [];
+    var bossBase = BOSSES[(S.gate-1) % BOSSES.length];
+    S.mapMonsters.push({ x:far[0][0], y:far[0][1], boss:true, base:bossBase, slot:9 });
+    for(i=0;i<9 && i<shuffled.length;i++){
+      S.mapMonsters.push({ x:shuffled[i][0], y:shuffled[i][1], boss:false, base:MONSTERS[Math.floor(Math.random()*MONSTERS.length)], slot:i });
+    }
+    var used = {};
+    used[tileKey(1,1)] = 1;
+    S.mapMonsters.forEach(function(m){ used[tileKey(m.x,m.y)] = 1; });
+    var chestSpots = openTiles.filter(function(t){ return !used[tileKey(t[0],t[1])] && Math.abs(t[0]-1)+Math.abs(t[1]-1) >= 3; });
+    for(i=chestSpots.length-1;i>0;i--){ var j2 = Math.floor(Math.random()*(i+1)); var t2 = chestSpots[i]; chestSpots[i]=chestSpots[j2]; chestSpots[j2]=t2; }
+    S.chests = chestSpots.slice(0,3).map(function(t){ return {x:t[0], y:t[1], opened:false}; });
+    S.portal = null;
+    S.portalActive = false;
+    S.currentEntity = -1;
+    S.monster = null;
+    S.mode = "explore";
+    S.enemyAtb = 0; S.shadowAtb = 0;
+  }
+
   function generateDungeon(){
-    var tries, x, y, i;
+    var x, y, i, tries;
     for(tries=0; tries<60; tries++){
       var walls = {};
       for(x=0;x<MAP_W;x++){ walls[tileKey(x,0)]=1; walls[tileKey(x,MAP_H-1)]=1; }
       for(y=0;y<MAP_H;y++){ walls[tileKey(0,y)]=1; walls[tileKey(MAP_W-1,y)]=1; }
-      // scattered stone pillars / wall chunks
       for(i=0;i<16;i++){
         x = 1 + Math.floor(Math.random()*(MAP_W-2));
         y = 1 + Math.floor(Math.random()*(MAP_H-2));
-        if(Math.abs(x-1)+Math.abs(y-1) <= 2) continue; // keep the entrance clear
+        if(Math.abs(x-1)+Math.abs(y-1) <= 2) continue;
         walls[tileKey(x,y)] = 1;
       }
-      // flood fill from the entrance — every open tile must be reachable
-      var seen = {}, queue = [[1,1]];
-      seen[tileKey(1,1)] = 1;
-      while(queue.length){
-        var cur = queue.shift();
-        var dirs = [[1,0],[-1,0],[0,1],[0,-1]];
-        for(i=0;i<4;i++){
-          var nx = cur[0]+dirs[i][0], ny = cur[1]+dirs[i][1];
-          if(nx<0||ny<0||nx>=MAP_W||ny>=MAP_H) continue;
-          if(walls[tileKey(nx,ny)] || seen[tileKey(nx,ny)]) continue;
-          seen[tileKey(nx,ny)] = 1; queue.push([nx,ny]);
-        }
-      }
-      var openTiles = [];
-      for(x=1;x<MAP_W-1;x++) for(y=1;y<MAP_H-1;y++){
-        if(!walls[tileKey(x,y)] && seen[tileKey(x,y)]) openTiles.push([x,y]);
-      }
-      if(openTiles.length < 45) continue; // too cramped — reroll
-
+      var openTiles = buildFloor(walls);
+      if(!openTiles) continue;
       S.walls = walls;
-      S.player = {x:1, y:1, dir:"down"};
-      // far, reachable tiles for monsters — boss gets the farthest spot
-      var far = openTiles.filter(function(t){ return Math.abs(t[0]-1)+Math.abs(t[1]-1) >= 5; });
-      far.sort(function(a,b){
-        return (Math.abs(b[0]-1)+Math.abs(b[1]-1)) - (Math.abs(a[0]-1)+Math.abs(a[1]-1));
-      });
-      var shuffled = far.slice(1);
-      for(i=shuffled.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var tmp = shuffled[i]; shuffled[i]=shuffled[j]; shuffled[j]=tmp; }
-      S.mapMonsters = [];
-      var bossBase = BOSSES[(S.gate-1) % BOSSES.length];
-      S.mapMonsters.push({ x:far[0][0], y:far[0][1], boss:true, base:bossBase, slot:9 });
-      for(i=0;i<9 && i<shuffled.length;i++){
-        S.mapMonsters.push({ x:shuffled[i][0], y:shuffled[i][1], boss:false, base:MONSTERS[Math.floor(Math.random()*MONSTERS.length)], slot:i });
-      }
-      var used = {};
-      used[tileKey(1,1)] = 1;
-      S.mapMonsters.forEach(function(m){ used[tileKey(m.x,m.y)] = 1; });
-      var chestSpots = openTiles.filter(function(t){ return !used[tileKey(t[0],t[1])] && Math.abs(t[0]-1)+Math.abs(t[1]-1) >= 3; });
-      for(i=chestSpots.length-1;i>0;i--){ var j2 = Math.floor(Math.random()*(i+1)); var t2 = chestSpots[i]; chestSpots[i]=chestSpots[j2]; chestSpots[j2]=t2; }
-      S.chests = chestSpots.slice(0,3).map(function(t){ return {x:t[0], y:t[1], opened:false}; });
-      S.portal = null;
-      S.portalActive = false;
-      S.currentEntity = -1;
-      S.monster = null;
-      S.mode = "explore";
+      populateFloor(openTiles);
       return;
     }
+    // guaranteed fallback: border walls only — always valid
+    var fw = {};
+    for(x=0;x<MAP_W;x++){ fw[tileKey(x,0)]=1; fw[tileKey(x,MAP_H-1)]=1; }
+    for(y=0;y<MAP_H;y++){ fw[tileKey(0,y)]=1; fw[tileKey(MAP_W-1,y)]=1; }
+    S.walls = fw;
+    populateFloor(buildFloor(fw) || [[1,1]]);
   }
 
   function entityAt(x,y){
@@ -836,7 +1254,6 @@
     }
     return null;
   }
-
   function setExploreMsg(html){ el.exploreMsg.innerHTML = html; }
 
   function renderDungeon(){
@@ -854,8 +1271,9 @@
           var ch = chestAt(x,y);
           if(mi>=0){
             var mm = S.mapMonsters[mi];
+            var ec = ELEMENTS[mm.base.el];
             cls += mm.boss ? " boss-tile" : " monster-tile";
-            content = '<span class="ent">' + mm.base.emoji + '</span>';
+            content = '<span class="el-dot" style="background:' + ec.color + '; color:' + ec.color + '"></span><span class="ent">' + mm.base.emoji + '</span>';
           } else if(ch){
             cls += " chest-tile"; content = '<span class="ent">🎁</span>';
           }
@@ -876,18 +1294,45 @@
       : 'Monsters left: <b>' + left + '</b>' + (bossLeft ? ' · <span class="boss-left">★ Boss on the map</span>' : '');
   }
 
+  /* ---------------- BATTLE LIFECYCLE ---------------- */
+  function clearRush(){
+    if(S.rushIv){ clearInterval(S.rushIv); S.rushIv = null; }
+  }
+  function endBattleCleanup(){
+    clearRush();
+    S.stunned = 0;
+    S.enemyAtb = 0;
+    S.shadowAtb = 0;
+    S.autoTimer = 0;
+    if(S.comboTimer){ clearTimeout(S.comboTimer); S.comboTimer = null; }
+    S.combo = 0;
+  }
+
   function startBattle(idx){
     var ent = S.mapMonsters[idx];
-    if(!ent) return;
+    if(!ent || S.mode!=="explore" || S.dead) return;
+    endBattleCleanup();
     S.currentEntity = idx;
     S.monster = makeMonster(ent.boss, ent.base, ent.slot);
-    S.stunned = 0;
     S.mode = "battle";
-    if(ent.boss) log("⚠ You face the <b>Gate Boss</b>: <b>" + escapeHtml(ent.base.name) + "</b>. Finish this.", "gold");
-    else log("⚔ A wild <b>" + escapeHtml(ent.base.name) + "</b> blocks your path!", "");
+    var ec = ELEMENTS[ent.base.el];
+    if(ent.boss) log("⚠ You face the <b>Gate Boss</b>: <b>" + escapeHtml(ent.base.name) + "</b> — " + ec.icon + " " + ec.label + ", " + S.monster.stars + "★. Finish this.", "gold");
+    else log("⚔ A wild <b>" + escapeHtml(ent.base.name) + "</b> (" + ec.icon + " " + ec.label + " · " + S.monster.stars + "★) blocks your path!", "");
     beep(220, 0.12, "sawtooth", 0.06);
     render();
     el.battlePanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+
+  function fleeBattle(){
+    if(S.mode!=="battle" || S.dead) return;
+    log("🏃 You break away from <b>" + escapeHtml(S.monster ? S.monster.name : "the monster") + "</b>. It still lurks on the map…", "");
+    endBattleCleanup();
+    S.monster = null;
+    S.currentEntity = -1;
+    S.mode = "explore";
+    setExploreMsg("🏃 You slipped away. Heal up, inscribe runes, or pick a different target.");
+    render();
+    el.dungeonPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
   }
 
   function gainXp(amount){
@@ -906,19 +1351,50 @@
     }
   }
 
+  function dropRune(guaranteed){
+    if(!guaranteed && Math.random() >= 0.22) return;
+    var grade = Math.min(6, 1 + Math.floor((S.gate-1)/2) + (Math.random()<0.35 ? 1 : 0) + (S.monster && S.monster.boss ? 1 : 0));
+    grade = Math.max(1, grade);
+    var setKey = RUNE_KEYS[Math.floor(Math.random()*RUNE_KEYS.length)];
+    var rune = { id: ++runeSeq, set: setKey, grade: grade };
+    S.runes.push(rune);
+    if(S.runes.length > 40){ // keep the oldest equipped-safe: drop the lowest-grade uninscribed one
+      var equipped = {};
+      S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+      for(var i=0;i<S.runes.length;i++){
+        if(!equipped[S.runes[i].id]){ S.runes.splice(i,1); break; }
+      }
+    }
+    sndRune();
+    log("◆ A <b>" + RUNE_SETS[setKey].label + " Rune</b> (" + starString(grade) + ") drops! " + RUNE_SETS[setKey].fmt(Math.round(grade*RUNE_SETS[setKey].per)) + " when inscribed.", "rune");
+  }
+
+  function addShadow(base, stars, source){
+    if(S.shadowsArr.length >= 12){
+      S.gold += 100;
+      log("Your army is full — " + escapeHtml(base.name) + "'s essence converts to <b>+100 gold</b> instead.", "gold");
+      return false;
+    }
+    S.shadowsArr.push({ name: base.name, emoji: base.emoji, el: base.el, stars: stars });
+    return true;
+  }
+
   function killMonster(){
     var m = S.monster;
+    if(!m) return;
+    endBattleCleanup();
     S.totalKills++;
     S.killsInGate++;
-    var xpGain = Math.round((m.boss ? 160 : 26) * (1 + (S.gate-1)*0.5));
+    var xpGain = Math.round((m.boss ? 160 : 26) * (1 + (S.gate-1)*0.5) * (1 + (m.stars-3)*0.15));
     var goldGain = Math.round((m.boss ? 220 : 18 + Math.random()*22) * (1 + (S.gate-1)*0.45));
     S.gold += goldGain;
     sndKill();
     log("<b>" + escapeHtml(m.name) + "</b> defeated. +" + xpGain + " XP, +" + goldGain + " gold.", m.boss ? "gold" : "good");
     if(!m.boss && Math.random() < 0.35) log(LOOT_LINES[Math.floor(Math.random()*LOOT_LINES.length)], "");
     if(!m.boss && Math.random() < 0.12){ S.potions++; log("It dropped a <b>potion</b>! Potions: " + S.potions, "good"); }
+    if(!m.boss && Math.random() < 0.10){ S.scrolls++; log("It was carrying a <b>Mystic Scroll</b>! Scrolls: " + S.scrolls, "gold"); }
+    dropRune(m.boss);
 
-    // remove the defeated monster from the map and return to exploring
     var bossPos = null;
     if(S.currentEntity>=0 && S.mapMonsters[S.currentEntity]){
       bossPos = { x:S.mapMonsters[S.currentEntity].x, y:S.mapMonsters[S.currentEntity].y };
@@ -929,10 +1405,12 @@
     S.mode = "explore";
 
     if(m.boss){
-      // Shadow extraction
-      if(Math.random() < 0.75 || S.shadows===0){
-        S.shadows++;
-        log("👤 <b>ARISE.</b> " + escapeHtml(m.name) + " joins your shadow army. All damage +5% (now +" + Math.round((shadowMult()-1)*100+5) + "%).", "sys");
+      S.crystals += 10;
+      log("💎 The boss drops <b>10 crystals</b>. Total: " + S.crystals + ".", "sys");
+      if(Math.random() < 0.75 || S.shadowsArr.length===0){
+        if(addShadow(m, m.stars, "boss")){
+          log("👤 <b>ARISE.</b> " + escapeHtml(m.name) + " (" + ELEMENTS[m.el].icon + " " + ELEMENTS[m.el].label + " · " + m.stars + "★) joins your shadow army. All damage +5% (army of " + S.shadowsArr.length + ").", "sys");
+        }
       } else {
         log("Shadow extraction failed — the boss's soul slips away. Bonus gold instead: +120 G.", "gold");
         S.gold += 120;
@@ -948,7 +1426,6 @@
       return;
     }
     gainXp(xpGain);
-    if(S.wrathCd>0) S.wrathCd = Math.max(0, S.wrathCd-1);
     var left = S.mapMonsters.length;
     setExploreMsg("✅ <b>" + escapeHtml(m.name) + "</b> down. <b>" + left + "</b> monster" + (left===1 ? "" : "s") + " left in this gate — keep hunting.");
     render();
@@ -959,26 +1436,42 @@
     S.combo++;
     if(S.combo > S.bestCombo) S.bestCombo = S.combo;
     if(S.comboTimer) clearTimeout(S.comboTimer);
-    S.comboTimer = setTimeout(function(){ S.combo = 0; render(); }, 2600);
+    S.comboTimer = setTimeout(function(){ S.combo = 0; if(S.mode==="battle") render(); }, 2600);
   }
 
   function dealDamage(mult, opts){
     opts = opts || {};
     if(S.dead || S.mode!=="battle" || !S.monster) return 0;
+    if(S.wrathCd>0 && !opts.fromWrath) S.wrathCd--; // cooldown ticks down per hunter hit
     var base = tapDamageBase() * (mult||1);
     var variance = 0.88 + Math.random()*0.24;
-    var isCrit = Math.random() < critChance() + (opts.guaranteedCrit ? 1 : 0);
+    var isCrit = Math.random() < critChance();
     var dmg = Math.round(base * variance * (isCrit ? 2 : 1));
     S.monster.hp -= dmg;
     S.mp = Math.min(maxMp(), S.mp + (opts.mpGain!=null ? opts.mpGain : 3));
     bumpCombo();
-    // hit animation
     el.mBtn.classList.remove("hit"); void el.mBtn.offsetWidth; el.mBtn.classList.add("hit");
     floater("-" + dmg + (isCrit ? " CRIT!" : ""), isCrit ? "crit" : "");
     if(isCrit) sndCrit(); else if(!opts.quiet) sndHit();
-    if(S.monster.hp <= 0){ killMonster(); }
+    if(S.monster.hp <= 0){ killMonster(); return dmg; }
     render();
     return dmg;
+  }
+
+  function shadowStrike(){
+    if(S.dead || S.mode!=="battle" || !S.monster || !S.shadowsArr.length) return;
+    var sh = S.shadowsArr[S.shadowTurn % S.shadowsArr.length];
+    S.shadowTurn++;
+    var mult = elementMult(sh.el, S.monster.el);
+    var dmg = Math.max(1, Math.round(shadowDamageBase() * (sh.stars/3) * mult * (0.85 + Math.random()*0.3)));
+    S.monster.hp -= dmg;
+    var ec = ELEMENTS[sh.el];
+    var tag = mult>1 ? " ▲" : (mult<1 ? " ▼" : "");
+    floater("-" + dmg + tag, "shadow-hit", 55 + Math.random()*20);
+    el.floaters.lastChild && (el.floaters.lastChild.style.color = ec.color);
+    beep(420 + Math.random()*120, 0.05, "triangle", 0.03);
+    if(S.monster.hp <= 0){ killMonster(); return; }
+    render();
   }
 
   function playerAttack(){ dealDamage(1); }
@@ -991,15 +1484,15 @@
       log("🗡️ <b>Power Strike!</b>", "");
       dealDamage(2.5, {mpGain:0});
     } else if(n===2){
-      if(S.mp < 20) return;
+      if(S.mp < 20 || S.rushIv) return;
       S.mp -= 20; sndSkill();
       log("👤 <b>Shadow Rush</b> — your shadows strike as one.", "");
       var hits = 0;
-      var iv = setInterval(function(){
+      S.rushIv = setInterval(function(){
         hits++;
-        if(S.dead || S.mode!=="battle" || !S.monster){ clearInterval(iv); return; }
+        if(S.dead || S.mode!=="battle" || !S.monster){ clearRush(); return; }
         dealDamage(0.65, {mpGain:0, quiet: hits>1});
-        if(hits>=5) clearInterval(iv);
+        if(hits>=5) clearRush();
       }, 110);
       render();
     } else if(n===3){
@@ -1007,10 +1500,10 @@
       S.mp -= 35; S.wrathCd = 12; sndSkill();
       log("💀 <b>MONARCH'S WRATH!</b> The whole gate goes quiet.", "sys");
       var before = S.monster ? S.monster.name : "";
-      dealDamage(5, {mpGain:0});
+      dealDamage(5, {mpGain:0, fromWrath:true});
       if(S.monster && S.monster.name===before && S.monster.hp>0){
         S.stunned = 3;
-        log("The monster is <b>stunned</b> — 3 of its attacks are skipped.", "gold");
+        log("The monster is <b>stunned</b> — its next 3 turns are skipped.", "gold");
       }
       render();
     }
@@ -1023,19 +1516,17 @@
     S.potions--;
     var heal = Math.round(mh*0.5);
     S.hp = Math.min(mh, S.hp + heal);
-    floater("+" + heal + " HP", "heal", 8);
+    if(S.mode==="battle") floater("+" + heal + " HP", "heal", 8);
     beep(660,0.12,"sine",0.06);
     log("🧪 Potion used. +" + heal + " HP.", "good");
     render();
   }
 
-  /* ---------------- MONSTER ATTACK LOOP ---------------- */
-  setInterval(function(){
+  function enemyAttack(){
     if(S.dead || S.mode!=="battle" || !S.monster) return;
-    // small MP regen so skills stay usable in long fights
-    S.mp = Math.min(maxMp(), S.mp + 1.5);
     if(S.stunned > 0){
       S.stunned--;
+      log("✦ " + escapeHtml(S.monster.name) + " is stunned and can't move. (" + S.stunned + " left)", "gold");
       render();
       return;
     }
@@ -1048,11 +1539,91 @@
     if(S.hp <= 0){
       S.hp = 0;
       S.dead = true;
+      endBattleCleanup();
       log("You were overwhelmed by <b>" + escapeHtml(S.monster.name) + "</b>.", "bad");
       el.deathOverlay.className = "overlay show";
     }
     render();
-  }, 2100);
+  }
+
+  /* ---------------- MASTER TICK (ATB / auto / speed) ---------------- */
+  var ENEMY_TURN_MS = 2400, SHADOW_TURN_MS = 1500, AUTO_MS = 620, lastTick = Date.now();
+  setInterval(function(){
+    var now = Date.now();
+    var dt = Math.min(120, now - lastTick);
+    lastTick = now;
+    if(S.dead || S.mode!=="battle" || !S.monster) return;
+    var scaled = dt * S.speed;
+    S.mp = Math.min(maxMp(), S.mp + scaled*0.0012);
+    // enemy ATB
+    S.enemyAtb += scaled;
+    el.mAtbBar.style.width = Math.min(100, S.enemyAtb/ENEMY_TURN_MS*100) + "%";
+    if(S.enemyAtb >= ENEMY_TURN_MS){
+      S.enemyAtb = 0;
+      enemyAttack();
+      if(S.mode!=="battle") return;
+    }
+    // shadow army ATB — the whole team shares a turn bar, one shadow strikes per fill
+    if(S.shadowsArr.length){
+      S.shadowAtb += scaled;
+      var pct = Math.min(100, S.shadowAtb/SHADOW_TURN_MS*100);
+      el.partyRow.querySelectorAll("[data-shadow-atb]").forEach(function(b){ b.style.width = pct + "%"; });
+      if(S.shadowAtb >= SHADOW_TURN_MS){
+        S.shadowAtb = 0;
+        shadowStrike();
+        if(S.mode!=="battle") return;
+      }
+    }
+    // auto battle
+    if(S.auto){
+      S.autoTimer += scaled;
+      if(S.autoTimer >= AUTO_MS){
+        S.autoTimer = 0;
+        if(S.hp < maxHp()*0.3 && S.potions>0) drinkPotion();
+        else if(S.mp >= 35 && S.wrathCd<=0 && S.monster.boss) useSkill(3);
+        else if(S.mp >= 32) useSkill(1);
+        else playerAttack();
+      }
+    }
+  }, 50);
+
+  /* ---------------- RUNES ---------------- */
+  function equipRune(id){
+    var free = -1;
+    for(var i=0;i<S.runeSlots.length;i++){ if(S.runeSlots[i]==null){ free = i; break; } }
+    var r = runeById(id);
+    if(!r) return;
+    if(free<0){ log("All 6 rune slots are full — tap an inscribed slot to remove one first.", "bad"); return; }
+    S.runeSlots[free] = id;
+    S.hp = Math.min(maxHp(), S.hp);
+    sndRune();
+    log("◆ Inscribed <b>" + RUNE_SETS[r.set].label + " Rune</b> (" + starString(r.grade) + ") in slot " + (free+1) + " — " + RUNE_SETS[r.set].fmt(Math.round(r.grade*RUNE_SETS[r.set].per)) + ".", "rune");
+    render();
+  }
+  function unequipRune(slot){
+    var id = S.runeSlots[slot];
+    if(id==null) return;
+    var r = runeById(id);
+    S.runeSlots[slot] = null;
+    S.hp = Math.min(maxHp(), S.hp);
+    if(r) log("◆ Removed the <b>" + RUNE_SETS[r.set].label + " Rune</b> from slot " + (slot+1) + " — it's back in your bag.", "");
+    render();
+  }
+
+  /* ---------------- SUMMON ---------------- */
+  function summonShadow(){
+    if(S.scrolls<=0) return;
+    S.scrolls--;
+    var base = SUMMON_POOL[Math.floor(Math.random()*SUMMON_POOL.length)];
+    var roll = Math.random();
+    var stars = roll<0.45 ? 3 : roll<0.75 ? 4 : roll<0.93 ? 5 : 6;
+    sndLevel();
+    if(addShadow(base, stars, "summon")){
+      log("📜 <b>SUMMON!</b> A " + stars + "★ " + ELEMENTS[base.el].icon + " " + ELEMENTS[base.el].label + " <b>" + escapeHtml(base.name) + "</b> rises from the scroll and kneels. Welcome to the army.", "sys");
+      setExploreMsg("📜 The scroll burns violet — <b>" + escapeHtml(base.name) + "</b> (" + stars + "★ " + ELEMENTS[base.el].label + ") joins your shadow army!");
+    }
+    render();
+  }
 
   /* ---------------- SHOP ---------------- */
   function buyWeapon(){
@@ -1075,7 +1646,7 @@
   function buyHeal(){
     if(S.gold < 40) return;
     S.gold -= 40; S.hp = maxHp(); S.mp = maxMp();
-    floater("FULLY RESTORED", "heal", 26);
+    if(S.mode==="battle") floater("FULLY RESTORED", "heal", 26);
     log("✨ Fully healed at the Association clinic. —40 G.", "good");
     render();
   }
@@ -1085,15 +1656,22 @@
     log("🧪 Bought a potion. You now carry " + S.potions + ". —60 G.", "");
     render();
   }
+  function buyScroll(){
+    if(S.gold < 150) return;
+    S.gold -= 150; S.scrolls++;
+    log("📜 Bought a Mystic Scroll. You now hold " + S.scrolls + ". —150 G.", "");
+    render();
+  }
 
   /* ---------------- EXPLORATION / MOVEMENT ---------------- */
   function enterNextGate(){
+    endBattleCleanup();
     S.gate++;
     S.killsInGate = 0;
     S.gateCleared = false;
+    S.monster = null;
     S.hp = Math.min(maxHp(), S.hp + Math.round(maxHp()*0.4));
     S.mp = maxMp();
-    el.clearOverlay.className = "overlay";
     log("🚪 You step through the portal into <b>Gate " + S.gate + " — " + escapeHtml(GATE_NAMES[(S.gate-1)%GATE_NAMES.length]) + "</b>. The mana in here feels heavier.", "sys");
     sndLevel();
     generateDungeon();
@@ -1111,32 +1689,34 @@
     S.player.dir = dir;
     var nx = S.player.x + dx, ny = S.player.y + dy;
     if(nx<0 || ny<0 || nx>=MAP_W || ny>=MAP_H || S.walls[tileKey(nx,ny)]){
-      beep(90, 0.05, "square", 0.03); // bumped a wall
+      beep(90, 0.05, "square", 0.03);
       render();
       return;
     }
-    // portal: descend
     if(S.portalActive && S.portal && S.portal.x===nx && S.portal.y===ny){
       S.player.x = nx; S.player.y = ny;
       enterNextGate();
       return;
     }
-    // monster: bump to battle (stay on your tile, classic trainer-style)
     var mi = entityAt(nx,ny);
     if(mi>=0){
       startBattle(mi);
       return;
     }
     S.player.x = nx; S.player.y = ny;
-    beep(320 + Math.random()*40, 0.04, "sine", 0.025); // soft step
-    // chest: open on step
+    beep(320 + Math.random()*40, 0.04, "sine", 0.025);
     var ch = chestAt(nx,ny);
     if(ch){
       ch.opened = true;
-      if(Math.random() < 0.3){
+      var roll = Math.random();
+      if(roll < 0.22){
         S.potions++;
         setExploreMsg("🎁 <b>Chest!</b> Inside: a <b>potion</b>. You now carry " + S.potions + ".");
         log("🎁 Opened a chest — found a <b>potion</b>!", "gold");
+      } else if(roll < 0.34){
+        S.scrolls++;
+        setExploreMsg("🎁 <b>Chest!</b> Inside: a <b>Mystic Scroll</b>! You now hold " + S.scrolls + ".");
+        log("🎁 Opened a chest — found a <b>Mystic Scroll</b>!", "gold");
       } else {
         var g = 40 + Math.floor(Math.random()*60) + (S.gate-1)*15;
         S.gold += g;
@@ -1159,10 +1739,23 @@
   el.skill2.addEventListener("click", function(){ useSkill(2); });
   el.skill3.addEventListener("click", function(){ useSkill(3); });
   el.potionBtn.addEventListener("click", drinkPotion);
+  el.potionBtn2.addEventListener("click", drinkPotion);
   $("buyPotionBtn").addEventListener("click", buyPotion);
+  $("fleeBtn").addEventListener("click", fleeBattle);
   el.weaponBtn.addEventListener("click", buyWeapon);
   el.armorBtn.addEventListener("click", buyArmor);
   el.healBtn.addEventListener("click", buyHeal);
+  el.scrollBtn.addEventListener("click", buyScroll);
+  el.summonBtn.addEventListener("click", summonShadow);
+  el.autoBtn.addEventListener("click", function(){
+    S.auto = !S.auto;
+    log(S.auto ? "▶ <b>Auto battle ON</b> — your hunter and army fight on their own." : "⏸ Auto battle OFF.", "sys");
+    render();
+  });
+  el.speedBtn.addEventListener("click", function(){
+    S.speed = S.speed>=3 ? 1 : S.speed+1;
+    render();
+  });
 
   document.querySelectorAll(".plus-btn").forEach(function(b){
     b.addEventListener("click", function(){
@@ -1178,8 +1771,8 @@
   });
 
   document.addEventListener("keydown", function(e){
-    // exploration: arrow keys / WASD walk the dungeon
-    if(S.mode==="explore" && !S.dead){
+    if(S.dead) return;
+    if(S.mode==="explore"){
       var dir = null;
       if(e.key==="ArrowUp" || e.key==="w" || e.key==="W") dir = "up";
       else if(e.key==="ArrowDown" || e.key==="s" || e.key==="S") dir = "down";
@@ -1194,7 +1787,6 @@
       if(e.key==="q" || e.key==="Q") drinkPotion();
       return;
     }
-    // battle keys
     if(e.code==="Space" && !e.repeat && e.target.tagName!=="BUTTON"){
       e.preventDefault(); playerAttack();
     } else if(e.code==="Space" && e.target===document.body){
@@ -1204,25 +1796,28 @@
     if(e.key==="2") useSkill(2);
     if(e.key==="3") useSkill(3);
     if(e.key==="q" || e.key==="Q") drinkPotion();
+    if(e.key==="Escape") fleeBattle();
   });
 
   $("reviveBtn").addEventListener("click", function(){
     S.dead = false;
+    endBattleCleanup();
+    S.monster = null;
+    S.currentEntity = -1;
     S.hp = maxHp(); S.mp = maxMp();
     S.killsInGate = 0; S.combo = 0; S.gateCleared = false;
     el.deathOverlay.className = "overlay";
-    log("The System revives you at the gate entrance. Same gate, fresh floor — your level, gold and gear are untouched.", "sys");
+    log("The System revives you at the gate entrance. Same gate, fresh floor — your level, gold, gear, runes and army are untouched.", "sys");
     generateDungeon();
     setExploreMsg("💫 The System drags you back to the <b>gate entrance</b>. The floor has reshaped itself — the hunt starts over.");
     render();
   });
 
-  $("nextGateBtn").addEventListener("click", function(){ enterNextGate(); });
-
   el.soundBtn.addEventListener("click", function(){
     S.sound = !S.sound;
     el.soundBtn.textContent = S.sound ? "🔊 Sound: On" : "🔇 Sound: Off";
     if(S.sound) beep(660,0.08,"sine",0.05);
+    saveGame();
   });
 
   el.resetBtn.addEventListener("click", function(){
@@ -1238,6 +1833,9 @@
       return;
     }
     var soundOn = S.sound;
+    endBattleCleanup();
+    clearSave();
+    runeSeq = 0;
     S = freshState();
     S.sound = soundOn;
     el.resetBtn.textContent = "Restart Hunt";
@@ -1247,13 +1845,40 @@
     generateDungeon();
     setExploreMsg("You step through the gate. Something moves in the dark…");
     render();
+    saveGame();
+  });
+
+  window.addEventListener("beforeunload", function(){ saveGame(); });
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState==="hidden") saveGame();
   });
 
   /* ---------------- START ---------------- */
-  log("⚠ <b>A gate has broken open nearby.</b> Hunter Association scanners rank you… E. Prove them wrong.", "sys");
-  log("Walk the dungeon with the <b>pad / arrows / WASD</b>. Bump into a monster to fight it — skills cost MP, and it refills as you hit things.", "");
-  generateDungeon();
+  var restored = false;
+  try{ restored = loadGame(); }catch(e){ restored = false; }
+  if(restored){
+    el.soundBtn.textContent = S.sound ? "🔊 Sound: On" : "🔇 Sound: Off";
+    // keep HP/MP inside their caps after gear/rune changes in the save
+    S.hp = Math.min(maxHp(), Math.max(1, S.hp));
+    S.mp = Math.min(maxMp(), Math.max(0, S.mp));
+    log("💾 <b>Save loaded — welcome back, hunter.</b> Lv " + S.level + " · Gate " + S.gate + " · " + S.gold + " gold · " + S.shadowsArr.length + " shadow" + (S.shadowsArr.length===1 ? "" : "s") + " · " + S.runes.length + " rune" + (S.runes.length===1 ? "" : "s") + ". Your progress now auto-saves between visits.", "sys");
+    if(S.mode==="battle" && S.monster){
+      log("⚔ You were mid-battle with <b>" + escapeHtml(S.monster.name) + "</b> — the fight resumes where you left it.", "gold");
+      setExploreMsg("💾 Welcome back. You're still in battle — finish the fight!");
+    } else if(S.portalActive){
+      setExploreMsg("💾 <b>Welcome back!</b> The boss of Gate " + S.gate + " is down and the <b>portal 🌀</b> is open — walk into it to descend.");
+    } else {
+      setExploreMsg("💾 <b>Welcome back, hunter.</b> Gate " + S.gate + " — " + S.mapMonsters.length + " monster" + (S.mapMonsters.length===1 ? "" : "s") + " left on this floor. Your hunt picks up right where you left it.");
+    }
+    log("Walk the dungeon with the <b>pad / arrows / WASD</b>. Progress saves automatically — close the page anytime.", "");
+  } else {
+    log("⚠ <b>A gate has broken open nearby.</b> Hunter Association scanners rank you… E. Prove them wrong.", "sys");
+    log("Walk the dungeon with the <b>pad / arrows / WASD</b>. Bump into a monster to fight it — your <b>shadow army</b> attacks on its own turn bar, and matching elements hit harder.", "");
+    log("You carry <b>1 Mystic Scroll</b> — summon your first shadow from the Shadow Army panel below. <b>Progress auto-saves</b> on this device between visits.", "gold");
+    generateDungeon();
+  }
   render();
+  saveGame();
 })();
 </script>
 </body>
