@@ -1,0 +1,2497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>Solo Leveling Dungeon Hunter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#07060f;
+    --panel:#12142a;
+    --panel2:#1a1d3a;
+    --panel3:#232751;
+    --line:#333a75;
+    --line-soft:#262b57;
+    --cyan:#38e1ff;
+    --violet:#9d6bff;
+    --gold:#f5c451;
+    --gold-deep:#b97e10;
+    --red:#ff5d5d;
+    --green:#4ade80;
+    --mp:#4f9dff;
+    --text:#f2f4ff;
+    --muted:#a7add6;
+    --muted2:#767ea8;
+    --elc:#9d6bff;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{background:var(--bg)}
+  body{
+    margin:0;
+    font-family:"Rajdhani", system-ui, sans-serif;
+    color:var(--text);
+    min-height:100vh;
+    padding:16px 14px 44px;
+    background:
+      radial-gradient(900px 480px at 50% -8%, rgba(109,64,255,.38), transparent 62%),
+      radial-gradient(760px 420px at 96% 22%, rgba(14,116,144,.22), transparent 60%),
+      radial-gradient(700px 500px at 4% 68%, rgba(185,126,16,.14), transparent 60%),
+      var(--bg);
+    overflow-x:hidden;
+  }
+  /* drifting mana motes */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:
+      radial-gradient(2px 2px at 12% 22%, rgba(157,107,255,.9), transparent 60%),
+      radial-gradient(1.5px 1.5px at 82% 14%, rgba(56,225,255,.9), transparent 60%),
+      radial-gradient(2px 2px at 66% 44%, rgba(245,196,81,.8), transparent 60%),
+      radial-gradient(1.5px 1.5px at 28% 62%, rgba(56,225,255,.7), transparent 60%),
+      radial-gradient(2px 2px at 90% 78%, rgba(157,107,255,.8), transparent 60%),
+      radial-gradient(1.5px 1.5px at 44% 88%, rgba(245,196,81,.7), transparent 60%),
+      radial-gradient(1.5px 1.5px at 6% 84%, rgba(157,107,255,.7), transparent 60%);
+    animation:motes 9s ease-in-out infinite alternate;
+  }
+  @keyframes motes{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+  button{font-family:inherit; cursor:pointer}
+  button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--cyan); outline-offset:2px}
+  .app{max-width:740px; margin:0 auto; position:relative; z-index:1}
+
+  .panel{
+    border:1px solid var(--line);
+    background:linear-gradient(180deg, var(--panel2), var(--panel));
+    border-radius:var(--radius);
+    box-shadow:0 10px 26px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .panel h3{
+    margin:0 0 10px; font-family:"Orbitron",sans-serif; font-size:12px; letter-spacing:.22em;
+    color:var(--cyan); font-weight:800; display:flex; align-items:center; gap:8px;
+  }
+  .panel h3::after{content:""; flex:1; height:1px; background:linear-gradient(90deg, var(--line), transparent)}
+
+  /* ---------- SYSTEM HEADER ---------- */
+  .system{
+    position:relative; text-align:center; padding:20px 18px 16px;
+    border:1.5px solid rgba(56,225,255,.75); border-radius:18px;
+    background:linear-gradient(180deg, rgba(18,32,66,.95), rgba(10,11,30,.97));
+    box-shadow:0 0 0 5px rgba(56,225,255,.07), 0 0 38px rgba(56,225,255,.20), inset 0 0 46px rgba(56,225,255,.07);
+  }
+  .sys-tag{
+    display:flex; align-items:center; gap:10px;
+    font-family:"Orbitron",sans-serif; font-size:10px; letter-spacing:.3em; color:var(--cyan); font-weight:700; text-transform:uppercase;
+  }
+  .sys-tag::before,.sys-tag::after{content:""; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--cyan))}
+  .sys-tag::after{background:linear-gradient(90deg,var(--cyan),transparent)}
+  .system h1{
+    font-family:"Cinzel",serif; margin:10px 0 2px;
+    font-size:clamp(30px,7.4vw,48px); line-height:.98; font-weight:900; letter-spacing:.05em;
+    text-shadow:0 3px 0 rgba(0,0,0,.5), 0 0 26px rgba(157,107,255,.45);
+  }
+  .system h1 span{
+    background:linear-gradient(180deg,#a5f3fc,#38bdf8 55%,#0369a1);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 14px rgba(56,189,248,.55));
+  }
+  .system .sub{text-align:center; color:var(--muted); font-size:15px; font-weight:600; letter-spacing:.04em; margin:5px 0 0}
+  .system .sub b{color:#fff}
+
+  /* ---------- STATUS ---------- */
+  .status{margin-top:12px; padding:14px}
+  .status-top{display:flex; gap:12px; align-items:stretch; flex-wrap:wrap}
+  .rank-badge{
+    width:86px; min-height:80px; padding:8px 6px; text-align:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;
+    border:1.5px solid var(--gold); border-radius:12px;
+    background:radial-gradient(circle at 50% 28%, #4a3405, #1c1304 75%);
+    box-shadow:0 0 18px rgba(245,196,81,.28), inset 0 0 18px rgba(245,196,81,.15);
+  }
+  .rank-badge small{font-size:9px; letter-spacing:.24em; color:var(--gold); font-weight:700; font-family:"Orbitron",sans-serif}
+  .rank-badge strong{font-family:"Cinzel",serif; font-size:40px; line-height:1; color:var(--gold); text-shadow:0 0 18px rgba(245,196,81,.65)}
+  .rank-badge em{font-style:normal; font-size:11px; color:#e6cd85; font-weight:700; letter-spacing:.06em}
+  .who{flex:1; min-width:200px}
+  .who-row{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap}
+  .who h2{margin:0; font-size:21px; letter-spacing:.02em; line-height:1}
+  .who h2 span{color:var(--muted); font-size:13.5px; font-weight:600}
+  .lvl{font-family:"Orbitron",sans-serif; font-weight:800; font-size:14px; color:#fff; background:var(--panel3); border:1px solid var(--line); border-radius:8px; padding:4px 10px}
+  .lvl b{color:var(--cyan)}
+  .bar-row{display:grid; grid-template-columns:34px 1fr 76px; align-items:center; gap:8px; margin-top:7px; font-size:12px; font-weight:700; letter-spacing:.08em}
+  .bar-row label{color:var(--muted)}
+  .bar-row output{text-align:right; font-variant-numeric:tabular-nums; color:#fff}
+  .bar{height:13px; background:#05060d; border:1px solid #2b3160; border-radius:7px; overflow:hidden; position:relative}
+  .bar i{display:block; height:100%; transition:width .3s ease; border-radius:6px; position:relative}
+  .bar i::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 55%)}
+  .bar.hp i{background:linear-gradient(90deg,#b91c1c,#ff6b5e)}
+  .bar.mp i{background:linear-gradient(90deg,#1d4ed8,#54b9ff)}
+  .bar.xp{height:9px}
+  .bar.xp i{background:linear-gradient(90deg,#7c3aed,#c4b5fd)}
+  .bar.atb{height:7px}
+  .bar.atb i{background:linear-gradient(90deg,#b97e10,#ffd970); transition:none}
+  .meta-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+  .chip{flex:1; min-width:92px; background:var(--panel2); border:1px solid var(--line-soft); border-radius:10px; padding:8px 10px; text-align:center}
+  .chip small{display:block; font-size:9.5px; letter-spacing:.18em; color:var(--muted2); font-weight:700; font-family:"Orbitron",sans-serif}
+  .chip strong{font-size:18px; font-variant-numeric:tabular-nums}
+  .chip.gold strong{color:var(--gold)}
+  .chip.crystal strong{color:#7dd3fc}
+  .chip.shadow strong{color:#c4b5fd}
+  .chip.scroll strong{color:#fda4af}
+  .points-banner{
+    display:none; margin-top:12px; border:1px solid var(--gold); border-radius:10px; background:#241a04; color:#fde68a;
+    padding:10px 12px; font-weight:700; font-size:15px; text-align:center;
+  }
+  .points-banner.show{display:block; animation:pulseGold 1.2s ease infinite alternate}
+  @keyframes pulseGold{from{box-shadow:0 0 0 rgba(245,196,81,0)}to{box-shadow:0 0 20px rgba(245,196,81,.4)}}
+
+  /* ---------- GATE BAR ---------- */
+  .gatebar{margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:11px 14px}
+  .gatebar .gate-name{font-family:"Orbitron",sans-serif; font-size:13px; font-weight:800; letter-spacing:.05em}
+  .gatebar .gate-name span{color:var(--violet)}
+  .gatebar .gate-sub{color:var(--muted); font-weight:600; font-size:13px}
+  .pips{display:flex; gap:4px; margin-left:auto}
+  .pip{width:18px; height:9px; border-radius:3px; background:#1a1f45; border:1px solid #2d3468}
+  .pip.done{background:var(--cyan); border-color:var(--cyan); box-shadow:0 0 8px rgba(56,225,255,.6)}
+  .pip.boss{background:#2a1408; border-color:var(--gold-deep)}
+  .pip.boss.done{background:var(--gold); border-color:var(--gold); box-shadow:0 0 8px rgba(245,196,81,.7)}
+
+  /* ---------- DUNGEON MAP ---------- */
+  [hidden]{display:none !important}
+  .dungeon-panel{margin-top:12px; padding:13px 14px}
+  .dungeon-head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+  .dungeon-head h3{margin:0; font-family:"Orbitron",sans-serif; font-size:12px; letter-spacing:.22em; color:var(--cyan); font-weight:800}
+  .dungeon-head .d-status{color:var(--muted); font-weight:700; font-size:13.5px}
+  .dungeon-head .d-status b{color:#fff}
+  .dungeon-head .d-status .boss-left{color:var(--gold)}
+  .dungeon-grid{
+    display:grid; grid-template-columns:repeat(13,1fr); gap:3px;
+    background:#04050c; border:1px solid #2b3160; border-radius:10px; padding:6px;
+    max-width:560px; margin:0 auto;
+  }
+  .tile{
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; border-radius:4px;
+    background:linear-gradient(180deg,#181c3c,#12152e); font-size:clamp(14px,4.2vw,25px); line-height:1; position:relative; user-select:none;
+  }
+  .tile.alt{background:linear-gradient(180deg,#1b2044,#141736)}
+  .tile.wall{
+    background:linear-gradient(180deg,#3b4a85,#212a56);
+    box-shadow:inset 0 0 0 1.5px #55679f, inset 0 -5px 0 rgba(0,0,0,.35), inset 0 4px 0 rgba(255,255,255,.08);
+  }
+  .tile.wall::after{content:""; position:absolute; left:18%; right:18%; top:50%; height:1.5px; background:rgba(0,0,0,.35)}
+  .tile .ent{filter:drop-shadow(0 3px 5px rgba(0,0,0,.7)); z-index:1}
+  .el-dot{position:absolute; top:2px; left:2px; width:8px; height:8px; border-radius:50%; z-index:2; box-shadow:0 0 6px currentColor}
+  .tile.monster-tile{background:linear-gradient(180deg,#241647,#180f31)}
+  .tile.boss-tile{background:linear-gradient(180deg,#3a1c07,#241103); box-shadow:inset 0 0 0 1.5px var(--gold-deep), inset 0 0 14px rgba(245,196,81,.4)}
+  .tile.chest-tile{background:linear-gradient(180deg,#2b2408,#1d1a08)}
+  .tile.portal-tile{
+    background:radial-gradient(circle at 50% 50%, rgba(216,199,255,.9), rgba(124,58,237,.5) 55%, #1d1430 80%);
+    box-shadow:inset 0 0 0 1.5px #a78bfa, inset 0 0 16px rgba(167,139,250,.85);
+    animation:portalPulse 1.1s ease-in-out infinite alternate;
+  }
+  @keyframes portalPulse{from{filter:brightness(.9)}to{filter:brightness(1.3)}}
+  .tile.player-tile{
+    background:radial-gradient(circle at 50% 55%, rgba(56,225,255,.5), rgba(14,116,144,.22) 60%, #12303e 88%);
+    box-shadow:inset 0 0 0 2px var(--cyan), inset 0 0 14px rgba(56,225,255,.55);
+  }
+  .player-sprite{display:block; animation:playerBob 1s ease-in-out infinite; filter:drop-shadow(0 0 7px rgba(56,225,255,.9)) drop-shadow(0 3px 4px rgba(0,0,0,.7))}
+  @keyframes playerBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+  .dir-arrow{position:absolute; right:1px; bottom:0; font-size:9px; color:var(--cyan); z-index:2; line-height:1; font-weight:900}
+  .explore-msg{max-width:560px; margin:10px auto 0; text-align:center; color:var(--muted); font-weight:600; font-size:14.5px; line-height:1.4; min-height:22px}
+  .explore-msg b{color:#fff}
+  .explore-msg .gold-t{color:var(--gold)}
+  .dpad{display:grid; grid-template-columns:repeat(3,62px); grid-template-rows:repeat(3,50px); gap:6px; justify-content:center; margin:12px auto 2px; max-width:220px}
+  .dpad button{
+    border:1.5px solid rgba(56,225,255,.7); border-radius:10px; color:#fff; font-size:19px; line-height:1;
+    background:linear-gradient(180deg,#1b6a8a,#0c2c44); box-shadow:0 4px 0 #062033, 0 0 12px rgba(56,225,255,.18);
+  }
+  .dpad button:active{transform:translateY(3px); box-shadow:0 1px 0 #062033}
+  .dpad .dpad-center{
+    border:1px solid var(--line-soft); border-radius:10px; background:#0a0d1f; color:var(--muted2);
+    font-family:"Orbitron",sans-serif; font-size:8.5px; letter-spacing:.14em; font-weight:700;
+    display:flex; align-items:center; justify-content:center; text-align:center; cursor:default;
+  }
+  .dungeon-panel.in-battle .dungeon-grid{opacity:.45}
+  .dungeon-panel.in-battle .dpad button{opacity:.35}
+  .keys-hint{text-align:center; color:var(--muted2); font-size:12.5px; font-weight:600; margin-top:8px}
+
+  /* ---------- BATTLE ARENA (Summoners-War style stage) ---------- */
+  .arena{
+    margin-top:12px; position:relative; overflow:hidden; padding:0; text-align:center;
+    --elc:#9d6bff;
+    background:
+      radial-gradient(640px 300px at 50% 118%, color-mix(in srgb, var(--elc) 42%, transparent), transparent 68%),
+      radial-gradient(460px 220px at 50% -6%, rgba(56,225,255,.13), transparent 62%),
+      linear-gradient(180deg,#131736 0%, #0a0c22 58%, #07081a 100%);
+  }
+  .arena::before{
+    content:""; position:absolute; inset:0; opacity:.4; pointer-events:none;
+    background-image:linear-gradient(rgba(120,140,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(120,140,255,.055) 1px, transparent 1px);
+    background-size:34px 34px;
+  }
+  .battle-top{
+    position:relative; z-index:2; display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+    padding:13px 14px 0; text-align:left; flex-wrap:wrap;
+  }
+  .enemy-id{flex:1; min-width:210px}
+  .enemy-line{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .el-badge{
+    display:inline-flex; align-items:center; gap:4px; font-family:"Orbitron",sans-serif; font-size:10px; font-weight:800;
+    letter-spacing:.1em; padding:3px 8px; border-radius:20px; color:#0b0b18; background:var(--elc);
+    box-shadow:0 0 12px color-mix(in srgb, var(--elc) 65%, transparent);
+  }
+  .stars{color:var(--gold); font-size:14px; letter-spacing:1px; text-shadow:0 0 8px rgba(245,196,81,.55)}
+  .stars .off{color:#4a4f78; text-shadow:none}
+  .monster-name{font-family:"Cinzel",serif; font-weight:900; font-size:21px; letter-spacing:.02em; margin:0; line-height:1.1}
+  .monster-name .boss-tag{color:#0b0b18; background:linear-gradient(180deg,#ffd970,var(--gold-deep)); font-family:"Orbitron",sans-serif; font-size:10px; letter-spacing:.16em; padding:3px 7px; border-radius:5px; vertical-align:middle; margin-right:8px}
+  .monster-sub{color:var(--muted); font-weight:600; font-size:13.5px; margin:3px 0 0}
+  .monster-sub .adv{color:var(--gold); font-weight:800}
+  .monster-sub .dis{color:#f87171; font-weight:800}
+  .battle-toggles{display:flex; gap:6px}
+  .toggle-btn{
+    border:1px solid var(--line); background:var(--panel2); color:var(--muted); border-radius:9px;
+    font-family:"Orbitron",sans-serif; font-size:11px; font-weight:800; letter-spacing:.08em; padding:8px 10px;
+  }
+  .toggle-btn.on{border-color:var(--gold); color:var(--gold); background:#241a04; box-shadow:0 0 12px rgba(245,196,81,.25)}
+  .monster-hp{position:relative; z-index:2; max-width:460px; margin:10px auto 0; padding:0 16px; text-align:left}
+  .monster-hp .bar-row{grid-template-columns:30px 1fr 88px; margin-top:5px}
+  .monster-hp .bar-row:first-child{margin-top:0}
+  .monster-stage{position:relative; z-index:1; height:218px; display:flex; align-items:flex-end; justify-content:center; margin:2px auto 0; max-width:480px}
+  .platform{
+    position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+    width:230px; height:52px; border-radius:50%;
+    background:radial-gradient(ellipse, color-mix(in srgb, var(--elc) 55%, transparent), rgba(10,10,26,.2) 68%, transparent 75%);
+  }
+  .rune-ring{
+    position:absolute; bottom:6px; left:50%; width:250px; height:66px; transform:translateX(-50%);
+    border-radius:50%; border:2px dashed color-mix(in srgb, var(--elc) 75%, transparent);
+    animation:ringSpin 16s linear infinite; opacity:.85;
+  }
+  @keyframes ringSpin{from{transform:translateX(-50%) rotate(0deg)}to{transform:translateX(-50%) rotate(360deg)}}
+  .monster-emoji{
+    font-size:124px; line-height:1; user-select:none; cursor:pointer; background:none; border:none; padding:10px 10px 26px; position:relative; z-index:2;
+    filter:drop-shadow(0 16px 22px rgba(0,0,0,.65)) drop-shadow(0 0 30px color-mix(in srgb, var(--elc) 55%, transparent));
+    transition:transform .08s ease; animation:bob 2.6s ease-in-out infinite;
+  }
+  .monster-emoji:active{transform:scale(.94)}
+  .monster-emoji.hit{animation:hitShake .28s ease}
+  .monster-emoji.boss{font-size:150px}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @keyframes hitShake{0%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-3deg)}55%{transform:translateX(9px) rotate(2deg)}100%{transform:translateX(0)}}
+  .floaters{position:absolute; inset:0; pointer-events:none; overflow:visible; z-index:4}
+  .floater{
+    position:absolute; font-family:"Orbitron",sans-serif; font-weight:900; font-size:22px; color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,.85); animation:floatUp .85s ease-out forwards; white-space:nowrap;
+  }
+  .floater.crit{color:var(--gold); font-size:32px}
+  .floater.player-dmg{color:#fca5a5; font-size:17px}
+  .floater.heal{color:#86efac}
+  .floater.shadow-hit{font-size:16px}
+  @keyframes floatUp{0%{opacity:0; transform:translateY(8px) scale(.85)}15%{opacity:1; transform:translateY(0) scale(1.06)}100%{opacity:0; transform:translateY(-66px) scale(1)}}
+  .combo{position:absolute; top:64px; right:14px; z-index:3; text-align:right; display:none}
+  .combo.show{display:block}
+  .combo strong{font-family:"Orbitron",sans-serif; font-size:27px; color:var(--gold); display:block; line-height:1; text-shadow:0 0 14px rgba(245,196,81,.55)}
+  .combo small{font-size:10px; letter-spacing:.22em; color:var(--muted); font-weight:700}
+  .stun-tag{display:none; position:relative; z-index:2; padding-bottom:8px; color:#fde68a; font-weight:700; letter-spacing:.1em; font-size:13px}
+  .stun-tag.show{display:block}
+  /* party row */
+  .party-row{
+    position:relative; z-index:2; display:flex; gap:8px; justify-content:center; align-items:flex-end; flex-wrap:wrap;
+    padding:4px 12px 14px;
+  }
+  .party-card{
+    width:74px; border:1px solid var(--line); border-radius:10px; padding:6px 4px 5px; text-align:center;
+    background:linear-gradient(180deg, rgba(35,39,81,.92), rgba(16,18,40,.95));
+  }
+  .party-card.leader{border-color:var(--cyan); box-shadow:0 0 12px rgba(56,225,255,.3)}
+  .party-card .face{font-size:30px; line-height:1.15; display:block; filter:drop-shadow(0 3px 4px rgba(0,0,0,.7))}
+  .party-card .pname{display:block; font-size:10px; font-weight:700; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .party-card .bar{height:5px; margin-top:4px}
+  .party-card .bar i{transition:none}
+  .party-card .bar i.shadow-atb{background:linear-gradient(90deg,#6d28d9,#c4b5fd)}
+  .party-empty{color:var(--muted2); font-weight:600; font-size:13.5px; padding:6px 0 12px}
+
+  /* ---------- ACTIONS ---------- */
+  .actions{margin-top:12px; display:grid; grid-template-columns:1fr; gap:10px}
+  .attack-btn{
+    border:1.5px solid rgba(56,225,255,.8); border-radius:14px; color:#fff; padding:15px 16px;
+    font-family:"Orbitron",sans-serif; font-weight:900; letter-spacing:.12em; font-size:19px;
+    background:linear-gradient(180deg,#1d7ea6,#0d3d5c);
+    box-shadow:0 5px 0 #062a42, 0 0 24px rgba(56,225,255,.28), inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .attack-btn:active{transform:translateY(3px); box-shadow:0 2px 0 #062a42}
+  .attack-btn small{display:block; font-family:"Rajdhani",sans-serif; font-weight:600; letter-spacing:.04em; font-size:13px; color:#bdefff; margin-top:2px; text-transform:none}
+  .skills{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+  .skill{
+    position:relative; overflow:hidden; border:1px solid var(--line); border-radius:12px; color:var(--text);
+    padding:11px 8px 10px; text-align:center; background:linear-gradient(180deg, var(--panel3), var(--panel2));
+    box-shadow:0 3px 0 #0a0c22;
+  }
+  .skill:active{transform:translateY(2px); box-shadow:0 1px 0 #0a0c22}
+  .skill:disabled{opacity:.42; cursor:not-allowed; transform:none}
+  .skill .ic{font-size:22px; display:block; line-height:1.1}
+  .skill strong{display:block; font-size:14px; margin-top:2px}
+  .skill small{color:var(--cyan); font-weight:700; font-size:12px}
+  .skill small.cd{color:var(--gold)}
+  .battle-util{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .util-row{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px}
+  .util{
+    border:1px solid var(--line); border-radius:12px; color:var(--text); padding:11px 10px; font-weight:700; font-size:15px;
+    background:linear-gradient(180deg, var(--panel2), var(--panel)); box-shadow:0 3px 0 #0a0c22;
+  }
+  .util:active{transform:translateY(2px); box-shadow:0 1px 0 #0a0c22}
+  .util:disabled{opacity:.45; cursor:not-allowed; transform:none}
+  .util span{color:var(--muted); font-weight:600; font-size:13px; display:block}
+  .util.potion{border-color:#4c3577}
+  .util.potion strong{color:#e9d5ff}
+  .util.flee{border-color:#5c3535}
+  .util.flee strong{color:#fca5a5}
+
+  /* ---------- COLLECTION / RUNES / STATS / SHOP ---------- */
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px}
+  @media (max-width:600px){ .grid2{grid-template-columns:1fr} }
+  .pad{padding:13px 14px}
+  .army-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(96px,1fr)); gap:8px}
+  .mon-card{
+    border:1.5px solid var(--cardc, var(--line)); border-radius:12px; padding:9px 6px 7px; text-align:center; position:relative;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--cardc, #333a75) 22%, #171a36), #101227);
+    box-shadow:inset 0 0 18px color-mix(in srgb, var(--cardc, #333a75) 18%, transparent);
+  }
+  .mon-card .face{font-size:36px; line-height:1.15; display:block; filter:drop-shadow(0 4px 6px rgba(0,0,0,.7))}
+  .mon-card .mname{display:block; font-size:11.5px; font-weight:700; line-height:1.15; margin-top:2px}
+  .mon-card .stars{font-size:10.5px}
+  .mon-card .eltag{font-size:10px; font-weight:800; letter-spacing:.08em; font-family:"Orbitron",sans-serif}
+  .army-empty{color:var(--muted); font-weight:600; font-size:14px; grid-column:1/-1; text-align:center; padding:8px 4px}
+  .summon-row{display:flex; gap:8px; margin-top:11px; flex-wrap:wrap}
+  .summon-btn{
+    flex:1; min-width:170px; border:1px solid #7c4a03; border-radius:11px; padding:11px; font-weight:800; font-size:15px; color:#ffe9b0;
+    background:linear-gradient(180deg,#8a5a10,#5e3c06); box-shadow:0 3px 0 #332000;
+  }
+  .summon-btn:active{transform:translateY(2px)}
+  .summon-btn:disabled{opacity:.45; cursor:not-allowed}
+  .summon-btn span{display:block; font-weight:600; font-size:12.5px; color:#f3d489}
+  .rune-slots{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:11px}
+  .rune-slot{
+    aspect-ratio:1/1; border:1.5px dashed #3a4176; border-radius:10px; background:#0d1026; color:var(--muted2);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:2px;
+    font-size:19px; line-height:1;
+  }
+  .rune-slot.filled{border-style:solid; border-color:var(--gold-deep); background:linear-gradient(180deg,#2b2108,#171106); color:#fff; cursor:pointer; box-shadow:inset 0 0 12px rgba(245,196,81,.16)}
+  .rune-slot small{font-size:8.5px; font-family:"Orbitron",sans-serif; letter-spacing:.04em; color:var(--muted); font-weight:700; text-align:center; line-height:1.1}
+  .rune-slot .rstars{font-size:8px; color:var(--gold); letter-spacing:0}
+  .rune-list{display:flex; flex-direction:column; gap:6px; max-height:190px; overflow:auto}
+  .rune-item{
+    display:flex; align-items:center; gap:9px; border:1px solid var(--line-soft); border-radius:10px; padding:7px 9px;
+    background:var(--panel2); text-align:left; color:var(--text); width:100%;
+  }
+  .rune-item .ric{font-size:21px}
+  .rune-item .rnm{flex:1}
+  .rune-item .rnm strong{font-size:14px; display:block; line-height:1.15}
+  .rune-item .rnm small{color:var(--muted); font-size:12px; font-weight:600}
+  .rune-item .rstars{color:var(--gold); font-size:11px}
+  .rune-item .req{font-family:"Orbitron",sans-serif; font-size:10px; font-weight:800; color:var(--cyan); letter-spacing:.06em}
+  .rune-empty{color:var(--muted); font-weight:600; font-size:13.5px; text-align:center; padding:6px}
+  .stat-row{display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed #23264e}
+  .stat-row:last-child{border-bottom:none}
+  .stat-row .nm{flex:1}
+  .stat-row .nm strong{font-size:16px}
+  .stat-row .nm small{display:block; color:var(--muted); font-size:12px; font-weight:600; line-height:1.2}
+  .stat-row .val{font-family:"Orbitron",sans-serif; font-weight:800; font-size:17px; min-width:30px; text-align:right}
+  .stat-row .bonus{color:var(--gold); font-size:12px; font-weight:800; min-width:44px; text-align:right}
+  .plus-btn{
+    width:32px; height:32px; border:1px solid var(--gold-deep); border-radius:9px; background:#241a04; color:var(--gold);
+    font-size:19px; font-weight:900; line-height:1; display:none;
+  }
+  .plus-btn.show{display:block}
+  .shop-row{display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px dashed #23264e}
+  .shop-row:last-child{border-bottom:none}
+  .shop-row .nm{flex:1}
+  .shop-row .nm strong{font-size:15px; display:block; line-height:1.15}
+  .shop-row .nm small{color:var(--muted); font-size:12px; font-weight:600}
+  .buy-btn{border:1px solid #0e7490; border-radius:9px; background:#0a3446; color:#a5f3fc; font-weight:800; padding:8px 10px; font-size:13px; white-space:nowrap; box-shadow:0 2px 0 #052433}
+  .buy-btn:active{transform:translateY(1px); box-shadow:none}
+  .buy-btn:disabled{opacity:.4; cursor:not-allowed}
+  .derived{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .derived div{flex:1; min-width:76px; background:var(--panel2); border:1px solid #23264e; border-radius:9px; padding:7px 8px; text-align:center}
+  .derived small{display:block; font-size:9.5px; letter-spacing:.13em; color:var(--muted2); font-weight:700}
+  .derived strong{font-size:16px}
+
+  /* ---------- LOG ---------- */
+  .log-panel{margin-top:12px; padding:13px 14px}
+  .log{list-style:none; margin:0; padding:0; max-height:176px; overflow:auto; font-size:14.5px; font-weight:600}
+  .log li{padding:5px 2px; border-bottom:1px solid #1b1e3f; color:#ccd2f2; line-height:1.35}
+  .log li:first-child{color:#fff}
+  .log li .t{color:var(--muted2); font-size:12px; margin-right:6px; font-variant-numeric:tabular-nums}
+  .log li.good{color:#86efac}
+  .log li.gold{color:#fde68a}
+  .log li.bad{color:#fca5a5}
+  .log li.sys{color:#7deffc}
+  .log li.rune{color:#f0abfc}
+
+  .footer-row{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .ghost-btn{flex:1; min-width:130px; border:1px solid var(--line); border-radius:10px; background:transparent; color:var(--muted); padding:10px; font-weight:700; font-size:14px}
+  .ghost-btn.danger-armed{border-color:var(--red); color:#fca5a5; background:#2a0a0a}
+  .hint{text-align:center; color:var(--muted2); font-size:13px; font-weight:600; margin-top:12px; line-height:1.5}
+  .save-status{text-align:center; color:#86efac; font-size:13px; font-weight:700; margin:10px 0 0; letter-spacing:.02em}
+  .save-status span{color:var(--muted2); font-weight:600}
+
+  /* ---------- OVERLAYS ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(3,4,10,.87); display:none; align-items:center; justify-content:center; padding:18px; z-index:20}
+  .overlay.show{display:flex}
+  .overlay-card{
+    max-width:420px; width:100%; border:1.5px solid var(--red); border-radius:16px; background:#170a13; padding:24px 20px; text-align:center;
+    box-shadow:0 0 44px rgba(239,68,68,.28);
+  }
+  .overlay-card h2{font-family:"Cinzel",serif; margin:0 0 6px; font-size:29px; letter-spacing:.05em}
+  .overlay-card p{color:var(--muted); font-weight:600; margin:0 0 16px; line-height:1.45}
+  .overlay-card p b{color:#fff}
+  .big-btn{width:100%; border:1px solid rgba(56,225,255,.7); border-radius:11px; background:#0d324e; color:#fff; padding:13px; font-family:"Orbitron",sans-serif; font-weight:800; letter-spacing:.1em; font-size:15px}
+
+  /* ---------- TABS ---------- */
+  .tabbar{
+    position:sticky; top:8px; z-index:6; display:flex; gap:6px; margin-top:12px; padding:6px;
+    border:1px solid var(--line); border-radius:14px; background:rgba(10,11,26,.94);
+    box-shadow:0 8px 22px rgba(0,0,0,.45);
+  }
+  .tab-btn{
+    flex:1; border:1px solid transparent; background:transparent; color:var(--muted); border-radius:10px;
+    padding:10px 2px; font-family:"Orbitron",sans-serif; font-size:11.5px; font-weight:800; letter-spacing:.04em;
+  }
+  .tab-btn.active{color:#fff; background:linear-gradient(180deg, var(--panel3), var(--panel2)); border-color:var(--cyan); box-shadow:0 0 14px rgba(56,225,255,.25)}
+  .tab-badge{display:inline-block; min-width:19px; padding:1px 5px; margin-left:2px; border-radius:10px; background:var(--gold); color:#241a04; font-size:11px; font-weight:900}
+  .points-banner{cursor:pointer}
+
+  /* ---------- SHADOW GROWTH ---------- */
+  .mon-card .mlvl{display:block; font-size:10px; color:var(--muted); font-weight:700; margin-top:3px; letter-spacing:.03em; line-height:1.35}
+  .shadow-card{
+    border:1.5px solid var(--cardc, var(--line)); border-radius:12px; padding:11px 12px; margin-bottom:10px;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--cardc, #333a75) 15%, #141630), #101227);
+  }
+  .shadow-card:last-child{margin-bottom:0}
+  .sg-head{display:flex; gap:10px; align-items:center}
+  .sg-face{font-size:34px; line-height:1; filter:drop-shadow(0 3px 4px rgba(0,0,0,.7))}
+  .sg-id{flex:1; min-width:0}
+  .sg-id strong{font-size:16px; display:block; line-height:1.15}
+  .sg-id small{color:var(--muted); font-weight:600; font-size:12.5px}
+  .sg-lvl{color:var(--cyan); font-family:"Orbitron",sans-serif; font-size:12px; white-space:nowrap}
+  .shadow-card .bar-row{grid-template-columns:30px 1fr 72px}
+  .sg-stats{display:flex; gap:6px; flex-wrap:wrap; margin-top:9px}
+  .sg-stats span{flex:1; min-width:88px; background:var(--panel2); border:1px solid #23264e; border-radius:8px; padding:5px 7px; text-align:center; font-size:9.5px; letter-spacing:.12em; color:var(--muted2); font-weight:700; font-family:"Orbitron",sans-serif}
+  .sg-stats b{display:block; color:#fff; font-size:15px; letter-spacing:0; font-family:"Rajdhani",sans-serif; margin-top:1px}
+  .sg-slots{display:flex; gap:6px; margin-top:10px}
+  .sg-slot{width:58px; height:58px; flex:none; font-size:19px}
+  .sg-bag{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:10px}
+  .sg-bag-label{font-size:12px; color:var(--muted); font-weight:700; width:100%}
+  .sg-inscribe{border:1px solid var(--gold-deep); background:#241a04; color:#fde68a; border-radius:8px; padding:6px 9px; font-weight:700; font-size:12.5px}
+  .sg-inscribe:active{transform:translateY(1px)}
+  .sg-norunes{color:var(--muted2); font-size:12.5px; font-weight:600; margin:9px 0 0}
+
+  /* ---------- LEVEL UP POPUP / SHADOW TOAST ---------- */
+  .lvl-card{border-color:var(--gold); background:linear-gradient(180deg,#1d1440,#0d0a24); box-shadow:0 0 44px rgba(245,196,81,.35)}
+  .lvl-card h2{color:var(--gold)}
+  .lvl-burst{font-family:"Orbitron",sans-serif; letter-spacing:.3em; font-size:12px; color:var(--gold); font-weight:800; margin-bottom:6px}
+  .gold-btn{border-color:var(--gold); background:linear-gradient(180deg,#8a5a10,#5e3c06)}
+  .shadow-toast{
+    position:fixed; top:12px; left:50%; transform:translate(-50%,-18px); z-index:30; width:max-content; max-width:92vw;
+    background:linear-gradient(180deg,#2a1b57,#171038); border:1.5px solid var(--violet); color:#fff; border-radius:12px;
+    padding:10px 16px; font-weight:600; font-size:14.5px; text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.55), 0 0 22px rgba(157,107,255,.35);
+    opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+  }
+  .shadow-toast.show{opacity:1; transform:translate(-50%,0)}
+  .shadow-toast b{color:#c4b5fd}
+
+  /* ---------- EVOLUTION / ROLES / SKILLS / CODEX ---------- */
+  .role-badge{display:inline-flex;align-items:center;gap:3px;font-family:"Orbitron",sans-serif;font-size:9px;font-weight:800;letter-spacing:.07em;padding:2px 7px;border-radius:20px;color:#0b0b18}
+  .evo-badge{display:inline-block;font-family:"Orbitron",sans-serif;font-size:9px;font-weight:900;letter-spacing:.06em;padding:2px 7px;border-radius:20px;background:#241a04;color:var(--gold);border:1px solid var(--gold-deep)}
+  .evo-badge.maxed{background:linear-gradient(180deg,#ffd970,var(--gold-deep));color:#241a04}
+  .sg-slots{flex-wrap:wrap}
+  .sg-slot{width:52px;height:52px}
+  .sg-desc{color:var(--muted);font-weight:600;font-size:13.5px;line-height:1.4;margin:8px 0 0}
+  .sg-rec{font-size:12.5px;font-weight:700;color:#f0abfc;margin:7px 0 0;line-height:1.4}
+  .sg-rec b{color:#fff}
+  .skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+  @media (max-width:520px){.skill-grid{grid-template-columns:1fr}}
+  .skill-card{border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;background:var(--panel2);text-align:left}
+  .skill-card strong{font-size:13.5px;display:block;line-height:1.2}
+  .skill-card strong span{color:var(--gold);font-family:"Orbitron",sans-serif;font-size:10px;letter-spacing:.05em}
+  .skill-card small{color:var(--muted);font-size:12px;font-weight:600;line-height:1.35;display:block;margin-top:2px}
+  .skill-card .sk-kind{color:var(--cyan);font-weight:800}
+  .evo-btn{width:100%;margin-top:10px;border:1.5px solid var(--gold);border-radius:11px;padding:11px;font-weight:900;font-size:14.5px;color:#ffe9b0;background:linear-gradient(180deg,#8a5a10,#5e3c06);box-shadow:0 3px 0 #332000;font-family:"Orbitron",sans-serif;letter-spacing:.04em}
+  .evo-btn:active{transform:translateY(2px)}
+  .evo-btn:disabled{opacity:.45;cursor:not-allowed;border-color:var(--line);background:var(--panel2);color:var(--muted);box-shadow:none}
+  .evo-btn small{display:block;font-family:"Rajdhani",sans-serif;font-weight:600;letter-spacing:0;font-size:12.5px;color:#f3d489}
+  .evo-btn:disabled small{color:var(--muted2)}
+  .battle-status{display:none;position:relative;z-index:2;padding:0 12px 9px;gap:6px;flex-wrap:wrap;justify-content:center}
+  .battle-status.show{display:flex}
+  .battle-status span{font-size:11.5px;font-weight:800;letter-spacing:.05em;padding:3px 9px;border-radius:20px;border:1px solid var(--line);background:var(--panel2);color:var(--muted)}
+  .battle-status span.on-shield{color:#7dd3fc;border-color:#0e7490}
+  .battle-status span.on-buff{color:#fde68a;border-color:var(--gold-deep)}
+  .battle-status span.on-debuff{color:#f0abfc;border-color:#7c3aed}
+  .floater.heal-hunter{color:#86efac;font-size:19px}
+  .floater.shield-hit{color:#7dd3fc;font-size:16px}
+  .codex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+  .codex-card{border:1px solid var(--line-soft);border-radius:11px;padding:9px 11px;background:var(--panel2)}
+  .codex-card strong{font-size:14.5px;display:block;line-height:1.2}
+  .codex-card small{color:var(--muted);font-weight:600;font-size:12.5px;line-height:1.35;display:block;margin-top:3px}
+  .codex-card .cx-skills{color:#ccd2f2;font-size:12px;font-weight:600;line-height:1.45;margin-top:5px;display:block}
+  .legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px}
+  .legend-card{border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;background:var(--panel2);font-size:12.5px;font-weight:600;color:var(--muted);line-height:1.4}
+  .legend-card strong{color:#fff;display:block;font-size:13.5px}
+  .mon-card .mrole{display:block;margin-top:3px}
+  /* ---------- POLISHED ART (smooth, glossy, no pixel sprites) ---------- */
+  .monster-emoji{font-size:148px;padding:18px 18px 34px;image-rendering:auto;-webkit-font-smoothing:antialiased;filter:drop-shadow(0 22px 26px rgba(0,0,0,.7)) drop-shadow(0 0 42px color-mix(in srgb, var(--elc) 60%, transparent)) saturate(1.25) contrast(1.05)}
+  .monster-emoji.boss{font-size:176px}
+  .monster-stage{height:252px}
+  .platform{width:290px;height:64px;background:radial-gradient(ellipse, color-mix(in srgb, var(--elc) 70%, transparent), rgba(10,10,26,.25) 62%, transparent 76%)}
+  .rune-ring{width:310px;height:80px;border-width:3px}
+  .art-orb{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.34), color-mix(in srgb, var(--cardc, #333a75) 38%, #141630) 58%, #0b0c20);border:2px solid color-mix(in srgb, var(--cardc, #333a75) 80%, white 10%);box-shadow:0 10px 22px rgba(0,0,0,.55), inset 0 2px 10px rgba(255,255,255,.22), 0 0 20px color-mix(in srgb, var(--cardc, #333a75) 45%, transparent);image-rendering:auto;-webkit-font-smoothing:antialiased}
+  .mon-card .face,.sg-face{width:64px;height:64px;font-size:38px;margin:0 auto}
+  .sg-face{margin:0;flex:none;width:58px;height:58px;font-size:34px}
+  .party-card{width:86px;padding:8px 5px 7px}
+  .party-card .face{width:52px;height:52px;font-size:30px;margin:0 auto}
+  .tile .ent{font-size:1.06em;image-rendering:auto;-webkit-font-smoothing:antialiased;filter:drop-shadow(0 4px 6px rgba(0,0,0,.75)) saturate(1.2)}
+  .turn-order{position:relative;z-index:2;display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding:9px 14px 0}
+  .turn-order .to-label{font-family:"Orbitron",sans-serif;font-size:9.5px;letter-spacing:.16em;color:var(--muted2);font-weight:800}
+  .to-chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:20px;border:1px solid var(--line);background:rgba(10,11,26,.8);color:var(--muted)}
+  .to-chip.next{border-color:var(--gold);color:#fff;box-shadow:0 0 12px rgba(245,196,81,.35)}
+  .to-chip.enemy{border-color:#5c3535;color:#fca5a5}
+  .to-chip small{font-family:"Orbitron",sans-serif;font-size:9px;color:var(--muted2)}
+  @media (prefers-reduced-motion: reduce){
+    .monster-emoji,.rune-ring,body::before{animation:none}
+    .floater{animation-duration:.01s}
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SYSTEM HEADER -->
+  <header class="system">
+    <div class="sys-tag">System Notification</div>
+    <h1>DUNGEON <span>HUNTER</span></h1>
+    <p class="sub">A gate has appeared. Build your <b>shadow army</b>, inscribe <b>runes</b>, exploit <b>elemental advantage</b> — weakest hunter to Monarch.</p>
+  </header>
+
+  <!-- HUNTER STATUS -->
+  <section class="status panel" aria-label="Hunter status">
+    <div class="status-top">
+      <div class="rank-badge" aria-label="Hunter rank">
+        <small>RANK</small>
+        <strong id="rankLetter">E</strong>
+        <em id="rankName">Weakest Hunter</em>
+      </div>
+      <div class="who">
+        <div class="who-row">
+          <h2>PLAYER <span>· Shadow Monarch in training</span></h2>
+          <div class="lvl">LV <b id="levelVal">1</b></div>
+        </div>
+        <div class="bar-row"><label>HP</label><div class="bar hp"><i id="hpBar" style="width:100%"></i></div><output id="hpText">100 / 100</output></div>
+        <div class="bar-row"><label>MP</label><div class="bar mp"><i id="mpBar" style="width:100%"></i></div><output id="mpText">50 / 50</output></div>
+        <div class="bar-row"><label>XP</label><div class="bar xp"><i id="xpBar" style="width:0%"></i></div><output id="xpText">0 / 100</output></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="chip gold"><small>◆ GOLD</small><strong id="goldVal">0</strong></div>
+      <div class="chip crystal"><small>◆ CRYSTALS</small><strong id="crystalVal">0</strong></div>
+      <div class="chip scroll"><small>📜 SCROLLS</small><strong id="scrollVal">1</strong></div>
+      <div class="chip shadow"><small>👤 SHADOWS</small><strong id="shadowsVal">0</strong></div>
+      <div class="chip"><small>⚔ KILLS</small><strong id="killsVal">0</strong></div>
+    </div>
+    <div class="points-banner" id="pointsBanner" role="button" tabindex="0" title="Open the Level Up tab">⬆ LEVEL UP — you have <span id="pointsVal">0</span> stat points. Tap here to open the <b>Level Up</b> tab and spend them.</div>
+  </section>
+
+  <!-- GATE BAR -->
+  <div class="gatebar panel">
+    <div>
+      <div class="gate-name">GATE <span id="gateNum">1</span> — <span id="gateName">Gate of Embers</span></div>
+      <div class="gate-sub" id="gateSub">Clear 10 monsters · Boss on the last one</div>
+    </div>
+    <div class="pips" id="pips" aria-label="Gate progress"></div>
+  </div>
+
+  <!-- TAB BAR -->
+  <nav class="tabbar" role="tablist" aria-label="Game sections">
+    <button type="button" class="tab-btn active" data-tab="hunt" role="tab" aria-selected="true">⚔️ Hunt</button>
+    <button type="button" class="tab-btn" data-tab="level" role="tab" aria-selected="false">⬆ Level Up <span class="tab-badge" id="levelTabBadge" hidden>0</span></button>
+    <button type="button" class="tab-btn" data-tab="army" role="tab" aria-selected="false">👤 Army</button>
+    <button type="button" class="tab-btn" data-tab="shop" role="tab" aria-selected="false">🏪 Shop</button>
+  </nav>
+
+  <!-- TAB: HUNT -->
+  <div class="tab-page" id="tab-hunt">
+  <!-- DUNGEON MAP -->
+  <section class="dungeon-panel panel" id="dungeonPanel" aria-label="Dungeon map">
+    <div class="dungeon-head">
+      <h3>🗺️ DUNGEON MAP</h3>
+      <div class="d-status" id="dungeonStatus">Monsters left: <b>10</b></div>
+    </div>
+    <div class="dungeon-grid" id="dungeonGrid" role="img" aria-label="Top-down dungeon floor. You are the glowing hunter. Walk into a monster to fight it. Colored dots mark each monster's element."></div>
+    <p class="explore-msg" id="exploreMsg">You step through the gate. Something moves in the dark…</p>
+    <div class="dpad" aria-label="Movement pad">
+      <span></span>
+      <button type="button" data-dir="up" aria-label="Move up">▲</button>
+      <span></span>
+      <button type="button" data-dir="left" aria-label="Move left">◀</button>
+      <div class="dpad-center">MOVE</div>
+      <button type="button" data-dir="right" aria-label="Move right">▶</button>
+      <span></span>
+      <button type="button" data-dir="down" aria-label="Move down">▼</button>
+      <span></span>
+    </div>
+    <p class="keys-hint">Walk with the pad, arrow keys, or WASD. The dot on each monster is its <b>element</b> — 🔥 beats 🌪️, 🌪️ beats ⛰️, ⛰️ beats 💧, 💧 beats 🔥, ✨ ⇄ 🌑. Your shadows strike harder with the advantage, and fight with their own <b>skills</b> based on their role.</p>
+  </section>
+
+  <!-- BATTLE ARENA -->
+  <section class="arena panel" id="battlePanel" aria-label="Battle arena" hidden>
+    <div class="battle-top">
+      <div class="enemy-id">
+        <div class="enemy-line">
+          <span class="el-badge" id="monsterElBadge">🔥 FIRE</span>
+          <span class="stars" id="monsterStars" aria-label="Monster grade"></span>
+        </div>
+        <h2 class="monster-name" id="monsterName">—</h2>
+        <p class="monster-sub" id="monsterSub">—</p>
+      </div>
+      <div class="battle-toggles">
+        <button class="toggle-btn" id="autoBtn" aria-pressed="false">▶ AUTO</button>
+        <button class="toggle-btn" id="speedBtn">SPEED ×1</button>
+      </div>
+    </div>
+    <div class="turn-order" id="turnOrder" aria-label="Turn order by speed"></div>
+    <div class="combo" id="comboBox"><small>COMBO</small><strong id="comboVal">x0</strong></div>
+    <div class="monster-hp">
+      <div class="bar-row"><label>HP</label><div class="bar hp"><i id="monsterHpBar" style="width:100%"></i></div><output id="monsterHpText">—</output></div>
+      <div class="bar-row"><label>ATB</label><div class="bar atb"><i id="monsterAtbBar" style="width:0%"></i></div><output id="monsterAtbText">ENEMY TURN</output></div>
+    </div>
+    <div class="monster-stage">
+      <div class="platform"></div>
+      <div class="rune-ring"></div>
+      <button class="monster-emoji" id="monsterBtn" aria-label="Attack the monster">👺</button>
+      <div class="floaters" id="floaters"></div>
+    </div>
+    <div class="stun-tag" id="stunTag">✦ STUNNED — it can't fight back ✦</div>
+    <div class="battle-status" id="battleStatus" aria-label="Battle effects"></div>
+    <div class="party-row" id="partyRow" aria-label="Your party"></div>
+  </section>
+
+  <!-- BATTLE ACTIONS -->
+  <div class="actions" id="battleActions" hidden>
+    <button class="attack-btn" id="attackBtn">⚔ ATTACK<small id="attackSub">Tap damage 14 · or tap the monster · Space works too</small></button>
+    <div class="skills">
+      <button class="skill" id="skill1"><span class="ic">🗡️</span><strong>Power Strike</strong><small id="skill1Cost">10 MP · 250% dmg</small></button>
+      <button class="skill" id="skill2"><span class="ic">👤</span><strong>Shadow Rush</strong><small id="skill2Cost">20 MP · 5 hits</small></button>
+      <button class="skill" id="skill3"><span class="ic">💀</span><strong>Monarch's Wrath</strong><small id="skill3Cost">35 MP · 500% + stun</small></button>
+    </div>
+    <div class="battle-util">
+      <button class="util potion" id="potionBtn2"><strong>🧪 Drink Potion</strong><span id="potionSub2">3 left · heals 50% HP</span></button>
+      <button class="util flee" id="fleeBtn"><strong>🏃 Flee Battle</strong><span>Escape — the monster stays on the map</span></button>
+    </div>
+  </div>
+  <div class="util-row">
+    <button class="util potion" id="potionBtn"><strong>🧪 Drink Potion</strong><span id="potionSub">3 left · heals 50% HP</span></button>
+    <button class="util" id="buyPotionBtn"><strong>Buy Potion — 60 G</strong><span>Stock up before the boss</span></button>
+  </div>
+
+  <!-- LOG -->
+  <section class="panel log-panel" aria-label="Battle log">
+    <h3>BATTLE LOG</h3>
+    <ul class="log" id="log"></ul>
+  </section>
+  </div><!-- /tab-hunt -->
+
+  <!-- TAB: ARMY -->
+  <div class="tab-page" id="tab-army" hidden>
+  <section class="panel pad" style="margin-top:12px" aria-label="Shadow army">
+    <h3>👤 SHADOW ARMY — YOUR TEAM</h3>
+    <div class="army-grid" id="armyGrid"></div>
+    <div class="summon-row">
+      <button class="summon-btn" id="summonBtn">📜 MYSTIC SUMMON<span id="summonSub">Use 1 scroll · random 3★–6★ shadow joins your team</span></button>
+    </div>
+  </section>
+  <section class="panel pad" style="margin-top:12px" aria-label="Elements and roles">
+    <h3>◆ THE 6 ELEMENTS &amp; 4 ROLES</h3>
+    <div class="legend-grid" id="legendGrid"></div>
+    <p class="keys-hint" style="margin-top:9px">Advantage cycle: <b>🔥 Fire → 🌪️ Wind → ⛰️ Earth → 💧 Water → 🔥 Fire</b>, and <b>✨ Light ⇄ 🌑 Dark</b> beat each other. Advantage = <b>+30% damage</b>, disadvantage = −20%. Build runes around each shadow's role: Attack wants <b>Fatal + Rage</b>, Defense wants <b>Energy + Guard</b>, Healers want <b>Energy + Swift</b>, Support wants <b>Swift + Fatal</b>.</p>
+  </section>
+  <section class="panel pad" style="margin-top:12px" aria-label="Summon codex">
+    <h3>📖 SUMMON CODEX — EVERY TYPE, ITS SKILLS &amp; STRENGTHS</h3>
+    <div class="codex-grid" id="codexGrid"></div>
+  </section>
+  </div><!-- /tab-army -->
+
+  <!-- TAB: LEVEL UP -->
+  <div class="tab-page" id="tab-level" hidden>
+    <!-- STATS -->
+    <section class="panel pad" style="margin-top:12px" aria-label="Stats">
+      <h3>HUNTER STATS</h3>
+      <div class="stat-row">
+        <div class="nm"><strong>Strength</strong><small>More damage on every hit</small></div>
+        <div class="bonus" id="strBonus"></div>
+        <div class="val" id="strVal">10</div>
+        <button class="plus-btn" data-stat="str" aria-label="Add Strength">+</button>
+      </div>
+      <div class="stat-row">
+        <div class="nm"><strong>Agility</strong><small>Higher crit chance &amp; combo speed</small></div>
+        <div class="bonus" id="agiBonus"></div>
+        <div class="val" id="agiVal">10</div>
+        <button class="plus-btn" data-stat="agi" aria-label="Add Agility">+</button>
+      </div>
+      <div class="stat-row">
+        <div class="nm"><strong>Vitality</strong><small>+12 max HP per point</small></div>
+        <div class="bonus" id="vitBonus"></div>
+        <div class="val" id="vitVal">10</div>
+        <button class="plus-btn" data-stat="vit" aria-label="Add Vitality">+</button>
+      </div>
+      <div class="derived">
+        <div><small>TAP DMG</small><strong id="dmgVal">14</strong></div>
+        <div><small>CRIT</small><strong id="critVal">13%</strong></div>
+        <div><small>DMG CUT</small><strong id="reduceVal">0%</strong></div>
+        <div><small>SHADOW DMG</small><strong id="shadowBonusVal">+0%</strong></div>
+      </div>
+    </section>
+
+    <!-- RUNES (HUNTER) -->
+    <section class="panel pad" style="margin-top:12px" aria-label="Runes">
+      <h3>◆ YOUR RUNES — 6 SLOTS</h3>
+      <div class="rune-slots" id="runeSlots"></div>
+      <div class="rune-list" id="runeList"></div>
+      <p class="keys-hint" style="margin-top:9px">Monsters drop runes — bosses always drop one. Tap a rune to inscribe it, tap an inscribed slot to remove it. <b style="color:#f0abfc">Fatal</b> +damage · <b style="color:#f0abfc">Energy</b> +HP · <b style="color:#f0abfc">Guard</b> damage cut · <b style="color:#f0abfc">Rage</b> +crit · <b style="color:#f0abfc">Swift</b> +shadow damage. Your shadows carry <b>6 rune slots</b> of their own — inscribe theirs in Shadow Growth below.</p>
+    </section>
+
+    <!-- SHADOW GROWTH -->
+    <section class="panel pad" style="margin-top:12px" aria-label="Shadow growth">
+      <h3>👤 SHADOW GROWTH — LEVELS &amp; RUNES</h3>
+      <div id="shadowGrowthList"></div>
+      <p class="keys-hint" style="margin-top:9px">Shadows gain <b>XP every time they attack</b> in battle — plus a bonus for a killing blow. Each shadow has <b>6 rune slots</b> and <b>4 skills</b> shaped by its <b>element</b> and <b>role</b>: Attack shadows burst, Defense shadows shield you, Healers restore your HP, Support shadows buff the team. <b>Evolve twice</b> — at Lv 8 and Lv 16 — and <b>each evolution doubles that shadow's power</b> (×2, then ×4). On a shadow, Fatal · Energy · Guard · Swift add damage, Rage adds crit — so match runes to the role's strengths listed on its card.</p>
+    </section>
+  </div><!-- /tab-level -->
+
+  <!-- TAB: SHOP -->
+  <div class="tab-page" id="tab-shop" hidden>
+    <!-- SHOP -->
+    <section class="panel pad" style="margin-top:12px" aria-label="Hunter shop">
+      <h3>HUNTER ASSOCIATION SHOP</h3>
+      <div class="shop-row">
+        <div class="nm"><strong id="weaponName">Rusty Dagger</strong><small id="weaponSub">Weapon Lv 1 · +0 bonus damage</small></div>
+        <button class="buy-btn" id="weaponBtn">Upgrade · 100 G</button>
+      </div>
+      <div class="shop-row">
+        <div class="nm"><strong id="armorName">Worn Hunter Jacket</strong><small id="armorSub">Armor Lv 1 · +0 max HP, less damage taken</small></div>
+        <button class="buy-btn" id="armorBtn">Upgrade · 100 G</button>
+      </div>
+      <div class="shop-row">
+        <div class="nm"><strong>Mystic Scroll</strong><small>Summon a random shadow for your army</small></div>
+        <button class="buy-btn" id="scrollBtn">Buy · 150 G</button>
+      </div>
+      <div class="shop-row">
+        <div class="nm"><strong>Full Heal</strong><small>Restore HP &amp; MP to full, right now</small></div>
+        <button class="buy-btn" id="healBtn">Heal · 40 G</button>
+      </div>
+    </section>
+  </div><!-- /tab-shop -->
+
+  <div class="footer-row">
+    <button class="ghost-btn" id="soundBtn">🔊 Sound: On</button>
+    <button class="ghost-btn" id="resetBtn">Restart Hunt</button>
+  </div>
+  <p class="save-status" id="saveStatus" role="status">💾 Auto-save on <span>— your level, gold, army, runes and gate progress are kept on this device between visits.</span></p>
+  <p class="hint">Explore each gate on foot, hunter. In battle your <b style="color:#c4b5fd">shadow army fights beside you</b> on its own turn bars — match their elements against the enemy for bonus damage. Turn on <b style="color:var(--gold)">AUTO</b> and crank the <b style="color:var(--gold)">SPEED</b> to farm gates like a true Monarch. Beat the boss and a portal opens: walk into it to descend. Bosses can be extracted as shadows: <b style="color:#c4b5fd">ARISE.</b></p>
+</div>
+
+<!-- LEVEL UP POPUP -->
+<div class="overlay lvl-overlay" id="levelOverlay" role="dialog" aria-modal="true" aria-labelledby="levelUpTitle">
+  <div class="overlay-card lvl-card">
+    <div class="lvl-burst">✦ LEVEL UP ✦</div>
+    <h2 id="levelUpTitle">LEVEL 2!</h2>
+    <p id="levelUpText"></p>
+    <button class="big-btn gold-btn" id="levelSpendBtn">⬆ SPEND STAT POINTS</button>
+    <button class="big-btn" id="levelCloseBtn" style="margin-top:8px">KEEP HUNTING</button>
+  </div>
+</div>
+<div class="shadow-toast" id="shadowToast" role="status"></div>
+
+<!-- DEATH OVERLAY -->
+<div class="overlay" id="deathOverlay" role="dialog" aria-modal="true" aria-labelledby="deathTitle">
+  <div class="overlay-card">
+    <h2 id="deathTitle" style="color:#fca5a5">YOU DIED</h2>
+    <p id="deathText">The gate overwhelmed you. The System drags you back — you keep your level, gold, gear, runes and army, but this gate restarts.</p>
+    <button class="big-btn" id="reviveBtn">RE-ENTER THE GATE</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- DATA ---------------- */
+  var GATE_NAMES = ["Gate of Embers","Gate of Frost","Gate of Thorns","Gate of Echoes","Gate of Ash","Gate of the Deep","Gate of Storms","Demon Castle Gate","Gate of the Monarch","Gate of Chaos"];
+  var ELEMENTS = {
+    fire:  {label:"FIRE",  icon:"🔥", color:"#ff7847"},
+    water: {label:"WATER", icon:"💧", color:"#38a8ff"},
+    earth: {label:"EARTH", icon:"⛰️", color:"#c9a86a"},
+    wind:  {label:"WIND",  icon:"🌪️", color:"#ffd84d"},
+    light: {label:"LIGHT", icon:"✨", color:"#fff3a6"},
+    dark:  {label:"DARK",  icon:"🌑", color:"#b388ff"}
+  };
+  var BEATS = { fire:"wind", wind:"earth", earth:"water", water:"fire", light:"dark", dark:"light" };
+  var ROLES = {
+    attack:  {label:"ATTACK",  icon:"⚔️", color:"#ff8a7a", desc:"Pure damage dealer. Highest hit power, crit-focused skills, and an armor-breaking finisher. Feed it Fatal + Rage runes.", runes:"Fatal + Rage — raw damage and crit chance"},
+    defense: {label:"DEFENSE", icon:"🛡️", color:"#7cc4ff", desc:"Front-line wall. Hits softer, but its skills grant you a shield that absorbs enemy damage and slam the enemy's turn bar back. Feed it Energy + Guard runes.", runes:"Energy + Guard — converts to bigger shields and steadier hits"},
+    healer:  {label:"HEALER",  icon:"💚", color:"#86efac", desc:"Keeps the hunter alive. Its skills restore your HP based on its own power — the stronger (and more evolved) it is, the bigger the heals. Feed it Energy + Swift runes.", runes:"Energy + Swift — both feed its healing power"},
+    support: {label:"SUPPORT", icon:"🔮", color:"#f0abfc", desc:"Force multiplier. Mixes elemental bolts with buffs that raise the whole team's damage and haste your shadows' turn bars. Feed it Swift + Fatal runes.", runes:"Swift + Fatal — buff strength and bolt damage"}
+  };
+  var ROLE_SKILLS = {
+    attack: [
+      {name:"Strike", icon:"⚔️", kind:"damage", mult:1.0, cd:0, desc:"A {el} strike dealing 100% of this shadow's damage. Scales with Fatal runes."},
+      {name:"Elemental Burst", icon:"💥", kind:"damage", mult:1.7, cd:2, desc:"A concentrated {el} blast dealing 170% damage. Element advantage multiplies it further — pair with Fatal."},
+      {name:"Armor Break", icon:"🔨", kind:"break", mult:1.2, cd:3, desc:"Deals 120% damage and shatters the enemy's guard: ALL damage it takes rises 30% for 2 enemy turns. Rage runes raise its crit chance."},
+      {name:"Rampage", icon:"☠️", kind:"damage", mult:2.9, cd:4, desc:"The shadow's ultimate — 290% {el} damage in one devastating hit. Evolution doubles this like everything else."}
+    ],
+    defense: [
+      {name:"Shield Bash", icon:"🛡️", kind:"shieldhit", mult:0.8, cd:0, desc:"Deals 80% damage and raises a shield on you worth 60% of the hit. Guard runes make both stronger."},
+      {name:"Guardian Wall", icon:"🧱", kind:"shield", mult:1.6, cd:2, desc:"No attack — raises a big {el} shield on you worth 160% of this shadow's damage. Energy runes feed shield size."},
+      {name:"Quake Slam", icon:"💢", kind:"slam", mult:1.0, cd:3, desc:"Deals 100% damage and knocks the enemy's turn bar back 35% — it attacks later. Buys breathing room."},
+      {name:"Fortress Aegis", icon:"🏰", kind:"shieldhit", mult:1.4, cd:4, desc:"Deals 140% damage and shields you for 120% of the hit. The wall fights back."}
+    ],
+    healer: [
+      {name:"Soothing Strike", icon:"💚", kind:"healhit", mult:0.6, cd:0, desc:"Deals 60% {el} damage and heals you for 50% of this shadow's damage. Swift runes feed the heal."},
+      {name:"Healing Surge", icon:"🌊", kind:"heal", mult:1.5, cd:2, desc:"Skips attacking to heal you for 150% of this shadow's damage. Energy runes raise its power, so heals grow too."},
+      {name:"Purifying Wave", icon:"🕊️", kind:"heal", mult:2.0, cd:3, desc:"A cleansing {el} wave healing you for 200% of this shadow's damage."},
+      {name:"Monarch's Mercy", icon:"👑", kind:"heal", mult:3.2, cd:5, desc:"The healer's ultimate — restores HP equal to 320% of its damage. An evolved healer can pull you back from the brink."}
+    ],
+    support: [
+      {name:"Empowering Bolt", icon:"🔮", kind:"buffhit", mult:0.8, cd:0, desc:"Deals 80% {el} damage and empowers the team: +15% damage for 2 rounds. Swift runes strengthen the buff's source."},
+      {name:"Elemental Hex", icon:"🌀", kind:"damage", mult:1.5, cd:2, desc:"A hexed {el} bolt dealing 150% damage. Reliable mid-fight pressure — Fatal runes apply."},
+      {name:"Haste Aura", icon:"⏩", kind:"haste", mult:0.7, cd:3, desc:"Deals 70% damage and surges your shadows' turn bar forward 40% — the army attacks again sooner."},
+      {name:"Monarch's Blessing", icon:"✨", kind:"blessing", mult:1.1, cd:4, desc:"Deals 110% damage, buffs team damage by +25% for 2 rounds, and heals you for 60% of this shadow's damage."}
+    ]
+  };
+  var SPECIES = {
+    "Goblin Scout":{role:"attack", desc:"A scrappy fire sneak with a burning shiv. Fragile, fast, and mean — a classic early Attack shadow."},
+    "Dungeon Wolf":{role:"attack", desc:"A wind-fast pack hunter. Tears at throats before prey knows it's there. Attack role through and through."},
+    "Venom Slime":{role:"defense", desc:"A watery blob that absorbs blows like a sponge. Its body IS the shield — Defense role, loves Energy runes."},
+    "Skeleton Soldier":{role:"defense", desc:"An undead shield-wall that never tires and never flees. Defense role — Guard runes make it a fortress."},
+    "Cave Spider":{role:"attack", desc:"A wind-quick ambusher that strikes from the dark. High-crit Attack skills — Rage runes shine here."},
+    "Stone Golem":{role:"defense", desc:"Living earth in humanoid shape. The slowest, toughest Defense shadow — its shields are enormous."},
+    "Orc Brute":{role:"attack", desc:"All muscle and fire. Every skill is just a bigger swing. Attack role, built for Fatal runes."},
+    "Dark Mage":{role:"support", desc:"A dark caster who bends mana for the team. Support role — buffs damage and hastes the army."},
+    "Poison Serpent":{role:"attack", desc:"A water serpent whose fangs carry the deep's chill venom. Attack role with a guard-shattering bite."},
+    "Shadow Assassin":{role:"attack", desc:"Born from darkness, built to end fights. The crit-heaviest Attack shadow — stack Rage."},
+    "Frost Wraith":{role:"support", desc:"A water spirit of cold and curses. Support role — its hexes and haste keep the army relentless."},
+    "Storm Roc":{role:"attack", desc:"A wind titan bird whose dive is a thunderclap. Attack role, devastating on elemental advantage."},
+    "Moss Treant":{role:"healer", desc:"An ancient earth guardian that mends wounds with sap and sunlight. Healer role — keep it evolved and it keeps YOU alive."},
+    "Light Wisp":{role:"healer", desc:"A tiny ball of pure light that knits flesh back together. Healer role — small body, huge Mercy heals."},
+    "Solar Knight":{role:"defense", desc:"A light-sworn knight whose shield glows like dawn. Defense role with radiant shield skills."},
+    "Shadow Knight":{role:"defense", desc:"A dark knight bound to the Monarch. Defense role — its aegis is woven from shadow itself."},
+    "Flame Imp":{role:"support", desc:"A mischievous fire sprite that supercharges allies between pranks. Support role, all buffs and bolts."},
+    "Tide Sprite":{role:"healer", desc:"A water fae who heals with tide and moonlight. A dependable Healer from the moment it is summoned."},
+    "Gale Falcon":{role:"attack", desc:"The sky's fastest hunter. Wind Attack role — strikes first, strikes hard."},
+    "Steel-Fanged Lycan":{role:"attack", desc:"Gate Boss. A wind lycan whose fangs pierce steel. Extracted, it becomes a ferocious Attack shadow."},
+    "Blood-Red Commander":{role:"attack", desc:"Gate Boss. A fire commander who led armies in life. Attack role — its Rampage is a war crime."},
+    "Cerberus, Gatekeeper":{role:"defense", desc:"Gate Boss. The three-headed fire hound of the gate. Defense role — three heads, one unbreakable wall."},
+    "Seraph of the Broken Gate":{role:"healer", desc:"Gate Boss. A fallen light seraph. Healer role — the strongest Mercy in the codex."},
+    "Demon King Baran":{role:"attack", desc:"Gate Boss. Dark royalty. Attack role with overwhelming ultimate damage when evolved."},
+    "Architect of Chaos":{role:"support", desc:"Gate Boss. A light entity that rewrites battles. Support role — blessings and haste on a boss's scale."}
+  };
+  function speciesOf(name){ return SPECIES[name] || null; }
+  function roleOfBase(base){ var sp = base && speciesOf(base.name); if(sp) return sp.role; var t = (base && base.type) || ""; if(/heal/i.test(t)) return "healer"; if(/caster|mage/i.test(t)) return "support"; return "attack"; }
+  function elementMult(attEl, defEl){
+    if(!attEl || !defEl) return 1;
+    if(BEATS[attEl]===defEl) return 1.3;
+    if(BEATS[defEl]===attEl) return 0.8;
+    return 1;
+  }
+  var MONSTERS = [
+    {name:"Goblin Scout", emoji:"👺", type:"Beast", el:"fire"},
+    {name:"Dungeon Wolf", emoji:"🐺", type:"Beast", el:"wind"},
+    {name:"Venom Slime", emoji:"🟢", type:"Magic Beast", el:"water"},
+    {name:"Skeleton Soldier", emoji:"💀", type:"Undead", el:"dark"},
+    {name:"Cave Spider", emoji:"🕷️", type:"Insectoid", el:"wind"},
+    {name:"Stone Golem", emoji:"🗿", type:"Construct", el:"earth"},
+    {name:"Orc Brute", emoji:"👹", type:"Demi-human", el:"fire"},
+    {name:"Dark Mage", emoji:"🧙", type:"Caster", el:"dark"},
+    {name:"Poison Serpent", emoji:"🐍", type:"Beast", el:"water"},
+    {name:"Shadow Assassin", emoji:"🥷", type:"Shadow", el:"dark"},
+    {name:"Frost Wraith", emoji:"👻", type:"Undead", el:"water"},
+    {name:"Storm Roc", emoji:"🦅", type:"Beast", el:"wind"},
+    {name:"Moss Treant", emoji:"🌳", type:"Nature Spirit", el:"earth"},
+    {name:"Light Wisp", emoji:"💡", type:"Spirit", el:"light"},
+    {name:"Solar Knight", emoji:"🌞", type:"Knight", el:"light"}
+  ];
+  var BOSSES = [
+    {name:"Steel-Fanged Lycan", emoji:"🐺", type:"Gate Boss", el:"wind"},
+    {name:"Blood-Red Commander", emoji:"👺", type:"Gate Boss", el:"fire"},
+    {name:"Cerberus, Gatekeeper", emoji:"🐕", type:"Gate Boss", el:"fire"},
+    {name:"Seraph of the Broken Gate", emoji:"👼", type:"Gate Boss", el:"light"},
+    {name:"Demon King Baran", emoji:"😈", type:"Gate Boss", el:"dark"},
+    {name:"Architect of Chaos", emoji:"👁️", type:"Gate Boss", el:"light"}
+  ];
+  var WEAPONS = ["Rusty Dagger","Hunter's Dagger","Knight Killer","Kasaka's Venom Fang","Demon King's Dagger","Monarch's Shadow Blade"];
+  var ARMORS = ["Worn Hunter Jacket","Reinforced Leather Armor","Red Knight's Armor","Demon King's Cloak","Monarch's Shadow Armor"];
+  var RUNE_SETS = {
+    fatal:  {label:"Fatal",  icon:"⚔️", per:3,   unit:"% damage",        fmt:function(v){ return "+" + v + "% tap damage"; }},
+    energy: {label:"Energy", icon:"❤️", per:3,   unit:"% max HP",        fmt:function(v){ return "+" + v + "% max HP"; }},
+    guard:  {label:"Guard",  icon:"🛡️", per:1.2, unit:"% damage cut",    fmt:function(v){ return "+" + v + "% damage cut"; }},
+    rage:   {label:"Rage",   icon:"💢", per:1.5, unit:"% crit chance",   fmt:function(v){ return "+" + v + "% crit chance"; }},
+    swift:  {label:"Swift",  icon:"🌀", per:4,   unit:"% shadow damage", fmt:function(v){ return "+" + v + "% shadow damage"; }}
+  };
+  var RUNE_KEYS = Object.keys(RUNE_SETS);
+  var LOOT_LINES = [
+    "Dropped a Magic Crystal.",
+    "Found a glowing Mana Stone in the remains.",
+    "Looted a cracked potion vial — the Association buys it back.",
+    "The monster was guarding a small gold pouch.",
+    "Recovered a rune fragment. It hums with mana."
+  ];
+  var SUMMON_POOL = MONSTERS.concat([
+    {name:"Shadow Knight", emoji:"♞", type:"Shadow", el:"dark"},
+    {name:"Flame Imp", emoji:"👿", type:"Demon", el:"fire"},
+    {name:"Tide Sprite", emoji:"🧚", type:"Fae", el:"water"},
+    {name:"Gale Falcon", emoji:"🦅", type:"Beast", el:"wind"},
+    {name:"Moss Treant", emoji:"🌳", type:"Nature Spirit", el:"earth"},
+    {name:"Light Wisp", emoji:"💡", type:"Spirit", el:"light"},
+    {name:"Solar Knight", emoji:"🌞", type:"Knight", el:"light"},
+    {name:"Seraph of the Broken Gate", emoji:"👼", type:"Gate Boss", el:"light"}
+  ]);
+
+  /* ---------------- STATE ---------------- */
+  var S, runeSeq = 0;
+  function freshState(){
+    return {
+      level:1, xp:0, xpNext:100,
+      hp:100, mp:50,
+      str:10, agi:10, vit:10, statPoints:0,
+      gold:0, crystals:0, scrolls:1, potions:3,
+      weaponLv:1, armorLv:1,
+      gate:1, killsInGate:0, totalKills:0, bestCombo:0,
+      shadowsArr:[], runes:[], runeSlots:[null,null,null,null,null,null],
+      combo:0, comboTimer:null,
+      monster:null, stunned:0, wrathCd:0,
+      dead:false, gateCleared:false, levelPopupOpen:false,
+      sound:true, resetArmed:false,
+      auto:false, speed:1,
+      mode:"explore",
+      player:{x:1, y:1, dir:"down"},
+      walls:{}, mapMonsters:[], chests:[], portal:null, portalActive:false,
+      currentEntity:-1,
+      enemyAtb:0, shadowAtb:0, shadowTurn:0, autoTimer:0, rushIv:null,
+      shield:0, enemyDefDown:0, teamBuffTurns:0, teamBuffPct:0, hunterAtb:0
+    };
+  }
+  S = freshState();
+
+  /* ---------------- SAVE / LOAD (persists between visits on this device) ---------------- */
+  var SAVE_KEY = "solo-leveling-dungeon-hunter-save-v1";
+  var _saveQueued = false;
+  function buildSaveData(){
+    return {
+      v:1, savedAt:Date.now(),
+      level:S.level, xp:S.xp, xpNext:S.xpNext,
+      hp:S.hp, mp:S.mp,
+      str:S.str, agi:S.agi, vit:S.vit, statPoints:S.statPoints,
+      gold:S.gold, crystals:S.crystals, scrolls:S.scrolls, potions:S.potions,
+      weaponLv:S.weaponLv, armorLv:S.armorLv,
+      gate:S.gate, killsInGate:S.killsInGate, totalKills:S.totalKills, bestCombo:S.bestCombo,
+      shadowsArr:S.shadowsArr, runes:S.runes, runeSlots:S.runeSlots, runeSeq:runeSeq,
+      sound:S.sound, auto:S.auto, speed:S.speed,
+      mode:S.mode, monster:S.monster, currentEntity:S.currentEntity,
+      stunned:S.stunned, wrathCd:S.wrathCd, gateCleared:S.gateCleared,
+      player:S.player, walls:S.walls, mapMonsters:S.mapMonsters, chests:S.chests,
+      portal:S.portal, portalActive:S.portalActive
+    };
+  }
+  function updateSaveStatus(){
+    var n = document.getElementById("saveStatus");
+    if(!n) return;
+    var d = new Date();
+    var t = d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+    n.innerHTML = "💾 Progress saved <span>· " + t + " — close and come back anytime, your hunt will be right here.</span>";
+  }
+  function saveGame(){
+    try{
+      localStorage.setItem(SAVE_KEY, JSON.stringify(buildSaveData()));
+      updateSaveStatus();
+    }catch(e){ /* storage full/blocked — game continues without saving */ }
+  }
+  function scheduleSave(){
+    if(_saveQueued) return;
+    _saveQueued = true;
+    setTimeout(function(){ _saveQueued = false; saveGame(); }, 250);
+  }
+  function clearSave(){
+    try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  }
+  function loadGame(){
+    var raw = null;
+    try{ raw = localStorage.getItem(SAVE_KEY); }catch(e){ return false; }
+    if(!raw) return false;
+    var data;
+    try{ data = JSON.parse(raw); }catch(e){ return false; }
+    if(!data || data.v!==1) return false;
+    if(typeof data.level!=="number" || data.level<1) return false;
+    if(!Array.isArray(data.shadowsArr) || !Array.isArray(data.runes) || !Array.isArray(data.runeSlots)) return false;
+    if(!Array.isArray(data.mapMonsters) || !data.walls || typeof data.walls!=="object") return false;
+    var base = freshState();
+    var keys = ["level","xp","xpNext","hp","mp","str","agi","vit","statPoints","gold","crystals","scrolls","potions","weaponLv","armorLv","gate","killsInGate","totalKills","bestCombo","shadowsArr","runes","runeSlots","sound","auto","speed","mode","monster","currentEntity","stunned","wrathCd","gateCleared","player","walls","mapMonsters","chests","portal","portalActive"];
+    for(var i=0;i<keys.length;i++){
+      if(data[keys[i]]!==undefined) base[keys[i]] = data[keys[i]];
+    }
+    S = base;
+    runeSeq = (typeof data.runeSeq==="number") ? data.runeSeq : 0;
+    if(!runeSeq && S.runes.length){
+      for(var j=0;j<S.runes.length;j++) if(S.runes[j].id>runeSeq) runeSeq = S.runes[j].id;
+    }
+    // sanitise restored state so a stale/edited save can never soft-lock the game
+    S.shadowsArr = S.shadowsArr.slice(0,12);
+    S.shadowsArr.forEach(function(sh){ normalizeShadow(sh); });
+    S.levelPopupOpen = false;
+    if(S.runeSlots.length!==6) S.runeSlots = [null,null,null,null,null,null];
+    if(!Array.isArray(S.chests)) S.chests = [];
+    if(!S.player || typeof S.player.x!=="number") S.player = {x:1,y:1,dir:"down"};
+    S.dead = false; S.combo = 0; S.comboTimer = null; S.rushIv = null;
+    S.shield = 0; S.enemyDefDown = 0; S.teamBuffTurns = 0; S.teamBuffPct = 0;
+    S.enemyAtb = 0; S.shadowAtb = 0; S.shadowTurn = 0; S.autoTimer = 0; S.resetArmed = false;
+    if(S.hp<=0) S.hp = 1;
+    if(S.mode==="battle" && !S.monster){ S.mode = "explore"; S.currentEntity = -1; }
+    if(S.mode!=="battle"){ S.mode = "explore"; S.monster = null; S.currentEntity = -1; }
+    return true;
+  }
+
+  /* ---------------- DERIVED ---------------- */
+  function runeBonus(key){
+    var total = 0;
+    for(var i=0;i<S.runeSlots.length;i++){
+      var id = S.runeSlots[i];
+      if(id==null) continue;
+      for(var j=0;j<S.runes.length;j++){
+        if(S.runes[j].id===id && S.runes[j].set===key) total += Math.round(S.runes[j].grade * RUNE_SETS[key].per);
+      }
+    }
+    return total;
+  }
+  function maxHp(){ return Math.round((100 + (S.vit-10)*12 + (S.armorLv-1)*25) * (1 + runeBonus("energy")/100)); }
+  function maxMp(){ return 50 + (S.level-1)*4; }
+  function shadowCountMult(){ return 1 + S.shadowsArr.length*0.05; }
+  function tapDamageBase(){ return Math.round((8 + S.str*1.1 + (S.weaponLv-1)*6) * shadowCountMult() * (1 + runeBonus("fatal")/100)); }
+  function critChance(){ return Math.min(0.85, 0.10 + S.agi*0.003 + runeBonus("rage")/100); }
+  function armorReduce(){ return Math.min(0.6, (S.armorLv-1)*0.07 + runeBonus("guard")/100); }
+  function shadowDamageBase(){ return tapDamageBase() * 0.55 * (1 + runeBonus("swift")/100); }
+  function rankFor(level){
+    if(level>=50) return {letter:"S", name:"Monarch"};
+    if(level>=40) return {letter:"A", name:"Elite Hunter"};
+    if(level>=30) return {letter:"B", name:"Veteran Hunter"};
+    if(level>=20) return {letter:"C", name:"Seasoned Hunter"};
+    if(level>=10) return {letter:"D", name:"Rising Hunter"};
+    return {letter:"E", name:"Weakest Hunter"};
+  }
+  var ATB_MAX = 1000;
+  function hunterSpeed(){ return Math.round(82 + S.agi*1.6 + runeBonus("swift")*0.7 + (S.level-1)*0.8); }
+  function shadowSpeed(sh){
+    normalizeShadow(sh);
+    var elSpd = {wind:26, light:16, dark:13, fire:10, water:4, earth:-12}[sh.el] || 0;
+    var roleSpd = {attack:10, support:8, healer:2, defense:-6}[sh.role] || 0;
+    var swiftPts = 0;
+    (sh.runeSlots||[]).forEach(function(id){ var r = id!=null ? runeById(id) : null; if(r && r.set==="swift") swiftPts += Math.round(r.grade*RUNE_SETS.swift.per); });
+    return Math.max(35, Math.round(74 + elSpd + roleSpd + (sh.level-1)*1.4 + sh.evo*6 + swiftPts*0.8));
+  }
+  function enemySpeed(m){
+    if(!m) return 70;
+    var elSpd = {wind:22, light:14, dark:11, fire:8, water:3, earth:-10}[m.el] || 0;
+    return Math.max(35, Math.round(66 + elSpd + (S.gate-1)*3 + (m.stars-3)*3 - (m.boss ? 8 : 0)));
+  }
+  function turnQueue(){
+    // predicted order: whoever fills their gauge soonest acts next; speed decides ties and pace
+    var actors = [];
+    if(S.monster) actors.push({kind:"enemy", label:"👹 Enemy", spd:enemySpeed(S.monster), atb:S.enemyAtb||0, enemy:true});
+    actors.push({kind:"hunter", label:"🧍 You", spd:hunterSpeed(), atb:S.hunterAtb||0});
+    S.shadowsArr.slice(0,12).forEach(function(sh, i){ actors.push({kind:"shadow", idx:i, label:sh.emoji+" "+sh.name, spd:shadowSpeed(sh), atb:sh.atb||0}); });
+    actors.forEach(function(a){ a.eta = Math.max(0, (ATB_MAX - a.atb)) / Math.max(1, a.spd); });
+    actors.sort(function(a,b){ return a.eta - b.eta || b.spd - a.spd; });
+    return actors;
+  }
+  function weaponCost(){ return 100 * S.weaponLv; }
+  function armorCost(){ return 100 * S.armorLv; }
+  function starsHtml(n){
+    var s = "";
+    for(var i=1;i<=6;i++) s += '<span class="' + (i<=n ? "" : "off") + '">★</span>';
+    return s;
+  }
+  function starString(n){
+    var s = "";
+    for(var i=1;i<=n;i++) s += "★";
+    return s;
+  }
+
+  /* ---------------- SHADOW GROWTH (levels from attacking + own runes) ---------------- */
+  function normalizeShadow(sh){
+    if(typeof sh.level!=="number" || sh.level<1) sh.level = 1;
+    if(typeof sh.xp!=="number" || sh.xp<0) sh.xp = 0;
+    if(typeof sh.attacks!=="number" || sh.attacks<0) sh.attacks = 0;
+    if(typeof sh.evo!=="number" || sh.evo<0) sh.evo = 0;
+    if(sh.evo>2) sh.evo = 2;
+    if(!sh.role || !ROLES[sh.role]) sh.role = roleOfBase(sh);
+    if(!sh.type){ var sp0 = speciesOf(sh.name); sh.type = sp0 ? "" : (sh.type||""); }
+    if(!Array.isArray(sh.cds) || sh.cds.length!==4) sh.cds = [0,0,0,0];
+    if(typeof sh.atb!=="number" || sh.atb<0) sh.atb = Math.random()*300;
+    if(!Array.isArray(sh.runeSlots)) sh.runeSlots = [null,null,null,null,null,null];
+    sh.runeSlots = sh.runeSlots.slice(0,6);
+    while(sh.runeSlots.length<6) sh.runeSlots.push(null);
+    return sh;
+  }
+  function evoMult(sh){ return Math.pow(2, (sh && sh.evo) || 0); }
+  function evoName(sh){ return ["Base Form","Evolution I ★","Evolution II ★★"][(sh && sh.evo) || 0]; }
+  function evoReq(sh){
+    if(!sh || sh.evo>=2) return null;
+    return sh.evo===0 ? {level:8, gold:150, crystals:5} : {level:16, gold:400, crystals:15};
+  }
+  function skillsFor(sh){
+    normalizeShadow(sh);
+    var role = ROLES[sh.role] ? sh.role : "attack";
+    var elName = ELEMENTS[sh.el] ? ELEMENTS[sh.el].label : "SHADOW";
+    return ROLE_SKILLS[role].map(function(sk, i){
+      var flavor = {attack:["Strike","Burst","Break","Rampage"], defense:["Bash","Wall","Slam","Aegis"], healer:["Touch","Surge","Wave","Mercy"], support:["Bolt","Hex","Aura","Blessing"]}[role][i];
+      return { name: elName.charAt(0)+elName.slice(1).toLowerCase() + " " + flavor + (i===0 ? "" : ""), baseName: sk.name, icon: sk.icon, kind: sk.kind, mult: sk.mult, cd: sk.cd, desc: sk.desc.replace(/\{el\}/g, ELEMENTS[sh.el] ? ELEMENTS[sh.el].label.toLowerCase() : "shadow") };
+    });
+  }
+  function shadowRoleDmgMult(sh){ return sh.role==="attack" ? 1.15 : sh.role==="defense" ? 0.8 : sh.role==="healer" ? 0.85 : 1.0; }
+  function shadowXpNext(sh){ return Math.round(20 * Math.pow(sh.level, 1.4)) + 10; }
+  function shadowLevelMult(sh){ return 1 + (sh.level-1)*0.12; }
+  function shadowRuneBonus(sh){
+    var dmg = 0, crit = 0;
+    (sh.runeSlots||[]).forEach(function(id){
+      if(id==null) return;
+      var r = runeById(id);
+      if(!r) return;
+      var v = Math.round(r.grade * RUNE_SETS[r.set].per);
+      if(r.set==="rage") crit += v; else dmg += v;
+    });
+    return { dmg:dmg, crit:crit };
+  }
+  function shadowHitBase(sh){
+    normalizeShadow(sh);
+    return shadowDamageBase() * (sh.stars/3) * shadowLevelMult(sh) * evoMult(sh) * shadowRoleDmgMult(sh) * (1 + shadowRuneBonus(sh).dmg/100);
+  }
+  function evolveShadow(idx){
+    var sh = S.shadowsArr[idx];
+    if(!sh) return;
+    normalizeShadow(sh);
+    var req = evoReq(sh);
+    if(!req) return;
+    if(sh.level < req.level){ log("👤 <b>" + escapeHtml(sh.name) + "</b> needs <b>Lv " + req.level + "</b> to evolve (now Lv " + sh.level + "). It levels by attacking in battle.", "bad"); return; }
+    if(S.gold < req.gold || S.crystals < req.crystals){ log("Evolution needs <b>" + req.gold + " G + " + req.crystals + " crystals</b> — you have " + S.gold + " G and " + S.crystals + " crystals. Bosses drop crystals.", "bad"); return; }
+    S.gold -= req.gold; S.crystals -= req.crystals;
+    sh.evo++;
+    sndLevel(); sndRune();
+    log("🌟 <b>EVOLUTION!</b> <b>" + escapeHtml(sh.name) + "</b> evolves to <b>" + evoName(sh) + "</b> — its power is now <b>×" + evoMult(sh) + "</b> (damage, heals, shields and buffs all doubled).", "gold");
+    el.shadowToast.innerHTML = "🌟 <b>" + escapeHtml(sh.name) + "</b> evolved — <b>" + evoName(sh) + "</b> · power ×" + evoMult(sh) + "!";
+    el.shadowToast.className = "shadow-toast show";
+    if(_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function(){ el.shadowToast.className = "shadow-toast"; }, 3000);
+    render();
+  }
+  var _toastTimer = null;
+  function shadowLevelToast(sh){
+    el.shadowToast.innerHTML = "👤 <b>" + escapeHtml(sh.name) + "</b> reached <b>LV " + sh.level + "</b> — its strikes hit harder now.";
+    el.shadowToast.className = "shadow-toast show";
+    if(_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function(){ el.shadowToast.className = "shadow-toast"; }, 2800);
+  }
+  function gainShadowXp(sh, amount){
+    sh.xp += amount;
+    var next = shadowXpNext(sh);
+    var guard = 0;
+    while(sh.xp >= next && guard++ < 20){
+      sh.xp -= next;
+      sh.level++;
+      next = shadowXpNext(sh);
+      log("👤 <b>" + escapeHtml(sh.name) + "</b> leveled up to <b>Lv " + sh.level + "</b> from fighting (⚔ " + sh.attacks + " attacks landed). Its damage grows.", "sys");
+      shadowLevelToast(sh);
+      beep(880,0.1,"triangle",0.05);
+      setTimeout(function(){ beep(1174,0.12,"triangle",0.05); }, 80);
+    }
+  }
+
+  /* ---------------- AUDIO (tiny synth, no files) ---------------- */
+  var audioCtx = null;
+  function beep(freq, dur, type, vol){
+    if(!S.sound) return;
+    try{
+      if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      if(audioCtx.state==="suspended") audioCtx.resume();
+      var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = type||"square"; o.frequency.value = freq;
+      g.gain.setValueAtTime(vol||0.06, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (dur||0.08));
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + (dur||0.08));
+    }catch(e){ /* audio unavailable — game continues silently */ }
+  }
+  function sndHit(){ beep(180+Math.random()*60, 0.07, "square", 0.05); }
+  function sndCrit(){ beep(720, 0.12, "sawtooth", 0.07); setTimeout(function(){beep(980,0.1,"sawtooth",0.05);},60); }
+  function sndKill(){ beep(520,0.1,"triangle",0.07); setTimeout(function(){beep(780,0.14,"triangle",0.07);},90); }
+  function sndHurt(){ beep(110, 0.12, "sawtooth", 0.06); }
+  function sndLevel(){ [523,659,784,1046].forEach(function(f,i){ setTimeout(function(){beep(f,0.14,"triangle",0.07);}, i*90); }); }
+  function sndSkill(){ beep(340,0.09,"sawtooth",0.06); setTimeout(function(){beep(560,0.12,"sawtooth",0.06);},70); }
+  function sndRune(){ beep(1180,0.1,"sine",0.05); setTimeout(function(){beep(1560,0.14,"sine",0.05);},80); }
+
+  /* ---------------- DOM ---------------- */
+  function $(id){ return document.getElementById(id); }
+  var el = {
+    rankLetter:$("rankLetter"), rankName:$("rankName"), level:$("levelVal"),
+    hpBar:$("hpBar"), hpText:$("hpText"), mpBar:$("mpBar"), mpText:$("mpText"),
+    xpBar:$("xpBar"), xpText:$("xpText"),
+    gold:$("goldVal"), crystals:$("crystalVal"), scrolls:$("scrollVal"), kills:$("killsVal"), shadows:$("shadowsVal"),
+    pointsBanner:$("pointsBanner"), pointsVal:$("pointsVal"),
+    gateNum:$("gateNum"), gateName:$("gateName"), gateSub:$("gateSub"), pips:$("pips"),
+    arena:$("battlePanel"),
+    mName:$("monsterName"), mSub:$("monsterSub"), mElBadge:$("monsterElBadge"), mStars:$("monsterStars"),
+    mHpBar:$("monsterHpBar"), mHpText:$("monsterHpText"), mAtbBar:$("monsterAtbBar"),
+    mBtn:$("monsterBtn"), floaters:$("floaters"), comboBox:$("comboBox"), comboVal:$("comboVal"),
+    stunTag:$("stunTag"), attackSub:$("attackSub"), partyRow:$("partyRow"),
+    autoBtn:$("autoBtn"), speedBtn:$("speedBtn"),
+    potionSub:$("potionSub"), potionBtn:$("potionBtn"), potionSub2:$("potionSub2"), potionBtn2:$("potionBtn2"),
+    armyGrid:$("armyGrid"), summonBtn:$("summonBtn"), summonSub:$("summonSub"),
+    runeSlots:$("runeSlots"), runeList:$("runeList"),
+    str:$("strVal"), agi:$("agiVal"), vit:$("vitVal"),
+    strBonus:$("strBonus"), agiBonus:$("agiBonus"), vitBonus:$("vitBonus"),
+    dmg:$("dmgVal"), crit:$("critVal"), reduce:$("reduceVal"), shadowBonus:$("shadowBonusVal"),
+    weaponName:$("weaponName"), weaponSub:$("weaponSub"), weaponBtn:$("weaponBtn"),
+    armorName:$("armorName"), armorSub:$("armorSub"), armorBtn:$("armorBtn"),
+    healBtn:$("healBtn"), scrollBtn:$("scrollBtn"),
+    skill1:$("skill1"), skill2:$("skill2"), skill3:$("skill3"),
+    skill1Cost:$("skill1Cost"), skill2Cost:$("skill2Cost"), skill3Cost:$("skill3Cost"),
+    log:$("log"),
+    deathOverlay:$("deathOverlay"),
+    levelOverlay:$("levelOverlay"), levelUpTitle:$("levelUpTitle"), levelUpText:$("levelUpText"),
+    shadowToast:$("shadowToast"), shadowGrowthList:$("shadowGrowthList"), levelTabBadge:$("levelTabBadge"),
+    battleStatus:$("battleStatus"), turnOrder:$("turnOrder"), legendGrid:$("legendGrid"), codexGrid:$("codexGrid"),
+    pointsBannerEl:$("pointsBanner"),
+    soundBtn:$("soundBtn"), resetBtn:$("resetBtn"),
+    dungeonPanel:$("dungeonPanel"), dungeonGrid:$("dungeonGrid"),
+    dungeonStatus:$("dungeonStatus"), exploreMsg:$("exploreMsg"),
+    battlePanel:$("battlePanel"), battleActions:$("battleActions")
+  };
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+  }
+
+  /* ---------------- LOG ---------------- */
+  function log(msg, cls){
+    var li = document.createElement("li");
+    if(cls) li.className = cls;
+    var now = new Date();
+    var t = String(now.getMinutes()).padStart(2,"0") + ":" + String(now.getSeconds()).padStart(2,"0");
+    li.innerHTML = '<span class="t">' + t + '</span>' + msg;
+    el.log.insertBefore(li, el.log.firstChild);
+    while(el.log.children.length > 30) el.log.removeChild(el.log.lastChild);
+  }
+
+  /* ---------------- FLOATERS ---------------- */
+  function floater(text, cls, xPct){
+    if(el.floaters.children.length > 14) return;
+    var f = document.createElement("div");
+    f.className = "floater" + (cls ? " " + cls : "");
+    f.textContent = text;
+    f.style.left = (xPct!=null ? xPct : 38 + Math.random()*24) + "%";
+    f.style.top = (16 + Math.random()*22) + "%";
+    el.floaters.appendChild(f);
+    setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 900);
+  }
+
+  /* ---------------- RENDER ---------------- */
+  function renderPips(){
+    el.pips.innerHTML = "";
+    for(var i=0;i<10;i++){
+      var d = document.createElement("div");
+      d.className = "pip" + (i===9 ? " boss" : "") + (i < S.killsInGate ? " done" : "");
+      el.pips.appendChild(d);
+    }
+  }
+
+  function partyAdvantage(){
+    // best elemental matchup any shadow has against the current monster
+    if(!S.monster || !S.shadowsArr.length) return 1;
+    var best = 0.8;
+    for(var i=0;i<S.shadowsArr.length;i++){
+      var m = elementMult(S.shadowsArr[i].el, S.monster.el);
+      if(m > best) best = m;
+    }
+    return best;
+  }
+
+  function renderBattleStatus(){
+    if(!el.battleStatus) return;
+    var parts = [];
+    if(S.shield>0) parts.push('<span class="on-shield">🛡️ SHIELD ' + Math.round(S.shield) + '</span>');
+    if(S.teamBuffTurns>0) parts.push('<span class="on-buff">✦ TEAM DMG +' + (S.teamBuffPct||0) + '% · ' + S.teamBuffTurns + ' turns</span>');
+    if(S.enemyDefDown>0) parts.push('<span class="on-debuff">🔨 GUARD BROKEN · ' + S.enemyDefDown + ' turns</span>');
+    el.battleStatus.innerHTML = parts.join("");
+    el.battleStatus.className = "battle-status" + (parts.length ? " show" : "");
+  }
+  function renderTurnOrder(){
+    if(!el.turnOrder || S.mode!=="battle" || !S.monster) return;
+    var q = turnQueue().slice(0,7);
+    var html = '<span class="to-label">TURN ORDER · BY SPEED</span>';
+    q.forEach(function(a, i){
+      html += '<span class="to-chip' + (i===0 ? " next" : "") + (a.enemy ? " enemy" : "") + '">' + escapeHtml(a.label) + ' <small>SPD ' + a.spd + '</small></span>';
+    });
+    el.turnOrder.innerHTML = html;
+  }
+  function renderParty(){
+    var html = '<div class="party-card leader"><span class="face art-orb" style="--cardc:#38e1ff">🧍</span><span class="pname">YOU · LV ' + S.level + ' · SPD ' + hunterSpeed() + '</span><div class="bar hp"><i style="width:' + Math.max(0, S.hp/maxHp()*100) + '%"></i></div><div class="bar" style="margin-top:3px"><i id="hunterAtbBar" class="shadow-atb" style="width:' + Math.min(100,(S.hunterAtb||0)/ATB_MAX*100) + '%"></i></div></div>';
+    var show = S.shadowsArr.slice(0,5);
+    for(var i=0;i<show.length;i++){
+      var sh = normalizeShadow(show[i]);
+      var ec = ELEMENTS[sh.el];
+      html += '<div class="party-card" style="border-color:' + ec.color + '"><span class="face art-orb" style="--cardc:' + ec.color + '">' + sh.emoji + '</span><span class="pname">' + ROLES[sh.role].icon + ' Lv ' + sh.level + (sh.evo ? ' E' + sh.evo : '') + ' · ' + escapeHtml(sh.name) + '</span><div class="bar"><i class="shadow-atb" data-shadow-atb="' + i + '" style="width:' + Math.min(100,(sh.atb||0)/ATB_MAX*100) + '%"></i></div></div>';
+    }
+    if(S.shadowsArr.length > 5) html += '<div class="party-card"><span class="face art-orb">👥</span><span class="pname">+' + (S.shadowsArr.length-5) + ' more in rotation</span><div class="bar"><i class="shadow-atb" style="width:0%"></i></div></div>';
+    if(!S.shadowsArr.length) html += '<div class="party-empty">No shadows yet — extract a boss or use a Mystic Scroll in the Army tab.</div>';
+    el.partyRow.innerHTML = html;
+    renderBattleStatus();
+    renderTurnOrder();
+  }
+
+  function renderArmy(){
+    if(!S.shadowsArr.length){
+      el.armyGrid.innerHTML = '<div class="army-empty">Your army is empty. Defeat a boss for a chance to extract its shadow — or summon one with a Mystic Scroll.</div>';
+    } else {
+      var html = "";
+      S.shadowsArr.forEach(function(sh){
+        normalizeShadow(sh);
+        var ec = ELEMENTS[sh.el];
+        var rc = ROLES[sh.role];
+        html += '<div class="mon-card" style="--cardc:' + ec.color + '"><span class="face art-orb">' + sh.emoji + '</span>' +
+          '<span class="stars">' + starString(sh.stars) + '</span>' +
+          '<span class="mname">' + escapeHtml(sh.name) + '</span>' +
+          '<span class="eltag" style="color:' + ec.color + '">' + ec.icon + ' ' + ec.label + '</span>' +
+          '<span class="mrole"><span class="role-badge" style="background:' + rc.color + '">' + rc.icon + ' ' + rc.label + '</span></span>' +
+          '<span class="mlvl"><span class="evo-badge' + (sh.evo>=2 ? " maxed" : "") + '">' + evoName(sh) + ' · ×' + evoMult(sh) + ' PWR</span><br>LV ' + sh.level + ' · SPD ' + shadowSpeed(sh) + ' · ⚔ ' + (sh.attacks||0) + ' attacks<br>' + (sh.runeSlots||[]).filter(function(x){ return x!=null; }).length + '/6 runes · 4 skills</span></div>';
+      });
+      el.armyGrid.innerHTML = html;
+    }
+    el.summonBtn.disabled = S.scrolls<=0 || S.shadowsArr.length>=12;
+    el.summonSub.textContent = S.shadowsArr.length>=12
+      ? "Army is full (12) — new summons convert to gold instead"
+      : "Use 1 scroll · you have " + S.scrolls + " · random 3★–6★ shadow joins your team";
+  }
+
+  function runeById(id){
+    for(var i=0;i<S.runes.length;i++) if(S.runes[i].id===id) return S.runes[i];
+    return null;
+  }
+  function renderRunes(){
+    var html = "";
+    for(var i=0;i<6;i++){
+      var id = S.runeSlots[i];
+      var r = id!=null ? runeById(id) : null;
+      if(r){
+        var set = RUNE_SETS[r.set];
+        html += '<button type="button" class="rune-slot filled" data-slot="' + i + '" aria-label="Remove ' + set.label + ' rune from slot ' + (i+1) + '">' + set.icon + '<small>' + set.label + '</small><span class="rstars">' + starString(r.grade) + '</span></button>';
+      } else {
+        html += '<div class="rune-slot">' + (i+1) + '<small>EMPTY</small></div>';
+      }
+    }
+    el.runeSlots.innerHTML = html;
+    el.runeSlots.querySelectorAll("[data-slot]").forEach(function(b){
+      b.addEventListener("click", function(){ unequipRune(parseInt(b.getAttribute("data-slot"),10)); });
+    });
+    var equipped = {};
+    S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+    S.shadowsArr.forEach(function(sh){ (sh.runeSlots||[]).forEach(function(id){ if(id!=null) equipped[id]=1; }); });
+    var bag = S.runes.filter(function(r){ return !equipped[r.id]; });
+    if(!bag.length){
+      el.runeList.innerHTML = '<div class="rune-empty">No runes in your bag. Monsters drop them — bosses always do.</div>';
+    } else {
+      el.runeList.innerHTML = "";
+      bag.forEach(function(r){
+        var set = RUNE_SETS[r.set];
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.className = "rune-item";
+        btn.innerHTML = '<span class="ric">' + set.icon + '</span><span class="rnm"><strong>' + set.label + ' Rune</strong><small>' + set.fmt(Math.round(r.grade*set.per)) + '</small></span><span class="rstars">' + starString(r.grade) + '</span><span class="req">INSCRIBE</span>';
+        btn.addEventListener("click", function(){ equipRune(r.id); });
+        el.runeList.appendChild(btn);
+      });
+    }
+  }
+
+  function render(){
+    var r = rankFor(S.level);
+    el.rankLetter.textContent = r.letter;
+    el.rankName.textContent = r.name;
+    el.level.textContent = S.level;
+    var mh = maxHp(), mm = maxMp();
+    if(S.hp > mh) S.hp = mh;
+    el.hpBar.style.width = Math.max(0, S.hp/mh*100) + "%";
+    el.hpText.textContent = Math.max(0,Math.ceil(S.hp)) + " / " + mh;
+    el.mpBar.style.width = Math.max(0, S.mp/mm*100) + "%";
+    el.mpText.textContent = Math.floor(S.mp) + " / " + mm;
+    el.xpBar.style.width = Math.min(100, S.xp/S.xpNext*100) + "%";
+    el.xpText.textContent = S.xp + " / " + S.xpNext;
+    el.gold.textContent = S.gold;
+    el.crystals.textContent = S.crystals;
+    el.scrolls.textContent = S.scrolls;
+    el.kills.textContent = S.totalKills;
+    el.shadows.textContent = S.shadowsArr.length;
+    el.pointsBanner.className = "points-banner" + (S.statPoints>0 ? " show" : "");
+    el.pointsVal.textContent = S.statPoints;
+    el.levelTabBadge.hidden = S.statPoints<=0;
+    el.levelTabBadge.textContent = S.statPoints;
+    document.querySelectorAll(".plus-btn").forEach(function(b){
+      b.className = "plus-btn" + (S.statPoints>0 ? " show" : "");
+    });
+    el.gateNum.textContent = S.gate;
+    el.gateName.textContent = GATE_NAMES[(S.gate-1) % GATE_NAMES.length];
+    el.gateSub.textContent = S.portalActive ? "Boss down — the portal is open. Walk into it!" : "Cleared " + S.killsInGate + " of 10 · Find them on the map below";
+    renderPips();
+    el.str.textContent = S.str; el.agi.textContent = S.agi; el.vit.textContent = S.vit;
+    el.strBonus.textContent = runeBonus("fatal") ? "◆+" + runeBonus("fatal") + "%" : "";
+    el.agiBonus.textContent = runeBonus("rage") ? "◆+" + runeBonus("rage") + "%" : "";
+    el.vitBonus.textContent = runeBonus("energy") ? "◆+" + runeBonus("energy") + "%" : "";
+    el.dmg.textContent = tapDamageBase();
+    el.crit.textContent = Math.round(critChance()*100) + "%";
+    el.reduce.textContent = Math.round(armorReduce()*100) + "%";
+    el.shadowBonus.textContent = "+" + Math.round(((shadowCountMult()-1) + runeBonus("swift")/100) * 100) + "%";
+    el.attackSub.textContent = "Tap damage " + tapDamageBase() + " · or tap the monster · Space works too";
+    var potionTxt = S.potions + " left · heals 50% HP";
+    el.potionSub.textContent = potionTxt;
+    el.potionSub2.textContent = potionTxt;
+    var potionOff = S.potions<=0 || S.hp>=maxHp() || S.dead;
+    el.potionBtn.disabled = potionOff;
+    el.potionBtn2.disabled = potionOff;
+    el.weaponName.textContent = WEAPONS[Math.min(S.weaponLv-1, WEAPONS.length-1)] + (S.weaponLv>WEAPONS.length ? " +" + (S.weaponLv-WEAPONS.length) : "");
+    el.weaponSub.textContent = "Weapon Lv " + S.weaponLv + " · +" + ((S.weaponLv-1)*6) + " bonus damage";
+    el.weaponBtn.textContent = "Upgrade · " + weaponCost() + " G";
+    el.weaponBtn.disabled = S.gold < weaponCost();
+    el.armorName.textContent = ARMORS[Math.min(S.armorLv-1, ARMORS.length-1)] + (S.armorLv>ARMORS.length ? " +" + (S.armorLv-ARMORS.length) : "");
+    el.armorSub.textContent = "Armor Lv " + S.armorLv + " · +" + ((S.armorLv-1)*25) + " max HP · " + Math.round(armorReduce()*100) + "% less damage taken";
+    el.armorBtn.textContent = "Upgrade · " + armorCost() + " G";
+    el.armorBtn.disabled = S.gold < armorCost();
+    el.healBtn.disabled = S.gold < 40 || (S.hp>=maxHp() && S.mp>=maxMp());
+    el.scrollBtn.disabled = S.gold < 150;
+    $("buyPotionBtn").disabled = S.gold < 60;
+    var inBattle = S.mode==="battle";
+    el.skill1.disabled = !inBattle || S.mp < 10 || S.dead;
+    el.skill2.disabled = !inBattle || S.mp < 20 || S.dead;
+    var wrathReady = S.mp >= 35 && S.wrathCd<=0;
+    el.skill3.disabled = !inBattle || !wrathReady || S.dead;
+    el.skill3Cost.textContent = S.wrathCd>0 ? "Cooldown · " + S.wrathCd + " hits" : "35 MP · 500% + stun";
+    el.skill3Cost.className = S.wrathCd>0 ? "cd" : "";
+    el.stunTag.className = "stun-tag" + (S.stunned>0 ? " show" : "");
+    el.comboBox.className = "combo" + (S.combo>=3 ? " show" : "");
+    el.comboVal.textContent = "x" + S.combo;
+    el.autoBtn.textContent = S.auto ? "⏸ AUTO ON" : "▶ AUTO";
+    el.autoBtn.className = "toggle-btn" + (S.auto ? " on" : "");
+    el.autoBtn.setAttribute("aria-pressed", S.auto ? "true" : "false");
+    el.speedBtn.textContent = "SPEED ×" + S.speed;
+    el.speedBtn.className = "toggle-btn" + (S.speed>1 ? " on" : "");
+    if(S.monster){
+      var m = S.monster;
+      var ec = ELEMENTS[m.el];
+      el.arena.style.setProperty("--elc", ec.color);
+      el.mElBadge.textContent = ec.icon + " " + ec.label;
+      el.mElBadge.style.background = ec.color;
+      el.mStars.innerHTML = starsHtml(m.stars);
+      el.mName.innerHTML = (m.boss ? '<span class="boss-tag">BOSS</span>' : "") + escapeHtml(m.name);
+      var adv = partyAdvantage();
+      var advTxt = "";
+      if(S.shadowsArr.length){
+        if(adv > 1) advTxt = ' · <span class="adv">▲ Shadow advantage!</span>';
+        else if(adv < 1) advTxt = ' · <span class="dis">▼ Shadows resisted</span>';
+      }
+      el.mSub.innerHTML = "Lv " + m.level + " · " + escapeHtml(m.type) + (m.role ? " · " + ROLES[m.role].icon + " " + ROLES[m.role].label : "") + " · SPD " + (m.spd || enemySpeed(m)) + " · hits for ~" + m.dmg + advTxt;
+      el.mHpBar.style.width = Math.max(0, m.hp/m.maxHp*100) + "%";
+      el.mHpText.textContent = Math.max(0, Math.ceil(m.hp)) + " / " + m.maxHp;
+      el.mBtn.textContent = m.emoji;
+      el.mBtn.className = "monster-emoji" + (m.boss ? " boss" : "");
+    }
+    el.battlePanel.hidden = !inBattle;
+    el.battleActions.hidden = !inBattle;
+    el.dungeonPanel.className = "dungeon-panel panel" + (inBattle ? " in-battle" : "");
+    renderParty();
+    renderArmy();
+    renderLegends();
+    renderCodex();
+    renderRunes();
+    renderShadowGrowth();
+    renderDungeon();
+    scheduleSave();
+  }
+
+  /* ---------------- MONSTERS ---------------- */
+  function monsterStars(isBoss){
+    if(isBoss) return (S.gate>=3 && Math.random()<0.5) ? 6 : 5;
+    var base = 3 + Math.min(2, Math.floor((S.gate-1)/3));
+    if(Math.random()<0.18) base = Math.min(5, base+1);
+    return base;
+  }
+  function makeMonster(isBoss, base, slot){
+    var lvl = S.gate*2 + slot + Math.max(0, S.level-1);
+    var stars = monsterStars(isBoss);
+    var starMult = 1 + (stars-3)*0.22;
+    var hpBase = isBoss ? 300 : 52;
+    var mHp = Math.round(hpBase * starMult * (1 + (S.gate-1)*0.85) * (1 + slot*0.10) * (isBoss ? (1 + (S.gate-1)*0.15) : 1));
+    var dmg = Math.round((5 + (S.gate-1)*3.2 + slot*0.5) * (isBoss ? 1.6 : 1) * (1 + (stars-3)*0.1));
+    var mm = { name: base.name, emoji: base.emoji, type: base.type, el: base.el, role: roleOfBase(base), boss: isBoss, stars: stars, level: lvl, maxHp: mHp, hp: mHp, dmg: dmg };
+    mm.spd = enemySpeed(mm);
+    return mm;
+  }
+
+  /* ---------------- DUNGEON GENERATION ---------------- */
+  var MAP_W = 13, MAP_H = 9;
+  function tileKey(x,y){ return x + "," + y; }
+
+  function buildFloor(walls){
+    // returns open reachable tiles, or null if the floor is too cramped
+    var seen = {}, queue = [[1,1]], x, y, i;
+    seen[tileKey(1,1)] = 1;
+    while(queue.length){
+      var cur = queue.shift();
+      var dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+      for(i=0;i<4;i++){
+        var nx = cur[0]+dirs[i][0], ny = cur[1]+dirs[i][1];
+        if(nx<0||ny<0||nx>=MAP_W||ny>=MAP_H) continue;
+        if(walls[tileKey(nx,ny)] || seen[tileKey(nx,ny)]) continue;
+        seen[tileKey(nx,ny)] = 1; queue.push([nx,ny]);
+      }
+    }
+    var openTiles = [];
+    for(x=1;x<MAP_W-1;x++) for(y=1;y<MAP_H-1;y++){
+      if(!walls[tileKey(x,y)] && seen[tileKey(x,y)]) openTiles.push([x,y]);
+    }
+    return openTiles.length >= 45 ? openTiles : null;
+  }
+
+  function populateFloor(openTiles){
+    var i;
+    S.player = {x:1, y:1, dir:"down"};
+    var far = openTiles.filter(function(t){ return Math.abs(t[0]-1)+Math.abs(t[1]-1) >= 5; });
+    if(far.length < 10) far = openTiles.filter(function(t){ return !(t[0]===1 && t[1]===1); });
+    far.sort(function(a,b){ return (Math.abs(b[0]-1)+Math.abs(b[1]-1)) - (Math.abs(a[0]-1)+Math.abs(a[1]-1)); });
+    var shuffled = far.slice(1);
+    for(i=shuffled.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var tmp = shuffled[i]; shuffled[i]=shuffled[j]; shuffled[j]=tmp; }
+    S.mapMonsters = [];
+    var bossBase = BOSSES[(S.gate-1) % BOSSES.length];
+    S.mapMonsters.push({ x:far[0][0], y:far[0][1], boss:true, base:bossBase, slot:9 });
+    for(i=0;i<9 && i<shuffled.length;i++){
+      S.mapMonsters.push({ x:shuffled[i][0], y:shuffled[i][1], boss:false, base:MONSTERS[Math.floor(Math.random()*MONSTERS.length)], slot:i });
+    }
+    var used = {};
+    used[tileKey(1,1)] = 1;
+    S.mapMonsters.forEach(function(m){ used[tileKey(m.x,m.y)] = 1; });
+    var chestSpots = openTiles.filter(function(t){ return !used[tileKey(t[0],t[1])] && Math.abs(t[0]-1)+Math.abs(t[1]-1) >= 3; });
+    for(i=chestSpots.length-1;i>0;i--){ var j2 = Math.floor(Math.random()*(i+1)); var t2 = chestSpots[i]; chestSpots[i]=chestSpots[j2]; chestSpots[j2]=t2; }
+    S.chests = chestSpots.slice(0,3).map(function(t){ return {x:t[0], y:t[1], opened:false}; });
+    S.portal = null;
+    S.portalActive = false;
+    S.currentEntity = -1;
+    S.monster = null;
+    S.mode = "explore";
+    S.enemyAtb = 0; S.shadowAtb = 0;
+  }
+
+  function generateDungeon(){
+    var x, y, i, tries;
+    for(tries=0; tries<60; tries++){
+      var walls = {};
+      for(x=0;x<MAP_W;x++){ walls[tileKey(x,0)]=1; walls[tileKey(x,MAP_H-1)]=1; }
+      for(y=0;y<MAP_H;y++){ walls[tileKey(0,y)]=1; walls[tileKey(MAP_W-1,y)]=1; }
+      for(i=0;i<16;i++){
+        x = 1 + Math.floor(Math.random()*(MAP_W-2));
+        y = 1 + Math.floor(Math.random()*(MAP_H-2));
+        if(Math.abs(x-1)+Math.abs(y-1) <= 2) continue;
+        walls[tileKey(x,y)] = 1;
+      }
+      var openTiles = buildFloor(walls);
+      if(!openTiles) continue;
+      S.walls = walls;
+      populateFloor(openTiles);
+      return;
+    }
+    // guaranteed fallback: border walls only — always valid
+    var fw = {};
+    for(x=0;x<MAP_W;x++){ fw[tileKey(x,0)]=1; fw[tileKey(x,MAP_H-1)]=1; }
+    for(y=0;y<MAP_H;y++){ fw[tileKey(0,y)]=1; fw[tileKey(MAP_W-1,y)]=1; }
+    S.walls = fw;
+    populateFloor(buildFloor(fw) || [[1,1]]);
+  }
+
+  function entityAt(x,y){
+    for(var i=0;i<S.mapMonsters.length;i++){
+      if(S.mapMonsters[i].x===x && S.mapMonsters[i].y===y) return i;
+    }
+    return -1;
+  }
+  function chestAt(x,y){
+    for(var i=0;i<S.chests.length;i++){
+      if(!S.chests[i].opened && S.chests[i].x===x && S.chests[i].y===y) return S.chests[i];
+    }
+    return null;
+  }
+  function setExploreMsg(html){ el.exploreMsg.innerHTML = html; }
+
+  function renderDungeon(){
+    if(!el.dungeonGrid) return;
+    var html = "";
+    for(var y=0;y<MAP_H;y++){
+      for(var x=0;x<MAP_W;x++){
+        var cls = "tile" + (((x+y)%2===0) ? "" : " alt");
+        var content = "";
+        if(S.walls[tileKey(x,y)]){ cls += " wall"; }
+        else if(S.portalActive && S.portal && S.portal.x===x && S.portal.y===y){
+          cls += " portal-tile"; content = '<span class="ent">🌀</span>';
+        } else {
+          var mi = entityAt(x,y);
+          var ch = chestAt(x,y);
+          if(mi>=0){
+            var mm = S.mapMonsters[mi];
+            var ec = ELEMENTS[mm.base.el];
+            cls += mm.boss ? " boss-tile" : " monster-tile";
+            content = '<span class="el-dot" style="background:' + ec.color + '; color:' + ec.color + '"></span><span class="ent">' + mm.base.emoji + '</span>';
+          } else if(ch){
+            cls += " chest-tile"; content = '<span class="ent">🎁</span>';
+          }
+        }
+        if(S.player.x===x && S.player.y===y){
+          cls += " player-tile";
+          var arrow = {up:"▲", down:"▼", left:"◀", right:"▶"}[S.player.dir] || "▼";
+          content = '<span class="player-sprite">🧍</span><span class="dir-arrow">' + arrow + '</span>';
+        }
+        html += '<div class="' + cls + '">' + content + '</div>';
+      }
+    }
+    el.dungeonGrid.innerHTML = html;
+    var left = S.mapMonsters.length;
+    var bossLeft = S.mapMonsters.some(function(m){ return m.boss; });
+    el.dungeonStatus.innerHTML = S.portalActive
+      ? 'The <b style="color:#c4b5fd">portal 🌀</b> is open — walk into it!'
+      : 'Monsters left: <b>' + left + '</b>' + (bossLeft ? ' · <span class="boss-left">★ Boss on the map</span>' : '');
+  }
+
+  /* ---------------- BATTLE LIFECYCLE ---------------- */
+  function clearRush(){
+    if(S.rushIv){ clearInterval(S.rushIv); S.rushIv = null; }
+  }
+  function endBattleCleanup(){
+    clearRush();
+    S.shield = 0; S.enemyDefDown = 0; S.teamBuffTurns = 0; S.teamBuffPct = 0;
+    S.stunned = 0;
+    S.enemyAtb = 0;
+    S.hunterAtb = 0;
+    S.shadowsArr.forEach(function(sh){ sh.atb = Math.random()*250; });
+    S.shadowAtb = 0;
+    S.autoTimer = 0;
+    if(S.comboTimer){ clearTimeout(S.comboTimer); S.comboTimer = null; }
+    S.combo = 0;
+  }
+
+  function startBattle(idx){
+    var ent = S.mapMonsters[idx];
+    if(!ent || S.mode!=="explore" || S.dead) return;
+    endBattleCleanup();
+    S.currentEntity = idx;
+    S.monster = makeMonster(ent.boss, ent.base, ent.slot);
+    S.mode = "battle";
+    switchTab("hunt");
+    var ec = ELEMENTS[ent.base.el];
+    if(ent.boss) log("⚠ You face the <b>Gate Boss</b>: <b>" + escapeHtml(ent.base.name) + "</b> — " + ec.icon + " " + ec.label + ", " + S.monster.stars + "★. Finish this.", "gold");
+    else log("⚔ A wild <b>" + escapeHtml(ent.base.name) + "</b> (" + ec.icon + " " + ec.label + " · " + S.monster.stars + "★) blocks your path!", "");
+    beep(220, 0.12, "sawtooth", 0.06);
+    render();
+    el.battlePanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+
+  function fleeBattle(){
+    if(S.mode!=="battle" || S.dead) return;
+    log("🏃 You break away from <b>" + escapeHtml(S.monster ? S.monster.name : "the monster") + "</b>. It still lurks on the map…", "");
+    endBattleCleanup();
+    S.monster = null;
+    S.currentEntity = -1;
+    S.mode = "explore";
+    setExploreMsg("🏃 You slipped away. Heal up, inscribe runes, or pick a different target.");
+    render();
+    el.dungeonPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+
+  function showLevelPopup(gained){
+    S.levelPopupOpen = true;
+    var r = rankFor(S.level);
+    el.levelUpTitle.textContent = "LEVEL " + S.level + "!";
+    el.levelUpText.innerHTML = "Rank <b>" + r.letter + " — " + escapeHtml(r.name) + "</b><br>+" + (gained*3) + " stat points banked · HP boosted · MP refilled.<br>Spend your points in the <b>Level Up</b> tab — your shadows' levels and runes live there too.";
+    el.levelOverlay.className = "overlay show lvl-overlay";
+  }
+  function closeLevelPopup(){
+    S.levelPopupOpen = false;
+    el.levelOverlay.className = "overlay lvl-overlay";
+  }
+  function gainXp(amount){
+    S.xp += amount;
+    var gained = 0;
+    while(S.xp >= S.xpNext){
+      S.xp -= S.xpNext;
+      S.level++;
+      gained++;
+      S.xpNext = Math.round(S.xpNext * 1.45);
+      S.statPoints += 3;
+      S.hp = Math.min(maxHp(), S.hp + Math.round(maxHp()*0.5));
+      S.mp = maxMp();
+      sndLevel();
+      var r = rankFor(S.level);
+      log("✦ <b>LEVEL UP!</b> You are now Lv " + S.level + " — Rank " + r.letter + " (" + r.name + "). +3 stat points.", "sys");
+      floater("LEVEL UP!", "crit", 34);
+    }
+    if(gained > 0) showLevelPopup(gained);
+  }
+
+  function dropRune(guaranteed){
+    if(!guaranteed && Math.random() >= 0.22) return;
+    var grade = Math.min(6, 1 + Math.floor((S.gate-1)/2) + (Math.random()<0.35 ? 1 : 0) + (S.monster && S.monster.boss ? 1 : 0));
+    grade = Math.max(1, grade);
+    var setKey = RUNE_KEYS[Math.floor(Math.random()*RUNE_KEYS.length)];
+    var rune = { id: ++runeSeq, set: setKey, grade: grade };
+    S.runes.push(rune);
+    if(S.runes.length > 40){ // keep the oldest equipped-safe: drop the lowest-grade uninscribed one
+      var equipped = {};
+      S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+      S.shadowsArr.forEach(function(sh){ (sh.runeSlots||[]).forEach(function(id){ if(id!=null) equipped[id]=1; }); });
+      for(var i=0;i<S.runes.length;i++){
+        if(!equipped[S.runes[i].id]){ S.runes.splice(i,1); break; }
+      }
+    }
+    sndRune();
+    log("◆ A <b>" + RUNE_SETS[setKey].label + " Rune</b> (" + starString(grade) + ") drops! " + RUNE_SETS[setKey].fmt(Math.round(grade*RUNE_SETS[setKey].per)) + " when inscribed.", "rune");
+  }
+
+  function addShadow(base, stars, source){
+    if(S.shadowsArr.length >= 12){
+      S.gold += 100;
+      log("Your army is full — " + escapeHtml(base.name) + "'s essence converts to <b>+100 gold</b> instead.", "gold");
+      return false;
+    }
+    S.shadowsArr.push({ name: base.name, emoji: base.emoji, type: base.type || "Shadow", el: base.el, role: roleOfBase(base), stars: stars, level:1, xp:0, attacks:0, evo:0, cds:[0,0,0,0], runeSlots:[null,null,null,null,null,null] });
+    return true;
+  }
+
+  function killMonster(){
+    var m = S.monster;
+    if(!m) return;
+    endBattleCleanup();
+    S.totalKills++;
+    S.killsInGate++;
+    var xpGain = Math.round((m.boss ? 160 : 26) * (1 + (S.gate-1)*0.5) * (1 + (m.stars-3)*0.15));
+    var goldGain = Math.round((m.boss ? 220 : 18 + Math.random()*22) * (1 + (S.gate-1)*0.45));
+    S.gold += goldGain;
+    sndKill();
+    log("<b>" + escapeHtml(m.name) + "</b> defeated. +" + xpGain + " XP, +" + goldGain + " gold.", m.boss ? "gold" : "good");
+    if(!m.boss && Math.random() < 0.35) log(LOOT_LINES[Math.floor(Math.random()*LOOT_LINES.length)], "");
+    if(!m.boss && Math.random() < 0.12){ S.potions++; log("It dropped a <b>potion</b>! Potions: " + S.potions, "good"); }
+    if(!m.boss && Math.random() < 0.10){ S.scrolls++; log("It was carrying a <b>Mystic Scroll</b>! Scrolls: " + S.scrolls, "gold"); }
+    dropRune(m.boss);
+
+    var bossPos = null;
+    if(S.currentEntity>=0 && S.mapMonsters[S.currentEntity]){
+      bossPos = { x:S.mapMonsters[S.currentEntity].x, y:S.mapMonsters[S.currentEntity].y };
+      S.mapMonsters.splice(S.currentEntity, 1);
+    }
+    S.currentEntity = -1;
+    S.monster = null;
+    S.mode = "explore";
+
+    if(m.boss){
+      S.crystals += 10;
+      log("💎 The boss drops <b>10 crystals</b>. Total: " + S.crystals + ".", "sys");
+      if(Math.random() < 0.75 || S.shadowsArr.length===0){
+        if(addShadow(m, m.stars, "boss")){
+          log("👤 <b>ARISE.</b> " + escapeHtml(m.name) + " (" + ELEMENTS[m.el].icon + " " + ELEMENTS[m.el].label + " · " + m.stars + "★) joins your shadow army. All damage +5% (army of " + S.shadowsArr.length + ").", "sys");
+        }
+      } else {
+        log("Shadow extraction failed — the boss's soul slips away. Bonus gold instead: +120 G.", "gold");
+        S.gold += 120;
+      }
+      gainXp(xpGain);
+      S.gateCleared = true;
+      S.portal = bossPos || {x:1, y:1};
+      S.portalActive = true;
+      setExploreMsg('👑 <b>The boss has fallen!</b> A <span class="gold-t">portal 🌀</span> tears open where it stood — walk into it to enter the next gate.');
+      log("🌀 A <b>portal</b> opens where the boss fell. Walk into it to descend to Gate " + (S.gate+1) + ".", "sys");
+      render();
+      el.dungeonPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+      return;
+    }
+    gainXp(xpGain);
+    var left = S.mapMonsters.length;
+    setExploreMsg("✅ <b>" + escapeHtml(m.name) + "</b> down. <b>" + left + "</b> monster" + (left===1 ? "" : "s") + " left in this gate — keep hunting.");
+    render();
+  }
+
+  /* ---------------- COMBAT ---------------- */
+  function bumpCombo(){
+    S.combo++;
+    if(S.combo > S.bestCombo) S.bestCombo = S.combo;
+    if(S.comboTimer) clearTimeout(S.comboTimer);
+    S.comboTimer = setTimeout(function(){ S.combo = 0; if(S.mode==="battle") render(); }, 2600);
+  }
+
+  function dealDamage(mult, opts){
+    opts = opts || {};
+    if(S.dead || S.levelPopupOpen || S.mode!=="battle" || !S.monster) return 0;
+    if(S.wrathCd>0 && !opts.fromWrath) S.wrathCd--; // cooldown ticks down per hunter hit
+    var base = tapDamageBase() * (mult||1) * (S.enemyDefDown>0 ? 1.3 : 1) * (S.teamBuffTurns>0 ? (1 + (S.teamBuffPct||0)/100) : 1);
+    var variance = 0.88 + Math.random()*0.24;
+    var isCrit = Math.random() < critChance();
+    var dmg = Math.round(base * variance * (isCrit ? 2 : 1));
+    S.monster.hp -= dmg;
+    S.mp = Math.min(maxMp(), S.mp + (opts.mpGain!=null ? opts.mpGain : 3));
+    bumpCombo();
+    el.mBtn.classList.remove("hit"); void el.mBtn.offsetWidth; el.mBtn.classList.add("hit");
+    floater("-" + dmg + (isCrit ? " CRIT!" : ""), isCrit ? "crit" : "");
+    if(isCrit) sndCrit(); else if(!opts.quiet) sndHit();
+    if(S.monster.hp <= 0){ killMonster(); return dmg; }
+    render();
+    return dmg;
+  }
+
+  function shadowStrike(shIdx){
+    if(S.dead || S.mode!=="battle" || !S.monster || !S.shadowsArr.length) return;
+    var sh = normalizeShadow(S.shadowsArr[(typeof shIdx==="number" ? shIdx : (S.shadowTurn % S.shadowsArr.length))]);
+    if(typeof shIdx!=="number") S.shadowTurn++;
+    sh.atb = 0;
+    for(var c=0;c<4;c++) if(sh.cds[c]>0) sh.cds[c]--;
+    var skills = skillsFor(sh);
+    var pick = 0;
+    for(var k=3;k>=1;k--){ if(sh.cds[k]<=0 && Math.random() < (k===3 ? 0.55 : k===2 ? 0.6 : 0.7)){ pick = k; break; } }
+    var sk = skills[pick];
+    if(pick>0) sh.cds[pick] = sk.cd + 1;
+    var mult = elementMult(sh.el, S.monster.el);
+    var rb = shadowRuneBonus(sh);
+    var buffMult = (S.teamBuffTurns>0 ? (1 + (S.teamBuffPct||0)/100) : 1) * (S.enemyDefDown>0 ? 1.3 : 1);
+    var isCrit = Math.random() < 0.05 + rb.crit/100;
+    var power = shadowHitBase(sh);
+    var ec = ELEMENTS[sh.el];
+    var tag = mult>1 ? " ▲" : (mult<1 ? " ▼" : "");
+    sh.attacks++;
+    gainShadowXp(sh, pick>=2 ? 4 : 2);
+    beep(420 + Math.random()*120, 0.05, "triangle", 0.03);
+    function hitEnemy(multSkill){
+      var dmg = Math.max(1, Math.round(power * multSkill * mult * buffMult * (0.85 + Math.random()*0.3) * (isCrit ? 2 : 1)));
+      S.monster.hp -= dmg;
+      floater(sk.icon + " -" + dmg + tag + (isCrit ? " CRIT" : ""), "shadow-hit", 52 + Math.random()*22);
+      if(el.floaters.lastChild) el.floaters.lastChild.style.color = ec.color;
+      return dmg;
+    }
+    function healHunter(multSkill){
+      var amt = Math.max(1, Math.round(power * multSkill * evoMult(sh) / Math.max(1,evoMult(sh)) * (1 + rb.dmg/200)));
+      // heals scale with power (which already includes evolution doubling)
+      amt = Math.max(1, Math.round(power * multSkill * 0.9));
+      var before = S.hp;
+      S.hp = Math.min(maxHp(), S.hp + amt);
+      var real = Math.round(S.hp - before);
+      floater("+" + real + " HP", "heal-hunter", 10);
+      return real;
+    }
+    function shieldHunter(multSkill){
+      var amt = Math.max(1, Math.round(power * multSkill));
+      S.shield = Math.min(maxHp(), (S.shield||0) + amt);
+      floater("🛡️ +" + amt, "shield-hit", 8);
+      return amt;
+    }
+    var summary = "";
+    if(sk.kind==="damage"){ var d1 = hitEnemy(sk.mult); summary = "dealt <b>" + d1 + "</b>"; }
+    else if(sk.kind==="break"){ var d2 = hitEnemy(sk.mult); S.enemyDefDown = 2; summary = "dealt <b>" + d2 + "</b> and <b>broke its guard</b> (+30% damage taken)"; }
+    else if(sk.kind==="shieldhit"){ var d3 = hitEnemy(sk.mult); var s1 = shieldHunter(sk.mult===0.8 ? 0.6 : 1.2); summary = "dealt <b>" + d3 + "</b> and shielded you for <b>" + s1 + "</b>"; }
+    else if(sk.kind==="shield"){ var s2 = shieldHunter(sk.mult); summary = "raised a <b>" + s2 + "</b>-point shield on you"; }
+    else if(sk.kind==="slam"){ var d4 = hitEnemy(sk.mult); S.enemyAtb = Math.max(0, S.enemyAtb - ATB_MAX*0.35); summary = "dealt <b>" + d4 + "</b> and knocked the enemy's turn back"; }
+    else if(sk.kind==="healhit"){ var d5 = hitEnemy(sk.mult); var h1 = healHunter(0.5); summary = "dealt <b>" + d5 + "</b> and healed you <b>+" + h1 + "</b>"; }
+    else if(sk.kind==="heal"){ var h2 = healHunter(sk.mult); summary = "healed you <b>+" + h2 + " HP</b>"; }
+    else if(sk.kind==="buffhit"){ var d6 = hitEnemy(sk.mult); S.teamBuffTurns = 2; S.teamBuffPct = Math.max(S.teamBuffPct||0, 15); summary = "dealt <b>" + d6 + "</b> and buffed team damage <b>+15%</b>"; }
+    else if(sk.kind==="haste"){ var d7 = hitEnemy(sk.mult); S.shadowsArr.forEach(function(o){ if(o!==sh) o.atb = Math.min(ATB_MAX, (o.atb||0) + ATB_MAX*0.4); }); S.hunterAtb = Math.min(ATB_MAX, (S.hunterAtb||0) + ATB_MAX*0.4); summary = "dealt <b>" + d7 + "</b> and <b>hasted the team</b>"; }
+    else if(sk.kind==="blessing"){ var d8 = hitEnemy(sk.mult); S.teamBuffTurns = 2; S.teamBuffPct = 25; var h3 = healHunter(0.6); summary = "dealt <b>" + d8 + "</b>, buffed team <b>+25%</b>, healed <b>+" + h3 + "</b>"; }
+    if(pick>=1 || sk.kind==="heal" || sk.kind==="shield") log(ec.icon + " <b>" + escapeHtml(sh.name) + "</b> uses <b>" + sk.icon + " " + escapeHtml(sk.name) + "</b> — " + summary + ". <small style='color:var(--muted2)'>SPD " + shadowSpeed(sh) + " · " + ROLES[sh.role].label + " · Evo ×" + evoMult(sh) + "</small>", "");
+    if(S.monster && S.monster.hp <= 0){ gainShadowXp(sh, 10); killMonster(); return; }
+    render();
+  }
+
+  function playerAttack(){ S.hunterAtb = 0; dealDamage(1); }
+
+  function useSkill(n){
+    if(S.dead || S.mode!=="battle" || !S.monster) return;
+    if(n===1){
+      if(S.mp < 10) return;
+      S.mp -= 10; sndSkill();
+      log("🗡️ <b>Power Strike!</b>", "");
+      dealDamage(2.5, {mpGain:0});
+    } else if(n===2){
+      if(S.mp < 20 || S.rushIv) return;
+      S.mp -= 20; sndSkill();
+      log("👤 <b>Shadow Rush</b> — your shadows strike as one.", "");
+      var hits = 0;
+      S.rushIv = setInterval(function(){
+        hits++;
+        if(S.dead || S.mode!=="battle" || !S.monster){ clearRush(); return; }
+        dealDamage(0.65, {mpGain:0, quiet: hits>1});
+        if(hits>=5) clearRush();
+      }, 110);
+      render();
+    } else if(n===3){
+      if(S.mp < 35 || S.wrathCd>0) return;
+      S.mp -= 35; S.wrathCd = 12; sndSkill();
+      log("💀 <b>MONARCH'S WRATH!</b> The whole gate goes quiet.", "sys");
+      var before = S.monster ? S.monster.name : "";
+      dealDamage(5, {mpGain:0, fromWrath:true});
+      if(S.monster && S.monster.name===before && S.monster.hp>0){
+        S.stunned = 3;
+        log("The monster is <b>stunned</b> — its next 3 turns are skipped.", "gold");
+      }
+      render();
+    }
+  }
+
+  function drinkPotion(){
+    if(S.potions<=0 || S.dead) return;
+    var mh = maxHp();
+    if(S.hp >= mh) return;
+    S.potions--;
+    var heal = Math.round(mh*0.5);
+    S.hp = Math.min(mh, S.hp + heal);
+    if(S.mode==="battle") floater("+" + heal + " HP", "heal", 8);
+    beep(660,0.12,"sine",0.06);
+    log("🧪 Potion used. +" + heal + " HP.", "good");
+    render();
+  }
+
+  function enemyAttack(){
+    if(S.dead || S.mode!=="battle" || !S.monster) return;
+    if(S.stunned > 0){
+      S.stunned--;
+      log("✦ " + escapeHtml(S.monster.name) + " is stunned and can't move. (" + S.stunned + " left)", "gold");
+      render();
+      return;
+    }
+    if(S.enemyDefDown>0) S.enemyDefDown--;
+    if(S.teamBuffTurns>0){ S.teamBuffTurns--; if(S.teamBuffTurns<=0) S.teamBuffPct = 0; }
+    var raw = S.monster.dmg * (0.85 + Math.random()*0.4);
+    var dmg = Math.max(1, Math.round(raw * (1 - armorReduce())));
+    if(S.shield > 0){
+      var absorbed = Math.min(S.shield, dmg);
+      S.shield -= absorbed; dmg -= absorbed;
+      floater("🛡️ -" + absorbed, "shield-hit", 6);
+      if(absorbed>0) log("🛡️ Your shadow's shield absorbs <b>" + absorbed + "</b> damage." + (S.shield>0 ? " Shield left: <b>" + Math.round(S.shield) + "</b>." : " The shield breaks."), "sys");
+    }
+    S.hp -= dmg;
+    S.combo = 0;
+    if(dmg>0) floater("-" + dmg, "player-dmg", 6);
+    sndHurt();
+    if(S.hp <= 0){
+      S.hp = 0;
+      S.dead = true;
+      endBattleCleanup();
+      log("You were overwhelmed by <b>" + escapeHtml(S.monster.name) + "</b>.", "bad");
+      el.deathOverlay.className = "overlay show";
+    }
+    render();
+  }
+
+  /* ---------------- MASTER TICK: turn-by-turn by SPEED ---------------- */
+  var lastTick = Date.now();
+  setInterval(function(){
+    var now = Date.now();
+    var dt = Math.min(120, now - lastTick);
+    lastTick = now;
+    if(S.levelPopupOpen) return;
+    if(S.dead || S.mode!=="battle" || !S.monster) return;
+    var g = dt * S.speed / 1000; // seconds of battle time, scaled by game speed toggle
+    S.mp = Math.min(maxMp(), S.mp + g*6);
+    // every combatant's gauge fills at its own SPEED
+    S.enemyAtb = (S.enemyAtb||0) + enemySpeed(S.monster) * g * 2.2;
+    S.hunterAtb = (S.hunterAtb||0) + hunterSpeed() * g * 2.2;
+    S.shadowsArr.forEach(function(sh){ normalizeShadow(sh); sh.atb = (sh.atb||0) + shadowSpeed(sh) * g * 2.2; });
+    // live gauge bars
+    el.mAtbBar.style.width = Math.min(100, (S.enemyAtb||0)/ATB_MAX*100) + "%";
+    el.partyRow.querySelectorAll("[data-shadow-atb]").forEach(function(b){
+      var idx = parseInt(b.getAttribute("data-shadow-atb"),10);
+      var sh2 = S.shadowsArr[idx];
+      b.style.width = sh2 ? Math.min(100, (sh2.atb||0)/ATB_MAX*100) + "%" : "0%";
+    });
+    var hb = document.getElementById("hunterAtbBar");
+    if(hb) hb.style.width = Math.min(100, (S.hunterAtb||0)/ATB_MAX*100) + "%";
+    renderTurnOrder();
+    // collect everyone who earned a turn, fastest first — speed decides the order
+    var ready = [];
+    if(S.enemyAtb >= ATB_MAX) ready.push({kind:"enemy", spd:enemySpeed(S.monster)});
+    if(S.auto && S.hunterAtb >= ATB_MAX) ready.push({kind:"hunter", spd:hunterSpeed()});
+    S.shadowsArr.forEach(function(sh, i){ if((sh.atb||0) >= ATB_MAX) ready.push({kind:"shadow", idx:i, spd:shadowSpeed(sh)}); });
+    ready.sort(function(a,b){ return b.spd - a.spd; });
+    for(var r=0;r<ready.length;r++){
+      if(S.dead || S.mode!=="battle" || !S.monster) return;
+      var act = ready[r];
+      if(act.kind==="enemy"){
+        S.enemyAtb = 0;
+        enemyAttack();
+      } else if(act.kind==="shadow"){
+        shadowStrike(act.idx);
+      } else if(act.kind==="hunter"){
+        S.hunterAtb = 0;
+        if(S.hp < maxHp()*0.3 && S.potions>0) drinkPotion();
+        else if(S.mp >= 35 && S.wrathCd<=0 && S.monster && S.monster.boss) useSkill(3);
+        else if(S.mp >= 32) useSkill(1);
+        else dealDamage(1);
+      }
+    }
+  }, 50);
+
+  /* ---------------- RUNES ---------------- */
+  function equipRune(id){
+    var free = -1;
+    for(var i=0;i<S.runeSlots.length;i++){ if(S.runeSlots[i]==null){ free = i; break; } }
+    var r = runeById(id);
+    if(!r) return;
+    if(free<0){ log("All 6 rune slots are full — tap an inscribed slot to remove one first.", "bad"); return; }
+    S.runeSlots[free] = id;
+    S.hp = Math.min(maxHp(), S.hp);
+    sndRune();
+    log("◆ Inscribed <b>" + RUNE_SETS[r.set].label + " Rune</b> (" + starString(r.grade) + ") in slot " + (free+1) + " — " + RUNE_SETS[r.set].fmt(Math.round(r.grade*RUNE_SETS[r.set].per)) + ".", "rune");
+    render();
+  }
+  function unequipRune(slot){
+    var id = S.runeSlots[slot];
+    if(id==null) return;
+    var r = runeById(id);
+    S.runeSlots[slot] = null;
+    S.hp = Math.min(maxHp(), S.hp);
+    if(r) log("◆ Removed the <b>" + RUNE_SETS[r.set].label + " Rune</b> from slot " + (slot+1) + " — it's back in your bag.", "");
+    render();
+  }
+
+  /* ---------------- SHADOW RUNES + GROWTH UI ---------------- */
+  function shadowRuneText(r){
+    var v = Math.round(r.grade * RUNE_SETS[r.set].per);
+    return r.set==="rage" ? "+" + v + "% crit chance for this shadow" : "+" + v + "% damage for this shadow";
+  }
+  function equipRuneToShadow(runeId, idx){
+    var sh = S.shadowsArr[idx];
+    if(!sh) return;
+    normalizeShadow(sh);
+    var r = runeById(runeId);
+    if(!r) return;
+    var free = -1;
+    for(var i=0;i<sh.runeSlots.length;i++){ if(sh.runeSlots[i]==null){ free = i; break; } }
+    if(free<0){ log("👤 <b>" + escapeHtml(sh.name) + "</b>'s 6 rune slots are full — tap one of its inscribed runes to remove it first.", "bad"); return; }
+    sh.runeSlots[free] = runeId;
+    sndRune();
+    log("◆ Inscribed <b>" + RUNE_SETS[r.set].label + " Rune</b> (" + starString(r.grade) + ") on <b>" + escapeHtml(sh.name) + "</b> — " + shadowRuneText(r) + ".", "rune");
+    render();
+  }
+  function unequipShadowRune(idx, slot){
+    var sh = S.shadowsArr[idx];
+    if(!sh || !Array.isArray(sh.runeSlots)) return;
+    var id = sh.runeSlots[slot];
+    if(id==null) return;
+    var r = runeById(id);
+    sh.runeSlots[slot] = null;
+    if(r) log("◆ Removed the <b>" + RUNE_SETS[r.set].label + " Rune</b> from <b>" + escapeHtml(sh.name) + "</b> — it's back in your bag.", "");
+    render();
+  }
+  function renderShadowGrowth(){
+    var host = el.shadowGrowthList;
+    if(!host) return;
+    if(!S.shadowsArr.length){
+      host.innerHTML = '<div class="army-empty">No shadows yet. Shadows earn XP and level up every time they attack in battle — summon one in the Army tab or extract a boss, then evolve and rune them here.</div>';
+      return;
+    }
+    var equipped = {};
+    S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+    S.shadowsArr.forEach(function(s2){ (s2.runeSlots||[]).forEach(function(id){ if(id!=null) equipped[id]=1; }); });
+    var bag = S.runes.filter(function(r){ return !equipped[r.id]; });
+    var html = "";
+    S.shadowsArr.forEach(function(sh, idx){
+      normalizeShadow(sh);
+      var ec = ELEMENTS[sh.el];
+      var rc = ROLES[sh.role];
+      var sp = speciesOf(sh.name);
+      var rb = shadowRuneBonus(sh);
+      var xpNext = shadowXpNext(sh);
+      var req = evoReq(sh);
+      html += '<div class="shadow-card" style="--cardc:' + ec.color + '">';
+      html += '<div class="sg-head"><span class="sg-face art-orb">' + sh.emoji + '</span><div class="sg-id"><strong>' + escapeHtml(sh.name) + ' <span class="sg-lvl">LV ' + sh.level + '</span></strong><small>' + starString(sh.stars) + ' · ' + ec.icon + ' ' + ec.label + ' · ⚔ ' + sh.attacks + ' attacks landed</small><div style="margin-top:4px;display:flex;gap:5px;flex-wrap:wrap"><span class="role-badge" style="background:' + rc.color + '">' + rc.icon + ' ' + rc.label + '</span><span class="evo-badge' + (sh.evo>=2 ? " maxed" : "") + '">' + evoName(sh) + ' · POWER ×' + evoMult(sh) + '</span></div></div></div>';
+      if(sp) html += '<p class="sg-desc">' + escapeHtml(sp.desc) + '</p>';
+      html += '<p class="sg-rec">🎯 <b>Play to its strengths:</b> ' + escapeHtml(rc.desc) + '<br>◆ Best runes: <b>' + escapeHtml(rc.runes) + '</b></p>';
+      html += '<div class="bar-row"><label>XP</label><div class="bar xp"><i style="width:' + Math.min(100, sh.xp/xpNext*100) + '%"></i></div><output>' + sh.xp + ' / ' + xpNext + '</output></div>';
+      html += '<div class="sg-stats"><span>POWER / HIT<b>~' + Math.round(shadowHitBase(sh)) + '</b></span><span>SPEED<b>' + shadowSpeed(sh) + '</b></span><span>RUNE DMG<b>+' + rb.dmg + '%</b></span><span>RUNE CRIT<b>+' + rb.crit + '%</b></span></div>';
+      html += '<div class="skill-grid">';
+      skillsFor(sh).forEach(function(sk, si){
+        html += '<div class="skill-card"><strong>' + sk.icon + ' S' + (si+1) + ' · ' + escapeHtml(sk.name) + ' <span>' + (sk.cd ? "CD " + sk.cd : "BASIC") + '</span></strong><small><span class="sk-kind">' + escapeHtml(sk.baseName) + ':</span> ' + escapeHtml(sk.desc) + '</small></div>';
+      });
+      html += '</div>';
+      if(req){
+        var can = sh.level>=req.level && S.gold>=req.gold && S.crystals>=req.crystals;
+        var why = sh.level<req.level ? "Reach Lv " + req.level + " to unlock (now Lv " + sh.level + ") · " : "";
+        html += '<button type="button" class="evo-btn" data-evolve="' + idx + '"' + (can ? "" : " disabled") + '>🌟 EVOLVE → ' + ["","Evolution I","Evolution II"][sh.evo+1] + ' — POWER ×' + (evoMult(sh)*2) + '<small>' + why + 'Costs ' + req.gold + ' G + ' + req.crystals + ' crystals · you have ' + S.gold + ' G · ' + S.crystals + ' crystals · each evolution DOUBLES power</small></button>';
+      } else {
+        html += '<p class="sg-rec" style="text-align:center">👑 <b>Fully evolved — Evolution II, power ×4.</b> This shadow is at its peak form.</p>';
+      }
+      html += '<div class="sg-bag-label" style="margin-top:10px;font-size:12px;color:var(--muted);font-weight:700">◆ 6 RUNE SLOTS — tap an inscribed rune to remove it</div>';
+      html += '<div class="sg-slots">';
+      for(var sIdx=0;sIdx<6;sIdx++){
+        var rid = sh.runeSlots[sIdx];
+        var rr = rid!=null ? runeById(rid) : null;
+        if(rr){
+          var st = RUNE_SETS[rr.set];
+          html += '<button type="button" class="rune-slot filled sg-slot" data-unequip-shadow="' + idx + '" data-slot="' + sIdx + '" aria-label="Remove ' + st.label + ' rune from ' + escapeHtml(sh.name) + '">' + st.icon + '<small>' + st.label + '</small><span class="rstars">' + starString(rr.grade) + '</span></button>';
+        } else {
+          html += '<div class="rune-slot sg-slot">' + (sIdx+1) + '<small>EMPTY</small></div>';
+        }
+      }
+      html += '</div>';
+      if(bag.length){
+        html += '<div class="sg-bag"><span class="sg-bag-label">Inscribe a rune from your bag:</span>';
+        bag.forEach(function(r){
+          var st2 = RUNE_SETS[r.set];
+          html += '<button type="button" class="sg-inscribe" data-inscribe="' + r.id + '" data-shadow="' + idx + '">' + st2.icon + ' ' + st2.label + ' ' + starString(r.grade) + '</button>';
+        });
+        html += '</div>';
+      } else {
+        html += '<p class="sg-norunes">No loose runes in your bag — monsters and bosses drop more.</p>';
+      }
+      html += '</div>';
+    });
+    host.innerHTML = html;
+    host.querySelectorAll("[data-unequip-shadow]").forEach(function(b){
+      b.addEventListener("click", function(){ unequipShadowRune(parseInt(b.getAttribute("data-unequip-shadow"),10), parseInt(b.getAttribute("data-slot"),10)); });
+    });
+    host.querySelectorAll("[data-inscribe]").forEach(function(b){
+      b.addEventListener("click", function(){ equipRuneToShadow(parseInt(b.getAttribute("data-inscribe"),10), parseInt(b.getAttribute("data-shadow"),10)); });
+    });
+    host.querySelectorAll("[data-evolve]").forEach(function(b){
+      b.addEventListener("click", function(){ evolveShadow(parseInt(b.getAttribute("data-evolve"),10)); });
+    });
+  }
+
+  /* ---------------- LEGENDS + CODEX ---------------- */
+  function renderLegends(){
+    if(!el.legendGrid || el.legendGrid.innerHTML) return;
+    var html = "";
+    Object.keys(ELEMENTS).forEach(function(k){
+      var e = ELEMENTS[k];
+      html += '<div class="legend-card"><strong>' + e.icon + ' ' + e.label + '</strong>Beats ' + ELEMENTS[BEATS[k]].icon + ' ' + ELEMENTS[BEATS[k]].label + ' (+30% damage).</div>';
+    });
+    Object.keys(ROLES).forEach(function(k){
+      var r = ROLES[k];
+      html += '<div class="legend-card"><strong>' + r.icon + ' ' + r.label + '</strong>' + escapeHtml(r.desc) + '</div>';
+    });
+    el.legendGrid.innerHTML = html;
+  }
+  function renderCodex(){
+    if(!el.codexGrid || el.codexGrid.innerHTML) return;
+    var seen = {}, list = [];
+    SUMMON_POOL.concat(BOSSES).forEach(function(b){ if(!seen[b.name]){ seen[b.name]=1; list.push(b); } });
+    var html = "";
+    list.forEach(function(b){
+      var role = roleOfBase(b);
+      var rc = ROLES[role];
+      var ec = ELEMENTS[b.el];
+      var sp = speciesOf(b.name);
+      var fake = {name:b.name, el:b.el, role:role};
+      var skNames = skillsFor(fake).map(function(s){ return s.icon + " " + s.name; }).join(" · ");
+      html += '<div class="codex-card" style="border-color:' + ec.color + '"><strong>' + b.emoji + ' ' + escapeHtml(b.name) + '</strong><small>' + ec.icon + ' ' + ec.label + ' · ' + rc.icon + ' ' + rc.label + ' · ' + escapeHtml(b.type || "") + '<br>' + (sp ? escapeHtml(sp.desc) : "") + '<br>◆ Best runes: <b style="color:#f0abfc">' + escapeHtml(rc.runes) + '</b></small><span class="cx-skills">Skills: ' + escapeHtml(skNames) + '</span></div>';
+    });
+    el.codexGrid.innerHTML = html;
+  }
+
+  /* ---------------- SUMMON ---------------- */
+  function summonShadow(){
+    if(S.scrolls<=0) return;
+    S.scrolls--;
+    var base = SUMMON_POOL[Math.floor(Math.random()*SUMMON_POOL.length)];
+    var roll = Math.random();
+    var stars = roll<0.45 ? 3 : roll<0.75 ? 4 : roll<0.93 ? 5 : 6;
+    sndLevel();
+    if(addShadow(base, stars, "summon")){
+      log("📜 <b>SUMMON!</b> A " + stars + "★ " + ELEMENTS[base.el].icon + " " + ELEMENTS[base.el].label + " " + ROLES[roleOfBase(base)].icon + " " + ROLES[roleOfBase(base)].label + " <b>" + escapeHtml(base.name) + "</b> rises from the scroll — SPD " + shadowSpeed(S.shadowsArr[S.shadowsArr.length-1]) + ", 4 skills, 6 rune slots, evolvable ×4. See its full card in Level Up.", "sys");
+      setExploreMsg("📜 The scroll burns violet — <b>" + escapeHtml(base.name) + "</b> (" + stars + "★ " + ELEMENTS[base.el].label + ") joins your shadow army!");
+    }
+    render();
+  }
+
+  /* ---------------- SHOP ---------------- */
+  function buyWeapon(){
+    var c = weaponCost();
+    if(S.gold < c) return;
+    S.gold -= c; S.weaponLv++;
+    beep(880,0.12,"triangle",0.06);
+    log("⚔ Weapon upgraded to <b>" + escapeHtml(WEAPONS[Math.min(S.weaponLv-1, WEAPONS.length-1)]) + "</b> (Lv " + S.weaponLv + "). Tap damage is now " + tapDamageBase() + ".", "gold");
+    render();
+  }
+  function buyArmor(){
+    var c = armorCost();
+    if(S.gold < c) return;
+    S.gold -= c; S.armorLv++;
+    S.hp = Math.min(maxHp(), S.hp + 25);
+    beep(880,0.12,"triangle",0.06);
+    log("🛡️ Armor upgraded (Lv " + S.armorLv + "). Max HP is now " + maxHp() + ".", "gold");
+    render();
+  }
+  function buyHeal(){
+    if(S.gold < 40) return;
+    S.gold -= 40; S.hp = maxHp(); S.mp = maxMp();
+    if(S.mode==="battle") floater("FULLY RESTORED", "heal", 26);
+    log("✨ Fully healed at the Association clinic. —40 G.", "good");
+    render();
+  }
+  function buyPotion(){
+    if(S.gold < 60) return;
+    S.gold -= 60; S.potions++;
+    log("🧪 Bought a potion. You now carry " + S.potions + ". —60 G.", "");
+    render();
+  }
+  function buyScroll(){
+    if(S.gold < 150) return;
+    S.gold -= 150; S.scrolls++;
+    log("📜 Bought a Mystic Scroll. You now hold " + S.scrolls + ". —150 G.", "");
+    render();
+  }
+
+  /* ---------------- EXPLORATION / MOVEMENT ---------------- */
+  function enterNextGate(){
+    endBattleCleanup();
+    S.gate++;
+    S.killsInGate = 0;
+    S.gateCleared = false;
+    S.monster = null;
+    S.hp = Math.min(maxHp(), S.hp + Math.round(maxHp()*0.4));
+    S.mp = maxMp();
+    log("🚪 You step through the portal into <b>Gate " + S.gate + " — " + escapeHtml(GATE_NAMES[(S.gate-1)%GATE_NAMES.length]) + "</b>. The mana in here feels heavier.", "sys");
+    sndLevel();
+    generateDungeon();
+    setExploreMsg("🚪 <b>Gate " + S.gate + " — " + escapeHtml(GATE_NAMES[(S.gate-1)%GATE_NAMES.length]) + ".</b> Ten monsters roam this floor. The boss lurks in the far corner…");
+    render();
+  }
+
+  function tryMove(dir){
+    if(S.dead || S.levelPopupOpen || S.mode!=="explore") return;
+    var dx = 0, dy = 0;
+    if(dir==="up") dy = -1;
+    if(dir==="down") dy = 1;
+    if(dir==="left") dx = -1;
+    if(dir==="right") dx = 1;
+    S.player.dir = dir;
+    var nx = S.player.x + dx, ny = S.player.y + dy;
+    if(nx<0 || ny<0 || nx>=MAP_W || ny>=MAP_H || S.walls[tileKey(nx,ny)]){
+      beep(90, 0.05, "square", 0.03);
+      render();
+      return;
+    }
+    if(S.portalActive && S.portal && S.portal.x===nx && S.portal.y===ny){
+      S.player.x = nx; S.player.y = ny;
+      enterNextGate();
+      return;
+    }
+    var mi = entityAt(nx,ny);
+    if(mi>=0){
+      startBattle(mi);
+      return;
+    }
+    S.player.x = nx; S.player.y = ny;
+    beep(320 + Math.random()*40, 0.04, "sine", 0.025);
+    var ch = chestAt(nx,ny);
+    if(ch){
+      ch.opened = true;
+      var roll = Math.random();
+      if(roll < 0.22){
+        S.potions++;
+        setExploreMsg("🎁 <b>Chest!</b> Inside: a <b>potion</b>. You now carry " + S.potions + ".");
+        log("🎁 Opened a chest — found a <b>potion</b>!", "gold");
+      } else if(roll < 0.34){
+        S.scrolls++;
+        setExploreMsg("🎁 <b>Chest!</b> Inside: a <b>Mystic Scroll</b>! You now hold " + S.scrolls + ".");
+        log("🎁 Opened a chest — found a <b>Mystic Scroll</b>!", "gold");
+      } else {
+        var g = 40 + Math.floor(Math.random()*60) + (S.gate-1)*15;
+        S.gold += g;
+        setExploreMsg("🎁 <b>Chest!</b> Inside: <span class='gold-t'><b>" + g + " gold</b></span>. The Association didn't see a thing.");
+        log("🎁 Opened a chest — <b>+" + g + " gold</b>!", "gold");
+      }
+      beep(880, 0.1, "triangle", 0.06);
+      setTimeout(function(){ beep(1180, 0.12, "triangle", 0.05); }, 80);
+    }
+    render();
+  }
+
+  /* ---------------- TABS ---------------- */
+  function switchTab(name){
+    document.querySelectorAll(".tab-page").forEach(function(p){ p.hidden = p.id !== "tab-" + name; });
+    document.querySelectorAll(".tab-btn").forEach(function(b){
+      var on = b.getAttribute("data-tab")===name;
+      b.className = "tab-btn" + (on ? " active" : "");
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+  }
+  document.querySelectorAll(".tab-btn").forEach(function(b){
+    b.addEventListener("click", function(){ switchTab(b.getAttribute("data-tab")); });
+  });
+  el.pointsBannerEl.addEventListener("click", function(){ switchTab("level"); });
+  el.pointsBannerEl.addEventListener("keydown", function(e){
+    if(e.key==="Enter" || e.key===" "){ e.preventDefault(); switchTab("level"); }
+  });
+  $("levelCloseBtn").addEventListener("click", closeLevelPopup);
+  $("levelSpendBtn").addEventListener("click", function(){ closeLevelPopup(); switchTab("level"); });
+
+  /* ---------------- EVENTS ---------------- */
+  document.querySelectorAll(".dpad button[data-dir]").forEach(function(b){
+    b.addEventListener("click", function(){ tryMove(b.getAttribute("data-dir")); });
+  });
+  $("attackBtn").addEventListener("click", playerAttack);
+  el.mBtn.addEventListener("click", playerAttack);
+  el.skill1.addEventListener("click", function(){ useSkill(1); });
+  el.skill2.addEventListener("click", function(){ useSkill(2); });
+  el.skill3.addEventListener("click", function(){ useSkill(3); });
+  el.potionBtn.addEventListener("click", drinkPotion);
+  el.potionBtn2.addEventListener("click", drinkPotion);
+  $("buyPotionBtn").addEventListener("click", buyPotion);
+  $("fleeBtn").addEventListener("click", fleeBattle);
+  el.weaponBtn.addEventListener("click", buyWeapon);
+  el.armorBtn.addEventListener("click", buyArmor);
+  el.healBtn.addEventListener("click", buyHeal);
+  el.scrollBtn.addEventListener("click", buyScroll);
+  el.summonBtn.addEventListener("click", summonShadow);
+  el.autoBtn.addEventListener("click", function(){
+    S.auto = !S.auto;
+    log(S.auto ? "▶ <b>Auto battle ON</b> — your hunter and army fight on their own." : "⏸ Auto battle OFF.", "sys");
+    render();
+  });
+  el.speedBtn.addEventListener("click", function(){
+    S.speed = S.speed>=3 ? 1 : S.speed+1;
+    render();
+  });
+
+  document.querySelectorAll(".plus-btn").forEach(function(b){
+    b.addEventListener("click", function(){
+      if(S.statPoints<=0) return;
+      var stat = b.getAttribute("data-stat");
+      S.statPoints--;
+      if(stat==="str") S.str++;
+      if(stat==="agi") S.agi++;
+      if(stat==="vit"){ S.vit++; S.hp = Math.min(maxHp(), S.hp + 12); }
+      beep(740,0.08,"triangle",0.05);
+      render();
+    });
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(S.dead) return;
+    if(S.mode==="explore"){
+      var dir = null;
+      if(e.key==="ArrowUp" || e.key==="w" || e.key==="W") dir = "up";
+      else if(e.key==="ArrowDown" || e.key==="s" || e.key==="S") dir = "down";
+      else if(e.key==="ArrowLeft" || e.key==="a" || e.key==="A") dir = "left";
+      else if(e.key==="ArrowRight" || e.key==="d" || e.key==="D") dir = "right";
+      if(dir){
+        if(e.target.tagName==="BUTTON") e.target.blur();
+        e.preventDefault();
+        tryMove(dir);
+        return;
+      }
+      if(e.key==="q" || e.key==="Q") drinkPotion();
+      return;
+    }
+    if(e.code==="Space" && !e.repeat && e.target.tagName!=="BUTTON"){
+      e.preventDefault(); playerAttack();
+    } else if(e.code==="Space" && e.target===document.body){
+      e.preventDefault(); playerAttack();
+    }
+    if(e.key==="1") useSkill(1);
+    if(e.key==="2") useSkill(2);
+    if(e.key==="3") useSkill(3);
+    if(e.key==="q" || e.key==="Q") drinkPotion();
+    if(e.key==="Escape") fleeBattle();
+  });
+
+  $("reviveBtn").addEventListener("click", function(){
+    S.dead = false;
+    endBattleCleanup();
+    S.monster = null;
+    S.currentEntity = -1;
+    S.hp = maxHp(); S.mp = maxMp();
+    S.killsInGate = 0; S.combo = 0; S.gateCleared = false;
+    el.deathOverlay.className = "overlay";
+    log("The System revives you at the gate entrance. Same gate, fresh floor — your level, gold, gear, runes and army are untouched.", "sys");
+    generateDungeon();
+    setExploreMsg("💫 The System drags you back to the <b>gate entrance</b>. The floor has reshaped itself — the hunt starts over.");
+    render();
+  });
+
+  el.soundBtn.addEventListener("click", function(){
+    S.sound = !S.sound;
+    el.soundBtn.textContent = S.sound ? "🔊 Sound: On" : "🔇 Sound: Off";
+    if(S.sound) beep(660,0.08,"sine",0.05);
+    saveGame();
+  });
+
+  el.resetBtn.addEventListener("click", function(){
+    if(!S.resetArmed){
+      S.resetArmed = true;
+      el.resetBtn.textContent = "Tap again to confirm restart";
+      el.resetBtn.className = "ghost-btn danger-armed";
+      setTimeout(function(){
+        S.resetArmed = false;
+        el.resetBtn.textContent = "Restart Hunt";
+        el.resetBtn.className = "ghost-btn";
+      }, 3500);
+      return;
+    }
+    var soundOn = S.sound;
+    endBattleCleanup();
+    clearSave();
+    runeSeq = 0;
+    S = freshState();
+    S.sound = soundOn;
+    el.resetBtn.textContent = "Restart Hunt";
+    el.resetBtn.className = "ghost-btn";
+    el.log.innerHTML = "";
+    log("A new hunt begins. The weakest hunter picks up a rusty dagger… again.", "sys");
+    generateDungeon();
+    setExploreMsg("You step through the gate. Something moves in the dark…");
+    render();
+    saveGame();
+  });
+
+  window.addEventListener("beforeunload", function(){ saveGame(); });
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState==="hidden") saveGame();
+  });
+
+  /* ---------------- START ---------------- */
+  var restored = false;
+  try{ restored = loadGame(); }catch(e){ restored = false; }
+  if(restored){
+    el.soundBtn.textContent = S.sound ? "🔊 Sound: On" : "🔇 Sound: Off";
+    // keep HP/MP inside their caps after gear/rune changes in the save
+    S.hp = Math.min(maxHp(), Math.max(1, S.hp));
+    S.mp = Math.min(maxMp(), Math.max(0, S.mp));
+    log("💾 <b>Save loaded — welcome back, hunter.</b> Lv " + S.level + " · Gate " + S.gate + " · " + S.gold + " gold · " + S.shadowsArr.length + " shadow" + (S.shadowsArr.length===1 ? "" : "s") + " · " + S.runes.length + " rune" + (S.runes.length===1 ? "" : "s") + ". Your progress now auto-saves between visits.", "sys");
+    if(S.mode==="battle" && S.monster){
+      log("⚔ You were mid-battle with <b>" + escapeHtml(S.monster.name) + "</b> — the fight resumes where you left it.", "gold");
+      setExploreMsg("💾 Welcome back. You're still in battle — finish the fight!");
+    } else if(S.portalActive){
+      setExploreMsg("💾 <b>Welcome back!</b> The boss of Gate " + S.gate + " is down and the <b>portal 🌀</b> is open — walk into it to descend.");
+    } else {
+      setExploreMsg("💾 <b>Welcome back, hunter.</b> Gate " + S.gate + " — " + S.mapMonsters.length + " monster" + (S.mapMonsters.length===1 ? "" : "s") + " left on this floor. Your hunt picks up right where you left it.");
+    }
+    log("Walk the dungeon with the <b>pad / arrows / WASD</b>. Progress saves automatically — close the page anytime.", "");
+  } else {
+    log("⚠ <b>A gate has broken open nearby.</b> Hunter Association scanners rank you… E. Prove them wrong.", "sys");
+    log("Walk the dungeon with the <b>pad / arrows / WASD</b>. Bump into a monster to fight it — your <b>shadow army</b> attacks on its own turn bar, and matching elements hit harder.", "");
+    log("You carry <b>1 Mystic Scroll</b> — summon your first shadow from the <b>Army tab</b> above. Shadows level up as they attack; manage their levels and runes in the <b>Level Up tab</b>. <b>Progress auto-saves</b> on this device between visits.", "gold");
+    generateDungeon();
+  }
+  render();
+  saveGame();
+})();
+</script>
+</body>
+</html>
