@@ -450,6 +450,60 @@
   .overlay-card p b{color:#fff}
   .big-btn{width:100%; border:1px solid rgba(56,225,255,.7); border-radius:11px; background:#0d324e; color:#fff; padding:13px; font-family:"Orbitron",sans-serif; font-weight:800; letter-spacing:.1em; font-size:15px}
 
+  /* ---------- TABS ---------- */
+  .tabbar{
+    position:sticky; top:8px; z-index:6; display:flex; gap:6px; margin-top:12px; padding:6px;
+    border:1px solid var(--line); border-radius:14px; background:rgba(10,11,26,.94);
+    box-shadow:0 8px 22px rgba(0,0,0,.45);
+  }
+  .tab-btn{
+    flex:1; border:1px solid transparent; background:transparent; color:var(--muted); border-radius:10px;
+    padding:10px 2px; font-family:"Orbitron",sans-serif; font-size:11.5px; font-weight:800; letter-spacing:.04em;
+  }
+  .tab-btn.active{color:#fff; background:linear-gradient(180deg, var(--panel3), var(--panel2)); border-color:var(--cyan); box-shadow:0 0 14px rgba(56,225,255,.25)}
+  .tab-badge{display:inline-block; min-width:19px; padding:1px 5px; margin-left:2px; border-radius:10px; background:var(--gold); color:#241a04; font-size:11px; font-weight:900}
+  .points-banner{cursor:pointer}
+
+  /* ---------- SHADOW GROWTH ---------- */
+  .mon-card .mlvl{display:block; font-size:10px; color:var(--muted); font-weight:700; margin-top:3px; letter-spacing:.03em; line-height:1.35}
+  .shadow-card{
+    border:1.5px solid var(--cardc, var(--line)); border-radius:12px; padding:11px 12px; margin-bottom:10px;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--cardc, #333a75) 15%, #141630), #101227);
+  }
+  .shadow-card:last-child{margin-bottom:0}
+  .sg-head{display:flex; gap:10px; align-items:center}
+  .sg-face{font-size:34px; line-height:1; filter:drop-shadow(0 3px 4px rgba(0,0,0,.7))}
+  .sg-id{flex:1; min-width:0}
+  .sg-id strong{font-size:16px; display:block; line-height:1.15}
+  .sg-id small{color:var(--muted); font-weight:600; font-size:12.5px}
+  .sg-lvl{color:var(--cyan); font-family:"Orbitron",sans-serif; font-size:12px; white-space:nowrap}
+  .shadow-card .bar-row{grid-template-columns:30px 1fr 72px}
+  .sg-stats{display:flex; gap:6px; flex-wrap:wrap; margin-top:9px}
+  .sg-stats span{flex:1; min-width:88px; background:var(--panel2); border:1px solid #23264e; border-radius:8px; padding:5px 7px; text-align:center; font-size:9.5px; letter-spacing:.12em; color:var(--muted2); font-weight:700; font-family:"Orbitron",sans-serif}
+  .sg-stats b{display:block; color:#fff; font-size:15px; letter-spacing:0; font-family:"Rajdhani",sans-serif; margin-top:1px}
+  .sg-slots{display:flex; gap:6px; margin-top:10px}
+  .sg-slot{width:58px; height:58px; flex:none; font-size:19px}
+  .sg-bag{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:10px}
+  .sg-bag-label{font-size:12px; color:var(--muted); font-weight:700; width:100%}
+  .sg-inscribe{border:1px solid var(--gold-deep); background:#241a04; color:#fde68a; border-radius:8px; padding:6px 9px; font-weight:700; font-size:12.5px}
+  .sg-inscribe:active{transform:translateY(1px)}
+  .sg-norunes{color:var(--muted2); font-size:12.5px; font-weight:600; margin:9px 0 0}
+
+  /* ---------- LEVEL UP POPUP / SHADOW TOAST ---------- */
+  .lvl-card{border-color:var(--gold); background:linear-gradient(180deg,#1d1440,#0d0a24); box-shadow:0 0 44px rgba(245,196,81,.35)}
+  .lvl-card h2{color:var(--gold)}
+  .lvl-burst{font-family:"Orbitron",sans-serif; letter-spacing:.3em; font-size:12px; color:var(--gold); font-weight:800; margin-bottom:6px}
+  .gold-btn{border-color:var(--gold); background:linear-gradient(180deg,#8a5a10,#5e3c06)}
+  .shadow-toast{
+    position:fixed; top:12px; left:50%; transform:translate(-50%,-18px); z-index:30; width:max-content; max-width:92vw;
+    background:linear-gradient(180deg,#2a1b57,#171038); border:1.5px solid var(--violet); color:#fff; border-radius:12px;
+    padding:10px 16px; font-weight:600; font-size:14.5px; text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.55), 0 0 22px rgba(157,107,255,.35);
+    opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+  }
+  .shadow-toast.show{opacity:1; transform:translate(-50%,0)}
+  .shadow-toast b{color:#c4b5fd}
+
   @media (prefers-reduced-motion: reduce){
     .monster-emoji,.rune-ring,body::before{animation:none}
     .floater{animation-duration:.01s}
@@ -492,7 +546,7 @@
       <div class="chip shadow"><small>👤 SHADOWS</small><strong id="shadowsVal">0</strong></div>
       <div class="chip"><small>⚔ KILLS</small><strong id="killsVal">0</strong></div>
     </div>
-    <div class="points-banner" id="pointsBanner">LEVEL UP — you have <span id="pointsVal">0</span> stat points. Tap <b>+</b> next to a stat below to spend them.</div>
+    <div class="points-banner" id="pointsBanner" role="button" tabindex="0" title="Open the Level Up tab">⬆ LEVEL UP — you have <span id="pointsVal">0</span> stat points. Tap here to open the <b>Level Up</b> tab and spend them.</div>
   </section>
 
   <!-- GATE BAR -->
@@ -504,6 +558,16 @@
     <div class="pips" id="pips" aria-label="Gate progress"></div>
   </div>
 
+  <!-- TAB BAR -->
+  <nav class="tabbar" role="tablist" aria-label="Game sections">
+    <button type="button" class="tab-btn active" data-tab="hunt" role="tab" aria-selected="true">⚔️ Hunt</button>
+    <button type="button" class="tab-btn" data-tab="level" role="tab" aria-selected="false">⬆ Level Up <span class="tab-badge" id="levelTabBadge" hidden>0</span></button>
+    <button type="button" class="tab-btn" data-tab="army" role="tab" aria-selected="false">👤 Army</button>
+    <button type="button" class="tab-btn" data-tab="shop" role="tab" aria-selected="false">🏪 Shop</button>
+  </nav>
+
+  <!-- TAB: HUNT -->
+  <div class="tab-page" id="tab-hunt">
   <!-- DUNGEON MAP -->
   <section class="dungeon-panel panel" id="dungeonPanel" aria-label="Dungeon map">
     <div class="dungeon-head">
@@ -575,7 +639,15 @@
     <button class="util" id="buyPotionBtn"><strong>Buy Potion — 60 G</strong><span>Stock up before the boss</span></button>
   </div>
 
-  <!-- SHADOW ARMY -->
+  <!-- LOG -->
+  <section class="panel log-panel" aria-label="Battle log">
+    <h3>BATTLE LOG</h3>
+    <ul class="log" id="log"></ul>
+  </section>
+  </div><!-- /tab-hunt -->
+
+  <!-- TAB: ARMY -->
+  <div class="tab-page" id="tab-army" hidden>
   <section class="panel pad" style="margin-top:12px" aria-label="Shadow army">
     <h3>👤 SHADOW ARMY — YOUR TEAM</h3>
     <div class="army-grid" id="armyGrid"></div>
@@ -583,10 +655,12 @@
       <button class="summon-btn" id="summonBtn">📜 MYSTIC SUMMON<span id="summonSub">Use 1 scroll · random 3★–6★ shadow joins your team</span></button>
     </div>
   </section>
+  </div><!-- /tab-army -->
 
-  <div class="grid2">
+  <!-- TAB: LEVEL UP -->
+  <div class="tab-page" id="tab-level" hidden>
     <!-- STATS -->
-    <section class="panel pad" aria-label="Stats">
+    <section class="panel pad" style="margin-top:12px" aria-label="Stats">
       <h3>HUNTER STATS</h3>
       <div class="stat-row">
         <div class="nm"><strong>Strength</strong><small>More damage on every hit</small></div>
@@ -614,8 +688,26 @@
       </div>
     </section>
 
+    <!-- RUNES (HUNTER) -->
+    <section class="panel pad" style="margin-top:12px" aria-label="Runes">
+      <h3>◆ YOUR RUNES — 6 SLOTS</h3>
+      <div class="rune-slots" id="runeSlots"></div>
+      <div class="rune-list" id="runeList"></div>
+      <p class="keys-hint" style="margin-top:9px">Monsters drop runes — bosses always drop one. Tap a rune to inscribe it, tap an inscribed slot to remove it. <b style="color:#f0abfc">Fatal</b> +damage · <b style="color:#f0abfc">Energy</b> +HP · <b style="color:#f0abfc">Guard</b> damage cut · <b style="color:#f0abfc">Rage</b> +crit · <b style="color:#f0abfc">Swift</b> +shadow damage. Your shadows carry runes of their own — inscribe theirs in Shadow Growth below.</p>
+    </section>
+
+    <!-- SHADOW GROWTH -->
+    <section class="panel pad" style="margin-top:12px" aria-label="Shadow growth">
+      <h3>👤 SHADOW GROWTH — LEVELS &amp; RUNES</h3>
+      <div id="shadowGrowthList"></div>
+      <p class="keys-hint" style="margin-top:9px">Shadows gain <b>XP every time they land a hit</b> in battle — plus a bonus for a killing blow — and level up on their own. Higher level means harder hits. Each shadow has <b>3 rune slots</b>: a rune inscribed on a shadow boosts <b>that shadow's</b> damage (Fatal · Energy · Guard · Swift) or its crit chance (Rage).</p>
+    </section>
+  </div><!-- /tab-level -->
+
+  <!-- TAB: SHOP -->
+  <div class="tab-page" id="tab-shop" hidden>
     <!-- SHOP -->
-    <section class="panel pad" aria-label="Hunter shop">
+    <section class="panel pad" style="margin-top:12px" aria-label="Hunter shop">
       <h3>HUNTER ASSOCIATION SHOP</h3>
       <div class="shop-row">
         <div class="nm"><strong id="weaponName">Rusty Dagger</strong><small id="weaponSub">Weapon Lv 1 · +0 bonus damage</small></div>
@@ -634,21 +726,7 @@
         <button class="buy-btn" id="healBtn">Heal · 40 G</button>
       </div>
     </section>
-  </div>
-
-  <!-- RUNES -->
-  <section class="panel pad" style="margin-top:12px" aria-label="Runes">
-    <h3>◆ RUNES — 6 SLOTS</h3>
-    <div class="rune-slots" id="runeSlots"></div>
-    <div class="rune-list" id="runeList"></div>
-    <p class="keys-hint" style="margin-top:9px">Monsters drop runes — bosses always drop one. Tap a rune to inscribe it, tap an inscribed slot to remove it. <b style="color:#f0abfc">Fatal</b> +damage · <b style="color:#f0abfc">Energy</b> +HP · <b style="color:#f0abfc">Guard</b> damage cut · <b style="color:#f0abfc">Rage</b> +crit · <b style="color:#f0abfc">Swift</b> +shadow damage.</p>
-  </section>
-
-  <!-- LOG -->
-  <section class="panel log-panel" aria-label="Battle log">
-    <h3>BATTLE LOG</h3>
-    <ul class="log" id="log"></ul>
-  </section>
+  </div><!-- /tab-shop -->
 
   <div class="footer-row">
     <button class="ghost-btn" id="soundBtn">🔊 Sound: On</button>
@@ -657,6 +735,18 @@
   <p class="save-status" id="saveStatus" role="status">💾 Auto-save on <span>— your level, gold, army, runes and gate progress are kept on this device between visits.</span></p>
   <p class="hint">Explore each gate on foot, hunter. In battle your <b style="color:#c4b5fd">shadow army fights beside you</b> on its own turn bars — match their elements against the enemy for bonus damage. Turn on <b style="color:var(--gold)">AUTO</b> and crank the <b style="color:var(--gold)">SPEED</b> to farm gates like a true Monarch. Beat the boss and a portal opens: walk into it to descend. Bosses can be extracted as shadows: <b style="color:#c4b5fd">ARISE.</b></p>
 </div>
+
+<!-- LEVEL UP POPUP -->
+<div class="overlay lvl-overlay" id="levelOverlay" role="dialog" aria-modal="true" aria-labelledby="levelUpTitle">
+  <div class="overlay-card lvl-card">
+    <div class="lvl-burst">✦ LEVEL UP ✦</div>
+    <h2 id="levelUpTitle">LEVEL 2!</h2>
+    <p id="levelUpText"></p>
+    <button class="big-btn gold-btn" id="levelSpendBtn">⬆ SPEND STAT POINTS</button>
+    <button class="big-btn" id="levelCloseBtn" style="margin-top:8px">KEEP HUNTING</button>
+  </div>
+</div>
+<div class="shadow-toast" id="shadowToast" role="status"></div>
 
 <!-- DEATH OVERLAY -->
 <div class="overlay" id="deathOverlay" role="dialog" aria-modal="true" aria-labelledby="deathTitle">
@@ -746,7 +836,7 @@
       shadowsArr:[], runes:[], runeSlots:[null,null,null,null,null,null],
       combo:0, comboTimer:null,
       monster:null, stunned:0, wrathCd:0,
-      dead:false, gateCleared:false,
+      dead:false, gateCleared:false, levelPopupOpen:false,
       sound:true, resetArmed:false,
       auto:false, speed:1,
       mode:"explore",
@@ -821,6 +911,8 @@
     }
     // sanitise restored state so a stale/edited save can never soft-lock the game
     S.shadowsArr = S.shadowsArr.slice(0,12);
+    S.shadowsArr.forEach(function(sh){ normalizeShadow(sh); });
+    S.levelPopupOpen = false;
     if(S.runeSlots.length!==6) S.runeSlots = [null,null,null,null,null,null];
     if(!Array.isArray(S.chests)) S.chests = [];
     if(!S.player || typeof S.player.x!=="number") S.player = {x:1,y:1,dir:"down"};
@@ -870,6 +962,54 @@
     var s = "";
     for(var i=1;i<=n;i++) s += "★";
     return s;
+  }
+
+  /* ---------------- SHADOW GROWTH (levels from attacking + own runes) ---------------- */
+  function normalizeShadow(sh){
+    if(typeof sh.level!=="number" || sh.level<1) sh.level = 1;
+    if(typeof sh.xp!=="number" || sh.xp<0) sh.xp = 0;
+    if(typeof sh.attacks!=="number" || sh.attacks<0) sh.attacks = 0;
+    if(!Array.isArray(sh.runeSlots)) sh.runeSlots = [null,null,null];
+    sh.runeSlots = sh.runeSlots.slice(0,3);
+    while(sh.runeSlots.length<3) sh.runeSlots.push(null);
+    return sh;
+  }
+  function shadowXpNext(sh){ return Math.round(20 * Math.pow(sh.level, 1.4)) + 10; }
+  function shadowLevelMult(sh){ return 1 + (sh.level-1)*0.12; }
+  function shadowRuneBonus(sh){
+    var dmg = 0, crit = 0;
+    (sh.runeSlots||[]).forEach(function(id){
+      if(id==null) return;
+      var r = runeById(id);
+      if(!r) return;
+      var v = Math.round(r.grade * RUNE_SETS[r.set].per);
+      if(r.set==="rage") crit += v; else dmg += v;
+    });
+    return { dmg:dmg, crit:crit };
+  }
+  function shadowHitBase(sh){
+    return shadowDamageBase() * (sh.stars/3) * shadowLevelMult(sh) * (1 + shadowRuneBonus(sh).dmg/100);
+  }
+  var _toastTimer = null;
+  function shadowLevelToast(sh){
+    el.shadowToast.innerHTML = "👤 <b>" + escapeHtml(sh.name) + "</b> reached <b>LV " + sh.level + "</b> — its strikes hit harder now.";
+    el.shadowToast.className = "shadow-toast show";
+    if(_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function(){ el.shadowToast.className = "shadow-toast"; }, 2800);
+  }
+  function gainShadowXp(sh, amount){
+    sh.xp += amount;
+    var next = shadowXpNext(sh);
+    var guard = 0;
+    while(sh.xp >= next && guard++ < 20){
+      sh.xp -= next;
+      sh.level++;
+      next = shadowXpNext(sh);
+      log("👤 <b>" + escapeHtml(sh.name) + "</b> leveled up to <b>Lv " + sh.level + "</b> from fighting (⚔ " + sh.attacks + " attacks landed). Its damage grows.", "sys");
+      shadowLevelToast(sh);
+      beep(880,0.1,"triangle",0.05);
+      setTimeout(function(){ beep(1174,0.12,"triangle",0.05); }, 80);
+    }
   }
 
   /* ---------------- AUDIO (tiny synth, no files) ---------------- */
@@ -923,6 +1063,9 @@
     skill1Cost:$("skill1Cost"), skill2Cost:$("skill2Cost"), skill3Cost:$("skill3Cost"),
     log:$("log"),
     deathOverlay:$("deathOverlay"),
+    levelOverlay:$("levelOverlay"), levelUpTitle:$("levelUpTitle"), levelUpText:$("levelUpText"),
+    shadowToast:$("shadowToast"), shadowGrowthList:$("shadowGrowthList"), levelTabBadge:$("levelTabBadge"),
+    pointsBannerEl:$("pointsBanner"),
     soundBtn:$("soundBtn"), resetBtn:$("resetBtn"),
     dungeonPanel:$("dungeonPanel"), dungeonGrid:$("dungeonGrid"),
     dungeonStatus:$("dungeonStatus"), exploreMsg:$("exploreMsg"),
@@ -983,7 +1126,7 @@
     for(var i=0;i<show.length;i++){
       var sh = show[i];
       var ec = ELEMENTS[sh.el];
-      html += '<div class="party-card" style="border-color:' + ec.color + '"><span class="face">' + sh.emoji + '</span><span class="pname">' + escapeHtml(sh.name) + '</span><div class="bar"><i class="shadow-atb" data-shadow-atb="' + i + '" style="width:0%"></i></div></div>';
+      html += '<div class="party-card" style="border-color:' + ec.color + '"><span class="face">' + sh.emoji + '</span><span class="pname">Lv ' + (sh.level||1) + ' · ' + escapeHtml(sh.name) + '</span><div class="bar"><i class="shadow-atb" data-shadow-atb="' + i + '" style="width:0%"></i></div></div>';
     }
     if(S.shadowsArr.length > 5) html += '<div class="party-card"><span class="face">👥</span><span class="pname">+' + (S.shadowsArr.length-5) + ' more</span><div class="bar"><i class="shadow-atb" style="width:0%"></i></div></div>';
     if(!S.shadowsArr.length) html += '<div class="party-empty">No shadows yet — extract a boss or use a Mystic Scroll below.</div>';
@@ -1000,7 +1143,8 @@
         html += '<div class="mon-card" style="--cardc:' + ec.color + '"><span class="face">' + sh.emoji + '</span>' +
           '<span class="stars">' + starString(sh.stars) + '</span>' +
           '<span class="mname">' + escapeHtml(sh.name) + '</span>' +
-          '<span class="eltag" style="color:' + ec.color + '">' + ec.icon + ' ' + ec.label + '</span></div>';
+          '<span class="eltag" style="color:' + ec.color + '">' + ec.icon + ' ' + ec.label + '</span>' +
+          '<span class="mlvl">LV ' + (sh.level||1) + ' · ⚔ ' + (sh.attacks||0) + ' hits<br>' + (sh.runeSlots||[]).filter(function(x){ return x!=null; }).length + '/3 runes inscribed</span></div>';
       });
       el.armyGrid.innerHTML = html;
     }
@@ -1032,6 +1176,7 @@
     });
     var equipped = {};
     S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+    S.shadowsArr.forEach(function(sh){ (sh.runeSlots||[]).forEach(function(id){ if(id!=null) equipped[id]=1; }); });
     var bag = S.runes.filter(function(r){ return !equipped[r.id]; });
     if(!bag.length){
       el.runeList.innerHTML = '<div class="rune-empty">No runes in your bag. Monsters drop them — bosses always do.</div>';
@@ -1068,6 +1213,8 @@
     el.shadows.textContent = S.shadowsArr.length;
     el.pointsBanner.className = "points-banner" + (S.statPoints>0 ? " show" : "");
     el.pointsVal.textContent = S.statPoints;
+    el.levelTabBadge.hidden = S.statPoints<=0;
+    el.levelTabBadge.textContent = S.statPoints;
     document.querySelectorAll(".plus-btn").forEach(function(b){
       b.className = "plus-btn" + (S.statPoints>0 ? " show" : "");
     });
@@ -1142,6 +1289,7 @@
     renderParty();
     renderArmy();
     renderRunes();
+    renderShadowGrowth();
     renderDungeon();
     scheduleSave();
   }
@@ -1315,6 +1463,7 @@
     S.currentEntity = idx;
     S.monster = makeMonster(ent.boss, ent.base, ent.slot);
     S.mode = "battle";
+    switchTab("hunt");
     var ec = ELEMENTS[ent.base.el];
     if(ent.boss) log("⚠ You face the <b>Gate Boss</b>: <b>" + escapeHtml(ent.base.name) + "</b> — " + ec.icon + " " + ec.label + ", " + S.monster.stars + "★. Finish this.", "gold");
     else log("⚔ A wild <b>" + escapeHtml(ent.base.name) + "</b> (" + ec.icon + " " + ec.label + " · " + S.monster.stars + "★) blocks your path!", "");
@@ -1335,11 +1484,24 @@
     el.dungeonPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
   }
 
+  function showLevelPopup(gained){
+    S.levelPopupOpen = true;
+    var r = rankFor(S.level);
+    el.levelUpTitle.textContent = "LEVEL " + S.level + "!";
+    el.levelUpText.innerHTML = "Rank <b>" + r.letter + " — " + escapeHtml(r.name) + "</b><br>+" + (gained*3) + " stat points banked · HP boosted · MP refilled.<br>Spend your points in the <b>Level Up</b> tab — your shadows' levels and runes live there too.";
+    el.levelOverlay.className = "overlay show lvl-overlay";
+  }
+  function closeLevelPopup(){
+    S.levelPopupOpen = false;
+    el.levelOverlay.className = "overlay lvl-overlay";
+  }
   function gainXp(amount){
     S.xp += amount;
+    var gained = 0;
     while(S.xp >= S.xpNext){
       S.xp -= S.xpNext;
       S.level++;
+      gained++;
       S.xpNext = Math.round(S.xpNext * 1.45);
       S.statPoints += 3;
       S.hp = Math.min(maxHp(), S.hp + Math.round(maxHp()*0.5));
@@ -1349,6 +1511,7 @@
       log("✦ <b>LEVEL UP!</b> You are now Lv " + S.level + " — Rank " + r.letter + " (" + r.name + "). +3 stat points.", "sys");
       floater("LEVEL UP!", "crit", 34);
     }
+    if(gained > 0) showLevelPopup(gained);
   }
 
   function dropRune(guaranteed){
@@ -1361,6 +1524,7 @@
     if(S.runes.length > 40){ // keep the oldest equipped-safe: drop the lowest-grade uninscribed one
       var equipped = {};
       S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+      S.shadowsArr.forEach(function(sh){ (sh.runeSlots||[]).forEach(function(id){ if(id!=null) equipped[id]=1; }); });
       for(var i=0;i<S.runes.length;i++){
         if(!equipped[S.runes[i].id]){ S.runes.splice(i,1); break; }
       }
@@ -1375,7 +1539,7 @@
       log("Your army is full — " + escapeHtml(base.name) + "'s essence converts to <b>+100 gold</b> instead.", "gold");
       return false;
     }
-    S.shadowsArr.push({ name: base.name, emoji: base.emoji, el: base.el, stars: stars });
+    S.shadowsArr.push({ name: base.name, emoji: base.emoji, el: base.el, stars: stars, level:1, xp:0, attacks:0, runeSlots:[null,null,null] });
     return true;
   }
 
@@ -1441,7 +1605,7 @@
 
   function dealDamage(mult, opts){
     opts = opts || {};
-    if(S.dead || S.mode!=="battle" || !S.monster) return 0;
+    if(S.dead || S.levelPopupOpen || S.mode!=="battle" || !S.monster) return 0;
     if(S.wrathCd>0 && !opts.fromWrath) S.wrathCd--; // cooldown ticks down per hunter hit
     var base = tapDamageBase() * (mult||1);
     var variance = 0.88 + Math.random()*0.24;
@@ -1460,17 +1624,21 @@
 
   function shadowStrike(){
     if(S.dead || S.mode!=="battle" || !S.monster || !S.shadowsArr.length) return;
-    var sh = S.shadowsArr[S.shadowTurn % S.shadowsArr.length];
+    var sh = normalizeShadow(S.shadowsArr[S.shadowTurn % S.shadowsArr.length]);
     S.shadowTurn++;
     var mult = elementMult(sh.el, S.monster.el);
-    var dmg = Math.max(1, Math.round(shadowDamageBase() * (sh.stars/3) * mult * (0.85 + Math.random()*0.3)));
+    var rb = shadowRuneBonus(sh);
+    var isCrit = Math.random() < 0.05 + rb.crit/100;
+    var dmg = Math.max(1, Math.round(shadowHitBase(sh) * mult * (0.85 + Math.random()*0.3) * (isCrit ? 2 : 1)));
     S.monster.hp -= dmg;
+    sh.attacks++;
+    gainShadowXp(sh, 2);
     var ec = ELEMENTS[sh.el];
     var tag = mult>1 ? " ▲" : (mult<1 ? " ▼" : "");
-    floater("-" + dmg + tag, "shadow-hit", 55 + Math.random()*20);
+    floater("-" + dmg + tag + (isCrit ? " CRIT" : ""), "shadow-hit", 55 + Math.random()*20);
     el.floaters.lastChild && (el.floaters.lastChild.style.color = ec.color);
     beep(420 + Math.random()*120, 0.05, "triangle", 0.03);
-    if(S.monster.hp <= 0){ killMonster(); return; }
+    if(S.monster.hp <= 0){ gainShadowXp(sh, 10); killMonster(); return; }
     render();
   }
 
@@ -1552,6 +1720,7 @@
     var now = Date.now();
     var dt = Math.min(120, now - lastTick);
     lastTick = now;
+    if(S.levelPopupOpen) return;
     if(S.dead || S.mode!=="battle" || !S.monster) return;
     var scaled = dt * S.speed;
     S.mp = Math.min(maxMp(), S.mp + scaled*0.0012);
@@ -1608,6 +1777,89 @@
     S.hp = Math.min(maxHp(), S.hp);
     if(r) log("◆ Removed the <b>" + RUNE_SETS[r.set].label + " Rune</b> from slot " + (slot+1) + " — it's back in your bag.", "");
     render();
+  }
+
+  /* ---------------- SHADOW RUNES + GROWTH UI ---------------- */
+  function shadowRuneText(r){
+    var v = Math.round(r.grade * RUNE_SETS[r.set].per);
+    return r.set==="rage" ? "+" + v + "% crit chance for this shadow" : "+" + v + "% damage for this shadow";
+  }
+  function equipRuneToShadow(runeId, idx){
+    var sh = S.shadowsArr[idx];
+    if(!sh) return;
+    normalizeShadow(sh);
+    var r = runeById(runeId);
+    if(!r) return;
+    var free = -1;
+    for(var i=0;i<sh.runeSlots.length;i++){ if(sh.runeSlots[i]==null){ free = i; break; } }
+    if(free<0){ log("👤 <b>" + escapeHtml(sh.name) + "</b>'s 3 rune slots are full — tap one of its inscribed runes to remove it first.", "bad"); return; }
+    sh.runeSlots[free] = runeId;
+    sndRune();
+    log("◆ Inscribed <b>" + RUNE_SETS[r.set].label + " Rune</b> (" + starString(r.grade) + ") on <b>" + escapeHtml(sh.name) + "</b> — " + shadowRuneText(r) + ".", "rune");
+    render();
+  }
+  function unequipShadowRune(idx, slot){
+    var sh = S.shadowsArr[idx];
+    if(!sh || !Array.isArray(sh.runeSlots)) return;
+    var id = sh.runeSlots[slot];
+    if(id==null) return;
+    var r = runeById(id);
+    sh.runeSlots[slot] = null;
+    if(r) log("◆ Removed the <b>" + RUNE_SETS[r.set].label + " Rune</b> from <b>" + escapeHtml(sh.name) + "</b> — it's back in your bag.", "");
+    render();
+  }
+  function renderShadowGrowth(){
+    var host = el.shadowGrowthList;
+    if(!host) return;
+    if(!S.shadowsArr.length){
+      host.innerHTML = '<div class="army-empty">No shadows yet. Shadows earn XP and level up every time they attack in battle — summon one in the Army tab or extract a boss, then watch them grow here.</div>';
+      return;
+    }
+    var equipped = {};
+    S.runeSlots.forEach(function(id){ if(id!=null) equipped[id]=1; });
+    S.shadowsArr.forEach(function(s2){ (s2.runeSlots||[]).forEach(function(id){ if(id!=null) equipped[id]=1; }); });
+    var bag = S.runes.filter(function(r){ return !equipped[r.id]; });
+    var html = "";
+    S.shadowsArr.forEach(function(sh, idx){
+      normalizeShadow(sh);
+      var ec = ELEMENTS[sh.el];
+      var rb = shadowRuneBonus(sh);
+      var xpNext = shadowXpNext(sh);
+      html += '<div class="shadow-card" style="--cardc:' + ec.color + '">';
+      html += '<div class="sg-head"><span class="sg-face">' + sh.emoji + '</span><div class="sg-id"><strong>' + escapeHtml(sh.name) + ' <span class="sg-lvl">LV ' + sh.level + '</span></strong><small>' + starString(sh.stars) + ' · ' + ec.icon + ' ' + ec.label + ' · ⚔ ' + sh.attacks + ' attacks landed</small></div></div>';
+      html += '<div class="bar-row"><label>XP</label><div class="bar xp"><i style="width:' + Math.min(100, sh.xp/xpNext*100) + '%"></i></div><output>' + sh.xp + ' / ' + xpNext + '</output></div>';
+      html += '<div class="sg-stats"><span>DMG / HIT<b>~' + Math.round(shadowHitBase(sh)) + '</b></span><span>RUNE DAMAGE<b>+' + rb.dmg + '%</b></span><span>RUNE CRIT<b>+' + rb.crit + '%</b></span></div>';
+      html += '<div class="sg-slots">';
+      for(var sIdx=0;sIdx<3;sIdx++){
+        var rid = sh.runeSlots[sIdx];
+        var rr = rid!=null ? runeById(rid) : null;
+        if(rr){
+          var st = RUNE_SETS[rr.set];
+          html += '<button type="button" class="rune-slot filled sg-slot" data-unequip-shadow="' + idx + '" data-slot="' + sIdx + '" aria-label="Remove ' + st.label + ' rune from ' + escapeHtml(sh.name) + '">' + st.icon + '<small>' + st.label + '</small><span class="rstars">' + starString(rr.grade) + '</span></button>';
+        } else {
+          html += '<div class="rune-slot sg-slot">' + (sIdx+1) + '<small>EMPTY</small></div>';
+        }
+      }
+      html += '</div>';
+      if(bag.length){
+        html += '<div class="sg-bag"><span class="sg-bag-label">Inscribe a rune from your bag:</span>';
+        bag.forEach(function(r){
+          var st2 = RUNE_SETS[r.set];
+          html += '<button type="button" class="sg-inscribe" data-inscribe="' + r.id + '" data-shadow="' + idx + '">' + st2.icon + ' ' + st2.label + ' ' + starString(r.grade) + '</button>';
+        });
+        html += '</div>';
+      } else {
+        html += '<p class="sg-norunes">No loose runes in your bag — monsters and bosses drop more.</p>';
+      }
+      html += '</div>';
+    });
+    host.innerHTML = html;
+    host.querySelectorAll("[data-unequip-shadow]").forEach(function(b){
+      b.addEventListener("click", function(){ unequipShadowRune(parseInt(b.getAttribute("data-unequip-shadow"),10), parseInt(b.getAttribute("data-slot"),10)); });
+    });
+    host.querySelectorAll("[data-inscribe]").forEach(function(b){
+      b.addEventListener("click", function(){ equipRuneToShadow(parseInt(b.getAttribute("data-inscribe"),10), parseInt(b.getAttribute("data-shadow"),10)); });
+    });
   }
 
   /* ---------------- SUMMON ---------------- */
@@ -1680,7 +1932,7 @@
   }
 
   function tryMove(dir){
-    if(S.dead || S.mode!=="explore") return;
+    if(S.dead || S.levelPopupOpen || S.mode!=="explore") return;
     var dx = 0, dy = 0;
     if(dir==="up") dy = -1;
     if(dir==="down") dy = 1;
@@ -1728,6 +1980,25 @@
     }
     render();
   }
+
+  /* ---------------- TABS ---------------- */
+  function switchTab(name){
+    document.querySelectorAll(".tab-page").forEach(function(p){ p.hidden = p.id !== "tab-" + name; });
+    document.querySelectorAll(".tab-btn").forEach(function(b){
+      var on = b.getAttribute("data-tab")===name;
+      b.className = "tab-btn" + (on ? " active" : "");
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+  }
+  document.querySelectorAll(".tab-btn").forEach(function(b){
+    b.addEventListener("click", function(){ switchTab(b.getAttribute("data-tab")); });
+  });
+  el.pointsBannerEl.addEventListener("click", function(){ switchTab("level"); });
+  el.pointsBannerEl.addEventListener("keydown", function(e){
+    if(e.key==="Enter" || e.key===" "){ e.preventDefault(); switchTab("level"); }
+  });
+  $("levelCloseBtn").addEventListener("click", closeLevelPopup);
+  $("levelSpendBtn").addEventListener("click", function(){ closeLevelPopup(); switchTab("level"); });
 
   /* ---------------- EVENTS ---------------- */
   document.querySelectorAll(".dpad button[data-dir]").forEach(function(b){
@@ -1874,7 +2145,7 @@
   } else {
     log("⚠ <b>A gate has broken open nearby.</b> Hunter Association scanners rank you… E. Prove them wrong.", "sys");
     log("Walk the dungeon with the <b>pad / arrows / WASD</b>. Bump into a monster to fight it — your <b>shadow army</b> attacks on its own turn bar, and matching elements hit harder.", "");
-    log("You carry <b>1 Mystic Scroll</b> — summon your first shadow from the Shadow Army panel below. <b>Progress auto-saves</b> on this device between visits.", "gold");
+    log("You carry <b>1 Mystic Scroll</b> — summon your first shadow from the <b>Army tab</b> above. Shadows level up as they attack; manage their levels and runes in the <b>Level Up tab</b>. <b>Progress auto-saves</b> on this device between visits.", "gold");
     generateDungeon();
   }
   render();
